@@ -11,11 +11,11 @@ class TeslaPWController(polyinterface.Controller):
 
     def __init__(self, messanaName):
         super(TeslaPWController, self).__init__(polyglot)
-        LOGGER.info('_init_ Messsana Controller')
+        LOGGER.info('_init_ Tesla Power Wall Controller')
         self.messanaImportOK = 0
         self.ISYforced = False
-        self.name = 'Messana Main'
-        self.address ='msystem'
+        self.name = 'Tesla POwer Wall'
+        self.address ='teslapw'
         self.id = self.address
         #LOGGER.debug('Name/address: '+ self.name + ' ' + self.address)
         self.primary = self.address
@@ -183,92 +183,12 @@ class TeslaPWController(polyinterface.Controller):
 
     def query(self, command=None):
         LOGGER.debug('TOP querry')
-        self.messana.updateSystemData('all')
+        self.teslaPW.updateSystemData('all')
         self.reportDrivers()
 
     def discover(self, command=None):
 
         LOGGER.debug('discover zones')
-        nbrZones =  self.messana.getZoneCount()
-        for zoneNbr in range(0,nbrZones):
-            LOGGER.debug('Adding zone ' + str(zoneNbr))
-            zonename = self.messana.getZoneName(zoneNbr)
-            zoneaddress = self.messana.getZoneAddress(zoneNbr)
-            #LOGGER.debug('zone ' + str(zoneNbr) + ' : name, Address: ' + zonename +' ' + zoneaddress) 
-            if not zoneaddress in self.nodes:
-               self.addNode(messanaZone(self, self.address, zoneaddress, zonename, zoneNbr))
-        
-        LOGGER.debug('discover macrozones')
-        nbrMacrozones =  self.messana.getMacrozoneCount()
-        for macrozoneNbr in range(0,nbrMacrozones):
-            LOGGER.debug('Adding macrozone ' + str(macrozoneNbr))
-            macrozonename = self.messana.getMacrozoneName(macrozoneNbr)
-            macrozoneaddress = self.messana.getMacrozoneAddress(macrozoneNbr)
-            #LOGGER.debug('macrozone ' + str(macrozoneNbr) + ' : name, Address: ' + macrozonename +' ' + macrozoneaddress) 
-            if not macrozoneaddress in self.nodes:
-               self.addNode(messanaMacrozone(self, self.address, macrozoneaddress, macrozonename, macrozoneNbr))
-        
-        LOGGER.debug('discover atus')
-        nbrAtus =  self.messana.getAtuCount()
-        for atuNbr in range(0,nbrAtus):
-            LOGGER.debug('Adding atu ' + str(atuNbr))
-            atuname = self.messana.getAtuName(atuNbr)
-            atuaddress = self.messana.getAtuAddress(atuNbr)
-            #LOGGER.debug('ATU ' + str(atuNbr) + ' : name, Address: ' + atuname +' ' + atuaddress) 
-            if not atuaddress in self.nodes:
-               self.addNode(messanaAtu(self, self.address, atuaddress, atuname, atuNbr))
-               
-        LOGGER.debug('discover buffer tanks')
-        nbrBufferTanks =  self.messana.getBufferTankCount()
-        for bufferTankNbr in range(0,nbrBufferTanks):
-            LOGGER.debug('Adding buffer tank ' + str(bufferTankNbr))
-            bufferTankName = self.messana.getBufferTankName(bufferTankNbr)
-            bufferTankAddress = self.messana.getBufferTankAddress(bufferTankNbr)
-            #LOGGER.debug('Buffer Tank' + str(bufferTankNbr) + ' : name, Address: ' + bufferTankName +' ' + bufferTankAddress) 
-            if not bufferTankAddress in self.nodes:
-               self.addNode(messanaBufTank(self, self.address, bufferTankAddress, bufferTankName, bufferTankNbr))
-               
-        LOGGER.debug('discover hot cold change overs')
-        nbrHcCos =  self.messana.getHcCoCount()
-        for HcCoNbr in range(0,nbrHcCos):
-            LOGGER.debug('Adding hot cold cnage over ' + str(HcCoNbr))
-            atuname = self.messana.getHcCoName(HcCoNbr)
-            atuaddress = self.messana.getHcCoAddress(HcCoNbr)
-            #LOGGER.debug('ATU ' + str(HcCoNbr) + ' : name, Address: ' + atuname +' ' + atuaddress) 
-            if not atuaddress in self.nodes:
-               self.addNode(messanaHcCo(self, self.address, atuaddress, atuname, HcCoNbr))
-
-        LOGGER.debug('discover fan coils')
-        nbrFanCoils =  self.messana.getFanCoilCount()
-        for fanCoilNbr in range(0,nbrFanCoils):
-            LOGGER.debug('Adding fan coils ' + str(fanCoilNbr))
-            atuname = self.messana.getFanCoilName(fanCoilNbr)
-            atuaddress = self.messana.getFanCoilAddress(fanCoilNbr)
-            #LOGGER.debug('ATU ' + str(fanCoilNbr) + ' : name, Address: ' + atuname +' ' + atuaddress) 
-            if not atuaddress in self.nodes:
-               self.addNode(messanaFanCoil(self, self.address, atuaddress, atuname, fanCoilNbr))
-
-        LOGGER.debug('discover energy sources' )
-        nbrEnergySources =  self.messana.getEnergySourceCount()
-        for energySourceNbr in range(0, nbrEnergySources):
-            LOGGER.debug('Adding energy sources ' + str(energySourceNbr))
-            atuname = self.messana.getEnergySourceName(energySourceNbr)
-            atuaddress = self.messana.getEnergySourceAddress(energySourceNbr)
-            #LOGGER.debug('ATU ' + str(energySourceNbr) + ' : name, Address: ' + atuname +' ' + atuaddress) 
-            if not atuaddress in self.nodes:
-               self.addNode(messanaEnergySource(self, self.address, atuaddress, atuname, energySourceNbr))
-
-
-        LOGGER.debug('discover domestic hot waters' )
-        nbrDHWs =  self.messana.getDomesticHotWaterCount()
-        for DHWNbr in range(0,nbrDHWs):
-            LOGGER.debug('Adding domestic hot water ' + str(DHWNbr))
-            atuname = self.messana.getDomesticHotWaterName(DHWNbr)
-            atuaddress = self.messana.getDomesticHotWaterAddress(DHWNbr)
-            #LOGGER.debug('ATU ' + str(DHWNbr) + ' : name, Address: ' + atuname +' ' + atuaddress) 
-            if not atuaddress in self.nodes:
-               self.addNode(messanaHotWater(self, self.address, atuaddress, atuname, DHWNbr))
-
         self.nodeDefineDone = True
   
     
@@ -308,9 +228,7 @@ class TeslaPWController(polyinterface.Controller):
  
 
     commands = { 'UPDATE': ISYupdate
-                ,'SET_STATUS': setStatus
-                ,'SET_ENERGYSAVE': setEnergySave
-                ,'SET_SETBACK' : setSetback 
+
                 }
 
   

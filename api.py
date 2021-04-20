@@ -8,7 +8,7 @@ from urllib3 import disable_warnings
 from urllib3.exceptions import InsecureRequestWarning
 from http.client import responses
 
-from .error import AccessDeniedError, APIError, PowerwallUnreachableError
+from error import AccessDeniedError, APIError, PowerwallUnreachableError
 
 
 class API(object):

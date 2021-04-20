@@ -1,4 +1,4 @@
-from .error import MissingAttributeError
+from error import MissingAttributeError
 
 
 def convert_to_kw(value: float, precision: int = 1) -> float:

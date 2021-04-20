@@ -2,8 +2,8 @@ from typing import Union, List
 import requests
 from distutils import version
 
-from .api import API
-from .const import (
+from api import API
+from const import (
     DEFAULT_KW_ROUND_PERSICION,
     SUPPORTED_OPERATION_MODES,
     DeviceType,
@@ -16,7 +16,7 @@ from .const import (
     SyncType,
     User,
 )
-from .responses import (
+from responses import (
     LoginResponse,
     Meter,
     MetersAggregates,
@@ -25,7 +25,7 @@ from .responses import (
     SiteInfo,
     Solar,
 )
-from .helpers import assert_attribute
+from helpers import assert_attribute
 
 
 class Powerwall:

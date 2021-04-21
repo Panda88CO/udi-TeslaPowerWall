@@ -1,4 +1,7 @@
+
+
 from api import API
+'''
 from const import (
     DEFAULT_KW_ROUND_PERSICION,
     SUPPORTED_OPERATION_MODES,
@@ -31,6 +34,24 @@ from responses import (
 )
 from powerwall import Powerwall
 
+'''
+import requests
+import json
+
+powerwallStr = "https://192.168.1.151/api/"
+login = "login/Basic"
+
+password='coe123COE',
+email='christian.olgaard@gmail.com',
+usertype = 'customer'
+
+testPW = API( "192.168.1.151", 10, None, False, True)
+response = testPW.login(usertype, email, password, False)
+print(testPW.is_authenticated())
+
+
+#resp = requests.put(loginstr, json=credentials, verify=False)
+'''
 PowerWall = Powerwall("192.168.1.151")
 PowerWall.login("coe123COE", "christian.olgaard@gmail.com")
 print(PowerWall.is_authenticated())
@@ -40,5 +61,4 @@ meters = PowerWall.get_meters()
 
 
 PowerWall.logout()
-
-
+'''

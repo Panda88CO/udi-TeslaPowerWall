@@ -37,53 +37,6 @@ for i in range(10):
     print()
     time.sleep(1)
 print()
-'''
-MeterType = ["solar", "site",  "battery", "load" ]
-
-for  meter_type in MeterType:
-    meter = meters.get_meter(meter_type)
-    meters.battery
-    meter.energy_exported
-    meter.energy_imported
-    meter.instant_power
-    meter.last_communication_time
-    meter.frequency
-    meter.average_voltage
-    meter.get_energy_exported()
-    meter.get_energy_imported()
-    assertIsInstance(meter.get_power(), float)
-    assertIsInstance(meter.is_active(), bool)
-    assertIsInstance(meter.is_drawing_from(), bool)
-    assertIsInstance(meter.is_sending_to(), bool)
-'''
-print('site : Instant power, energy export, Energy import')
-print (str(Meter['site']['instant_power']))
-
-print (meters['site']['instant_power'] + ', ' + meters['site']['energy_exported'] + ', ' + meters['site']['energy_imported'])
-print ()
-print ('battery: Instant power, energy export, Energy import' )
-print (meters['battery']['instant_power'] + ', ' + meters['battery']['energy_exported'] + ', ' + meters['battery']['energy_imported'])
-print ()
-print ('Load: Instant power, energy export, Energy import' )
-print (meters['load']['instant_power'] + ', ' + meters['load']['energy_exported'] + ', ' + meters['load']['energy_imported'])
-print ()
-print ('solar: Instant power, energy export, Energy import' )
-print (meters['solar']['instant_power'] + ', ' + meters['solar']['energy_exported'] + ', ' + meters['solar']['energy_imported'])
-print ()
-time.sleep(60)
-meters = PowerWall.get_meters()
-print('site : Instant power, energy export, Energy import')
-print (meters['site']['instant_power'] + ', ' + meters['site']['energy_exported'] + ', ' + meters['site']['energy_imported'],)
-print ()
-print ('battery: Instant power, energy export, Energy import' )
-print (meters['battery']['instant_power'] + ', ' + meters['battery']['energy_exported'] + ', ' + meters['battery']['energy_imported'],)
-print ()
-print ('Load: Instant power, energy export, Energy import' )
-print (meters['load']['instant_power'] + ', ' + meters['load']['energy_exported'] + ', ' + meters['load']['energy_imported'],)
-print ()
-print ('solar: Instant power, energy export, Energy import' )
-print (meters['solar']['instant_power'] + ', ' + meters['solar']['energy_exported'] + ', ' + meters['solar']['energy_imported'],)
-print ()
 
 
 #print(PowerWall.run())
@@ -91,27 +44,27 @@ print ()
 #print(PowerWall.run())
 
 print('get charge ') #needed
-print(PowerWall.get_charge()) #needed
+test1 = PowerWall.get_charge() #needed
 print('\nget sitemaster ' )
-print(PowerWall.get_sitemaster()) #Needed
+test2 = PowerWall.get_sitemaster() #Needed
 
 print('\n get Meters ' )
 #print( PowerWall.get_meters())
 
 print('\n get grid status ' ) # Needed
-print( PowerWall.get_grid_status()) # Needed
+test3 = PowerWall.get_grid_status() # Needed
 
 print('\n get grid services active ')
-print( PowerWall.is_grid_services_active()) # Needed
+test4 = PowerWall.is_grid_services_active() # Needed
 print('\nget grid services active ')
-print(PowerWall.is_grid_services_active()) # Needed
+test5 = PowerWall.is_grid_services_active() # Needed
 print('\n get grid services ')
-print( PowerWall.get_site_info())
+test6 = PowerWall.get_site_info()
 
 #print(PowerWall.set_site_name(, site_name: str))
 
 print('\n get status ')
-print(PowerWall.get_status()) # NEeded
+test7 = PowerWall.get_status() # NEeded
 #print(PowerWall.get_grid_status()) # Needed
 
 

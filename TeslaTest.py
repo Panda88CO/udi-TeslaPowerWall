@@ -47,7 +47,7 @@ print('get charge ') #needed
 test1 = PowerWall.get_charge() #needed
 print('\nget sitemaster ' )
 test2 = PowerWall.get_sitemaster() #Needed
-
+print(test2.is_connected_to_tesla, test2.is_running, test2.status)
 print('\n get Meters ' )
 #print( PowerWall.get_meters())
 

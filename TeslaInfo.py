@@ -11,57 +11,17 @@ class TeslaInfo:
     def __init__ (self, mIPaddress, mAPIkey, mISYcontrollerName):
         # Note all xxIDs must be lower case without special characters (ISY requirement)
         self.systemID = mISYcontrollerName
-        self.zoneID = 'zones'
-        self.macrozoneID = 'macrozones'
-        self.atuID = 'atus'
-        self.dhwID = 'domhws'
-        self.fcID = 'fancoils'
-        self.energySourceID =  'energysys'
-        self.HotColdcoID = 'hcco'
-        self.bufferTankID = 'buftanks'
-        self.supportedNodeList = [
-                             self.zoneID
-                            ,self.macrozoneID
-                            ,self.atuID
-                            ,self.dhwID
-                            ,self.fcID
-                            ,self.energySourceID
-                            ,self.HotColdcoID 
-                            ,self.bufferTankID
-                            ] 
-        self.mSystem = {     self.systemID: {  'ISYnode':{ 'nlsICON' :'Thermostat'
-                                                ,'sends'   : []
+  
+        self.sData = {     self.systemID: {  'ISYnode':{ 'nlsICON' :'Electricity'
+                                                ,'sends'   :  ['DON', 'DOF']
                                                 ,'accepts' : {'UPDATE'          : {   'ISYtext' :'Update System Data'
                                                                                     ,'ISYeditor' : None} 
-                                                             ,'SET_SETPOINT'    : {   'ISYtext' :'Set Temperature'
-                                                                                    ,'ISYeditor' : 'mSetpoint' }
-                                                             ,'SET_STATUS'      : {   'ISYtext' :'Zone State'
-                                                                                    ,'ISYeditor' : 'mStatus' }                                                         
-                                                             ,'SET_ENERGYSAVE'  : {   'ISYtext' :'Energy Saving'
-                                                                                    ,'ISYeditor' : 'mEnergySaving' }
-                                                             ,'SET_SCHEDULEON'  : {   'ISYtext' :'Schedule Status'
-                                                                                    ,'ISYeditor' : 'mScheduleOn' }
-                                                             ,'CurrentSetpointDP': { 'ISYtext' :'Current Setpoint Dewpoint'
-                                                                                    ,'ISYeditor' : 'mCurrentSetpointDP'}
-                                                             ,'CurrentSetpointRH' : { 'ISYtext' :'Current Setpoint Rel. Humidity'
-                                                                                    ,'ISYeditor' : 'mCurrentSetpointRH'}
-                                                             ,'DehumSetpointDP' : { 'ISYtext' :'Dehumdification Setpoint Dewpoint'
-                                                                                    ,'ISYeditor' : 'mDehumSetpointDP'}
-                                                             ,'DehumSetpointRH' : { 'ISYtext' :'Dehumdification Setpoint Rel. Humidity'
-                                                                                    ,'ISYeditor' : 'mDehumSetpointRH'}
-                                                             ,'HumSetpointDP'   : { 'ISYtext' :'Humdification Setpoint Dewpoint'
-                                                                                    ,'ISYeditor' : 'mHumSetpointDP'}
-                                                             ,'HumSetpointRH'   : { 'ISYtext' :'Humdification Setpoint Rel. Humidity'
-                                                                                    ,'ISYeditor' : 'mHumSetpointRH'}
-                                                             ,'SET_CO2'         :{ 'ISYtext' :'CO2 Setpoint'
-                                                                                    ,'ISYeditor' : 'mCO2'}
-
-                                                            } 
+                                                             } 
                                                 }
                                     ,'KeyInfo' : {
-                                         'mName':{
-                                             'GETstr': '/api/zone/name/'
-                                            ,'PUTstr': '/api/zone/name/'
+                                         'sChargeLevel':{
+                                             'GETstr': None
+                                            ,'PUTstr': None
                                             ,'Active': None 
                                             ,'ISYeditor':{   
                                                      'ISYuom':None
@@ -75,7 +35,7 @@ class TeslaInfo:
                                                     ,'nlsValues' : None 
                                                         }  
                                                 }  
-                                        ,'mSetpoint' :{
+                                        ,'sGridStatus' :{
                                              'GETstr': '/api/zone/setpoint/'
                                             ,'PUTstr': '/api/zone/setpoint/'
                                             ,'Active': None 
@@ -155,7 +115,7 @@ class TeslaInfo:
             self. setMessanaCredentials (mIPaddress, mAPIkey) 
             # Need SystemCapability function               
             self.getSystemCapability()
-            self.updateSystemData('all')
+            self.updatesData('all')
             LOGGER.debug(self.systemID + ' added')
  
             self.addSystemDefStruct(self.systemID)
@@ -191,7 +151,7 @@ class TeslaInfo:
         if mKey in self.setupFile['nodeDef'][ self.systemID]['sts']:
             keys = list(self.setupFile['nodeDef'][ self.systemID]['sts'][mKey].keys())
             info['driver'] = keys[0]
-            tempData =  self.GETSystemData(mKey)
+            tempData =  self.GETsData(mKey)
             if tempData['statusOK']:
                 val = tempData['data']        
                 if val in  ['Celcius', 'Fahrenheit']:
@@ -209,9 +169,9 @@ class TeslaInfo:
 
     def checkValidNodeCommand(self, key, node, nodeNbr):
         exists = True
-        mCmd = self.mSystem[node]['ISYnode']['accepts'][key]['ISYeditor']
+        mCmd = self.sData[node]['ISYnode']['accepts'][key]['ISYeditor']
         if mCmd != None:
-            if not(mCmd in self.mSystem[node]['PUTkeysList'][nodeNbr]):
+            if not(mCmd in self.sData[node]['PUTkeysList'][nodeNbr]):
                 exists = False
         return(exists)
 
@@ -228,14 +188,14 @@ class TeslaInfo:
         self.setupFile['nodeDef'][self.name]={}
         self.setupFile['nodeDef'][self.name]['CodeId'] = nodeId
         self.setupFile['nodeDef'][self.name]['nlsId'] = self.nlsKey
-        self.setupFile['nodeDef'][self.name]['nlsNAME']=self.mSystem[nodeName]['data'][nodeNbr]['mName']
-        self.setupFile['nodeDef'][self.name]['nlsICON']=self.mSystem[nodeName]['ISYnode']['nlsICON']
+        self.setupFile['nodeDef'][self.name]['nlsNAME']=self.sData[nodeName]['data'][nodeNbr]['mName']
+        self.setupFile['nodeDef'][self.name]['nlsICON']=self.sData[nodeName]['ISYnode']['nlsICON']
         self.setupFile['nodeDef'][self.name]['sts']={}
 
-        #for mKey in self.mSystem[nodeName]['data'][nodeNbr]: 
-        for mKey in self.mSystem[nodeName]['GETkeysList'][nodeNbr]:             
+        #for mKey in self.sData[nodeName]['data'][nodeNbr]: 
+        for mKey in self.sData[nodeName]['GETkeysList'][nodeNbr]:             
             #make check if system has unit installed
-            if self.mSystem[nodeName]['KeyInfo'][mKey]['ISYeditor']['ISYuom']:
+            if self.sData[nodeName]['KeyInfo'][mKey]['ISYeditor']['ISYuom']:
                 self.keyCount = self.keyCount + 1
                 editorName = nodeName.upper()+str(nodeNbr)+'_'+str(self.keyCount)
                 nlsName = editorName
@@ -243,35 +203,35 @@ class TeslaInfo:
                 self.setupFile['nodeDef'][self.name]['sts'][mKey]={ISYvar:editorName}
                 self.setupFile['editors'][editorName]={}
                 #self.setupFile['nls'][editorName][ISYparam]
-                for ISYparam in self.mSystem[nodeName]['KeyInfo'][mKey]['ISYeditor']:
-                    if self.mSystem[nodeName]['KeyInfo'][mKey]['ISYeditor'][ISYparam]!= None:
-                        self.setupFile['editors'][editorName][ISYparam]=self.mSystem[nodeName]['KeyInfo'][mKey]['ISYeditor'][ISYparam]
+                for ISYparam in self.sData[nodeName]['KeyInfo'][mKey]['ISYeditor']:
+                    if self.sData[nodeName]['KeyInfo'][mKey]['ISYeditor'][ISYparam]!= None:
+                        self.setupFile['editors'][editorName][ISYparam]=self.sData[nodeName]['KeyInfo'][mKey]['ISYeditor'][ISYparam]
 
-                if self.mSystem[nodeName]['KeyInfo'][mKey]['ISYnls']:
+                if self.sData[nodeName]['KeyInfo'][mKey]['ISYnls']:
                     self.setupFile['nls'][nlsName]={}
-                for ISYnls in self.mSystem[nodeName]['KeyInfo'][mKey]['ISYnls']:
+                for ISYnls in self.sData[nodeName]['KeyInfo'][mKey]['ISYnls']:
                     #LOGGER.debug( mKey + ' ' + ISYnls)
-                    if  self.mSystem[nodeName]['KeyInfo'][mKey]['ISYnls'][ISYnls]:      
-                        self.setupFile['nls'][nlsName][ISYnls] = self.mSystem[nodeName]['KeyInfo'][mKey]['ISYnls'][ISYnls]
+                    if  self.sData[nodeName]['KeyInfo'][mKey]['ISYnls'][ISYnls]:      
+                        self.setupFile['nls'][nlsName][ISYnls] = self.sData[nodeName]['KeyInfo'][mKey]['ISYnls'][ISYnls]
                         if ISYnls == 'nlsValues':
                             self.setupFile['editors'][editorName]['nlsKey'] = nlsName 
 
         self.setupFile['nodeDef'][self.name]['cmds']= {}
-        if 'accepts' in self.mSystem[nodeName]['ISYnode']:
+        if 'accepts' in self.sData[nodeName]['ISYnode']:
             self.setupFile['nodeDef'][self.name]['cmds']['accepts']={}
-            for key in  self.mSystem[nodeName]['ISYnode']['accepts']:
+            for key in  self.sData[nodeName]['ISYnode']['accepts']:
                 if self.checkValidNodeCommand(key, nodeName, nodeNbr ):
-                    if self.mSystem[nodeName]['ISYnode']['accepts'][key]['ISYeditor'] in self.setupFile['nodeDef'][self.name]['sts']:
-                        self.setupFile['nodeDef'][self.name]['cmds']['accepts'][key]= self.setupFile['nodeDef'][self.name]['sts'][self.mSystem[nodeName]['ISYnode']['accepts'][key]['ISYeditor']]
-                        self.setupFile['nodeDef'][self.name]['cmds']['accepts'][key]['ISYInfo']=self.mSystem[nodeName]['ISYnode']['accepts'][key]
+                    if self.sData[nodeName]['ISYnode']['accepts'][key]['ISYeditor'] in self.setupFile['nodeDef'][self.name]['sts']:
+                        self.setupFile['nodeDef'][self.name]['cmds']['accepts'][key]= self.setupFile['nodeDef'][self.name]['sts'][self.sData[nodeName]['ISYnode']['accepts'][key]['ISYeditor']]
+                        self.setupFile['nodeDef'][self.name]['cmds']['accepts'][key]['ISYInfo']=self.sData[nodeName]['ISYnode']['accepts'][key]
                     else:
                         self.setupFile['nodeDef'][self.name]['cmds']['accepts'][key]={}
-                        self.setupFile['nodeDef'][self.name]['cmds']['accepts'][key]['ISYInfo']= self.mSystem[nodeName]['ISYnode']['accepts'][key]
+                        self.setupFile['nodeDef'][self.name]['cmds']['accepts'][key]['ISYInfo']= self.sData[nodeName]['ISYnode']['accepts'][key]
                 else:
                     LOGGER.debug('Removed "accepts" for : ' + key + ' not supported')
                     
-        if 'sends' in self.mSystem[nodeName]['ISYnode']:         
-            self.setupFile['nodeDef'][self.name]['cmds']['sends'] = self.mSystem[nodeName]['ISYnode']['sends']                                 
+        if 'sends' in self.sData[nodeName]['ISYnode']:         
+            self.setupFile['nodeDef'][self.name]['cmds']['sends'] = self.sData[nodeName]['ISYnode']['sends']                                 
         return()
 
     def addSystemDefStruct(self, nodeId):
@@ -283,17 +243,17 @@ class TeslaInfo:
         self.setupFile['nodeDef'][ self.systemID]={}
         self.setupFile['nodeDef'][ self.systemID]['CodeId'] = nodeId
         self.setupFile['nodeDef'][ self.systemID]['nlsId'] = self.nlsKey
-        self.setupFile['nodeDef'][ self.systemID]['nlsNAME']=self.mSystem[ self.systemID]['data']['mName']
-        self.setupFile['nodeDef'][ self.systemID]['nlsICON']=self.mSystem[ self.systemID]['ISYnode']['nlsICON']
+        self.setupFile['nodeDef'][ self.systemID]['nlsNAME']=self.sData[ self.systemID]['data']['mName']
+        self.setupFile['nodeDef'][ self.systemID]['nlsICON']=self.sData[ self.systemID]['ISYnode']['nlsICON']
         self.setupFile['nodeDef'][ self.systemID]['sts']={}
 
-        #for mKey in self.mSystem[ self.systemID]['data']: 
-        for mKey in self.mSystem[ self.systemID]['GETkeysList']:    
+        #for mKey in self.sData[ self.systemID]['data']: 
+        for mKey in self.sData[ self.systemID]['GETkeysList']:    
             #make check if system has unit installed
-            if self.mSystem[ self.systemID]['KeyInfo'][mKey]['ISYeditor']['ISYuom']:
-                if ((self.mSystem[ self.systemID]['KeyInfo'][mKey]['ISYeditor']['ISYuom'] == 112
-                   and self.mSystem[ self.systemID]['data'][mKey] != 0)
-                   or self.mSystem[ self.systemID]['KeyInfo'][mKey]['ISYeditor']['ISYuom'] != 112):
+            if self.sData[ self.systemID]['KeyInfo'][mKey]['ISYeditor']['ISYuom']:
+                if ((self.sData[ self.systemID]['KeyInfo'][mKey]['ISYeditor']['ISYuom'] == 112
+                   and self.sData[ self.systemID]['data'][mKey] != 0)
+                   or self.sData[ self.systemID]['KeyInfo'][mKey]['ISYeditor']['ISYuom'] != 112):
                     self.keyCount = self.keyCount + 1
                     editorName = 'SYSTEM_'+str(self.keyCount)
                     nlsName = editorName
@@ -301,43 +261,43 @@ class TeslaInfo:
                     self.setupFile['nodeDef'][ self.systemID]['sts'][mKey]={ISYvar:editorName}
                     self.setupFile['editors'][editorName]={}
                     #self.setupFile['nls'][editorName][ISYparam]
-                    for ISYparam in self.mSystem[ self.systemID]['KeyInfo'][mKey]['ISYeditor']:
-                        if self.mSystem[ self.systemID]['KeyInfo'][mKey]['ISYeditor'][ISYparam]!= None:
-                            self.setupFile['editors'][editorName][ISYparam]=self.mSystem[ self.systemID]['KeyInfo'][mKey]['ISYeditor'][ISYparam]
+                    for ISYparam in self.sData[ self.systemID]['KeyInfo'][mKey]['ISYeditor']:
+                        if self.sData[ self.systemID]['KeyInfo'][mKey]['ISYeditor'][ISYparam]!= None:
+                            self.setupFile['editors'][editorName][ISYparam]=self.sData[ self.systemID]['KeyInfo'][mKey]['ISYeditor'][ISYparam]
 
-                    if self.mSystem[ self.systemID]['KeyInfo'][mKey]['ISYnls']:
+                    if self.sData[ self.systemID]['KeyInfo'][mKey]['ISYnls']:
                         self.setupFile['nls'][nlsName]={}
-                    for ISYnls in self.mSystem[ self.systemID]['KeyInfo'][mKey]['ISYnls']:
+                    for ISYnls in self.sData[ self.systemID]['KeyInfo'][mKey]['ISYnls']:
                         #LOGGER.debug( mKey + ' ' + ISYnls)
-                        if  self.mSystem[ self.systemID]['KeyInfo'][mKey]['ISYnls'][ISYnls]:      
-                            self.setupFile['nls'][nlsName][ISYnls] = self.mSystem[ self.systemID]['KeyInfo'][mKey]['ISYnls'][ISYnls]
+                        if  self.sData[ self.systemID]['KeyInfo'][mKey]['ISYnls'][ISYnls]:      
+                            self.setupFile['nls'][nlsName][ISYnls] = self.sData[ self.systemID]['KeyInfo'][mKey]['ISYnls'][ISYnls]
                             if ISYnls == 'nlsValues':
                                 self.setupFile['editors'][editorName]['nlsKey'] = nlsName
         
         self.setupFile['nodeDef'][ self.systemID]['cmds']={}
-        if 'accepts' in self.mSystem[ self.systemID]['ISYnode']:
+        if 'accepts' in self.sData[ self.systemID]['ISYnode']:
             self.setupFile['nodeDef'][ self.systemID]['cmds']['accepts'] = {}
-            for key in  self.mSystem[ self.systemID]['ISYnode']['accepts']:     
-                if self.mSystem[ self.systemID]['ISYnode']['accepts'][key]['ISYeditor'] in self.setupFile['nodeDef'][ self.systemID]['sts']:
-                    mVal = self.mSystem[ self.systemID]['ISYnode']['accepts'][key]['ISYeditor']
+            for key in  self.sData[ self.systemID]['ISYnode']['accepts']:     
+                if self.sData[ self.systemID]['ISYnode']['accepts'][key]['ISYeditor'] in self.setupFile['nodeDef'][ self.systemID]['sts']:
+                    mVal = self.sData[ self.systemID]['ISYnode']['accepts'][key]['ISYeditor']
                     self.setupFile['nodeDef'][ self.systemID]['cmds']['accepts'][key]= self.setupFile['nodeDef'][ self.systemID]['sts'][mVal]
-                    self.setupFile['nodeDef'][ self.systemID]['cmds']['accepts'][key]['ISYInfo']=self.mSystem[ self.systemID]['ISYnode']['accepts'][key]
+                    self.setupFile['nodeDef'][ self.systemID]['cmds']['accepts'][key]['ISYInfo']=self.sData[ self.systemID]['ISYnode']['accepts'][key]
                 else:
                     self.setupFile['nodeDef'][ self.systemID]['cmds']['accepts'][key]= {}
-                    self.setupFile['nodeDef'][ self.systemID]['cmds']['accepts'][key]['ISYInfo']= self.mSystem[ self.systemID]['ISYnode']['accepts'][key]   
-        if 'sends' in self.mSystem[ self.systemID]['ISYnode']:
-            self.setupFile['nodeDef'][ self.systemID]['cmds']['sends']=self.mSystem[ self.systemID]['ISYnode']['sends']                              
+                    self.setupFile['nodeDef'][ self.systemID]['cmds']['accepts'][key]['ISYInfo']= self.sData[ self.systemID]['ISYnode']['accepts'][key]   
+        if 'sends' in self.sData[ self.systemID]['ISYnode']:
+            self.setupFile['nodeDef'][ self.systemID]['cmds']['sends']=self.sData[ self.systemID]['ISYnode']['sends']                              
         return()
 
 
 
    
     
-    def GETSystemData(self, mKey):
-        LOGGER.debug('GETSystemData')
+    def GETsData(self, mKey):
+        LOGGER.debug('GETsData')
 
-    def PUTSystemData(self, mKey, value):
-            LOGGER.debug('PUTSystemData')     
+    def PUTsData(self, mKey, value):
+            LOGGER.debug('PUTsData')     
   
     def GETNodeData(self, mNodeKey, nodeNbr, mKey):
         LOGGER.debug('GETNodeData')       
@@ -345,16 +305,16 @@ class TeslaInfo:
     # New Functions Need to be tested
     def getNodeKeys (self, nodeNbr, nodeKey, cmdKey):
         keys = []
-        if len(self.mSystem[nodeKey]['GETkeysList'][nodeNbr]) == 0:
+        if len(self.sData[nodeKey]['GETkeysList'][nodeNbr]) == 0:
             LOGGER.debug('NodeCapability must be run first')
         else:
             if cmdKey == 'PUTstr':
-                for mKey in self.mSystem[nodeKey]['PUTkeysList'][nodeNbr]:
-                    if self.mSystem[nodeKey]['KeyInfo'][mKey][cmdKey] != None:
+                for mKey in self.sData[nodeKey]['PUTkeysList'][nodeNbr]:
+                    if self.sData[nodeKey]['KeyInfo'][mKey][cmdKey] != None:
                         keys.append(mKey)
             else:
-                for mKey in self.mSystem[nodeKey]['GETkeysList'][nodeNbr]:
-                    if self.mSystem[nodeKey]['KeyInfo'][mKey][cmdKey] != None:
+                for mKey in self.sData[nodeKey]['GETkeysList'][nodeNbr]:
+                    if self.sData[nodeKey]['KeyInfo'][mKey][cmdKey] != None:
                         keys.append(mKey)             
         return(keys)
 
@@ -511,20 +471,20 @@ class TeslaInfo:
 
 
     #System
-    def updateSystemData(self, level):
+    def updatesData(self, level):
         LOGGER.debug('Update Messana Sytem Data')
         sysData = {}
         DataOK = True
        
         if level == 'active':
             for mKey in self.systemActiveKeys():
-                sysData= self.pullSystemDataIndividual(mKey)
+                sysData= self.pullsDataIndividual(mKey)
                 if not(sysData['statusOK']):
                     LOGGER.debug('Error System Active GET: ' + mKey)
                     DataOK = False  
         elif level == 'all':
             for mKey in self.systemPullKeys():
-                sysData= self.pullSystemDataIndividual(mKey)
+                sysData= self.pullsDataIndividual(mKey)
                 if not(sysData['statusOK']):
                     LOGGER.debug('Error System Active GET: ' + mKey)
                     DataOK = False 
@@ -535,15 +495,15 @@ class TeslaInfo:
 
 
 
-    def pullSystemDataIndividual(self, mKey):
+    def pullsDataIndividual(self, mKey):
         #LOGGER.debug('MessanaInfo pull System Data: ' + mKey)
-        return(self.GETSystemData(mKey) )
+        return(self.GETsData(mKey) )
                  
 
-    def pushSystemDataIndividual(self, mKey, value):
+    def pushsDataIndividual(self, mKey, value):
         sysData={}
         #LOGGER.debug('MessanaInfo push System Data: ' + mKey)       
-        sysData = self.PUTSystemData(mKey, value)
+        sysData = self.PUTsData(mKey, value)
         if sysData['statusOK']:
             return(True)
         else:
@@ -557,17 +517,17 @@ class TeslaInfo:
 
     def systemPullKeys(self):
         #LOGGER.debug('systemPullKeys')
-        return(self.mSystem[self.systemID]['GETkeysList'])
+        return(self.sData[self.systemID]['GETkeysList'])
 
     def systemPushKeys(self):
         #LOGGER.debug('systemPushKeys')
-        return(self.mSystem[self.systemID]['PUTkeysList'])  
+        return(self.sData[self.systemID]['PUTkeysList'])  
             
     def systemActiveKeys(self):
         #LOGGER.debug('systemActiveKeys')
         keys=[]
-        for mKey in self.mSystem[self.systemID]['GETkeysList']:
-            if self.mSystem[self.systemID]['KeyInfo'][mKey]['Active'] != None:
+        for mKey in self.sData[self.systemID]['GETkeysList']:
+            if self.sData[self.systemID]['KeyInfo'][mKey]['Active'] != None:
                 keys.append(mKey)
         return(keys)  
             
@@ -575,7 +535,7 @@ class TeslaInfo:
         messanaKey = self.ISYmap[ self.systemID][ISYkey]['messana']
         systemPullKeys = self.systemPullKeys()
         if messanaKey in systemPullKeys:
-            data = self.pullSystemDataIndividual(messanaKey)
+            data = self.pullsDataIndividual(messanaKey)
             if data['statusOK']:
                 val = data['data']        
                 if val in  ['Celcius', 'Fahrenheit']:
@@ -598,7 +558,7 @@ class TeslaInfo:
         systemPushKeys = self.systemPushKeys()
         status = False
         if messanaKey in systemPushKeys:
-            status = self.pushSystemDataIndividual(messanaKey, systemValue)
+            status = self.pushsDataIndividual(messanaKey, systemValue)
         return(status)
     
     def getMessanaSystemKey(self, ISYkey):
@@ -609,7 +569,7 @@ class TeslaInfo:
         if mKey in self.setupFile['nodeDef'][ self.systemID]['sts']:
             keys = list(self.setupFile['nodeDef'][ self.systemID]['sts'][mKey].keys())
             info['driver'] = keys[0]
-            tempData =  self.GETSystemData(mKey)
+            tempData =  self.GETsData(mKey)
             if tempData['statusOK']:
                 val = tempData['data']        
                 if val in  ['Celcius', 'Fahrenheit']:

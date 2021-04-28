@@ -30,7 +30,7 @@ metersOld = PowerWall.get_meters()
 
 for i in range(10):
     meters = PowerWall.get_meters()
-    print(meters.solar.instant_power,meters.solar.energy_exported, meters.solar.energy_imported )
+    print(meters.solar.instant_power,meters.solar.energy_exported, meters.solar.energy_imported, meters.solar.last_communication_time )
     print(meters.site.instant_power, meters.site.energy_exported, meters.site.energy_imported)
     print(meters.load.instant_power, meters.load.energy_exported, meters.load.energy_imported)
     print(meters.battery.instant_power, meters.battery.energy_exported, meters.battery.energy_imported)

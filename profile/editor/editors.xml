@@ -1,0 +1,44 @@
+<editors> 
+  <editor id = "SYSTEM_1" > 
+     <range  uom="51" min="0" max="100" prec="1" />
+</editor>
+  <editor id = "SYSTEM_2" > 
+     <range  uom="51" min="0" max="100" prec="1" />
+</editor>
+  <editor id = "SYSTEM_3" > 
+     <range  uom="25" subset="0-3" nls="SYSTEM_3" />
+</editor>
+  <editor id = "SYSTEM_4" > 
+     <range  uom="30" min="0" max="10" prec="2" />
+</editor>
+  <editor id = "SYSTEM_5" > 
+     <range  uom="30" min="0" max="10" prec="2" />
+</editor>
+  <editor id = "SYSTEM_6" > 
+     <range  uom="30" min="0" max="10" prec="2" />
+</editor>
+  <editor id = "SYSTEM_7" > 
+     <range  uom="30" min="0" max="10" prec="2" />
+</editor>
+  <editor id = "SYSTEM_8" > 
+     <range  uom="30" min="0" max="2400" prec="2" />
+</editor>
+  <editor id = "SYSTEM_9" > 
+     <range  uom="30" min="0" max="10000" prec="2" />
+</editor>
+  <editor id = "SYSTEM_10" > 
+     <range  uom="30" min="0" max="10000" prec="2" />
+</editor>
+  <editor id = "SYSTEM_11" > 
+     <range  uom="25" subset="0-3" nls="SYSTEM_11" />
+</editor>
+  <editor id = "SYSTEM_12" > 
+     <range  uom="25" subset="0-1" nls="SYSTEM_12" />
+</editor>
+  <editor id = "SYSTEM_13" > 
+     <range  uom="25" subset="0-1" nls="SYSTEM_13" />
+</editor>
+  <editor id = "SYSTEM_14" > 
+     <range  uom="25" subset="0-1" nls="SYSTEM_14" />
+</editor>
+</editors> 

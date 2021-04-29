@@ -3,24 +3,13 @@ import time
 import json
 from tesla_powerwall import Powerwall
 
-def get(self, path: str, headers: dict = {}) -> dict:
-    try:
-        response = self._http_session.get(
-            url=self.url(path),
-            timeout=self._timeout,
-            headers=headers,
-        )
-    except (
-        requests.exceptions.ConnectionError,
-        requests.exceptions.ReadTimeout,
-    ) as e:
-        raise PowerwallUnreachableError(e)
-    return(response)
-
-
-
+from TeslaInfo import tesla_info
+from  ISYprofile import isyProfile
+isyinfo = isyProfile('teslawall','powerwall')
 PowerWall = Powerwall("192.168.1.151")
 PowerWall.login("coe123COE", "christian.olgaard@gmail.com")
+
+#self.teslaInfo = tesla_info('192.168.1.151', 'coe123COE', 'christian.olgaard@gmail.com')
 print(PowerWall.is_authenticated())
 #print(PowerWall.get_charge())
 #print(PowerWall.get_status())
@@ -28,7 +17,7 @@ print(PowerWall.is_authenticated())
 metersOld = PowerWall.get_meters()
 #time.sleep(60)
 
-for i in range(10):
+for i in range(3):
     meters = PowerWall.get_meters()
     print(meters.solar.instant_power,meters.solar.energy_exported, meters.solar.energy_imported, meters.solar.last_communication_time )
     print(meters.site.instant_power, meters.site.energy_exported, meters.site.energy_imported)
@@ -45,8 +34,10 @@ print()
 
 print('get charge ') #needed
 test1 = PowerWall.get_charge() #needed
+print (test1)
 print('\nget sitemaster ' )
 test2 = PowerWall.get_sitemaster() #Needed
+
 print(test2.is_connected_to_tesla, test2.is_running, test2.status)
 print('\n get Meters ' )
 #print( PowerWall.get_meters())
@@ -56,8 +47,8 @@ test3 = PowerWall.get_grid_status() # Needed
 
 print('\n get grid services active ')
 test4 = PowerWall.is_grid_services_active() # Needed
-print('\nget grid services active ')
-test5 = PowerWall.is_grid_services_active() # Needed
+
+test5 = PowerWall.get_operation_mode()
 print('\n get grid services ')
 test6 = PowerWall.get_site_info()
 

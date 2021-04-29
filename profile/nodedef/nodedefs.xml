@@ -1,0 +1,30 @@
+<nodeDefs> 
+   <nodeDef id="teslawall" nls="nlsteslawall">
+      <editors />
+      <sts>
+         <st id="GV1" editor="SYSTEM_1" />
+         <st id="GV2" editor="SYSTEM_2" />
+         <st id="GV3" editor="SYSTEM_3" />
+         <st id="GV4" editor="SYSTEM_4" />
+         <st id="GV5" editor="SYSTEM_5" />
+         <st id="GV6" editor="SYSTEM_6" />
+         <st id="GV7" editor="SYSTEM_7" />
+         <st id="GV8" editor="SYSTEM_8" />
+         <st id="GV9" editor="SYSTEM_9" />
+         <st id="GV10" editor="SYSTEM_10" />
+         <st id="GV11" editor="SYSTEM_11" />
+         <st id="GV12" editor="SYSTEM_12" />
+         <st id="GV13" editor="SYSTEM_13" />
+         <st id="GV14" editor="SYSTEM_14" />
+      </sts>
+      <cmds>
+         <sends>
+            <cmd id="DON" /> 
+            <cmd id="DOF" /> 
+         </sends>
+         <accepts>
+            <cmd id="UPDATE" /> 
+         </accepts>
+      </cmds>
+   </nodeDef> 
+</nodeDefs> 

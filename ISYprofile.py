@@ -13,6 +13,15 @@ class isyProfile:
         # Note all xxIDs must be lower case without special characters (ISY requirement)
         self.systemID = ISYcontrollerName
         self.systemName = systemName
+        self.sData  = {}
+        '''
+        'ISYnode' : {}
+
+                        ,'KeyInfo' :{}
+                        ,'data' : {}
+                    }
+        '''
+        '''
         self.sData = {  self.systemID: {  'ISYnode':{ 'nlsICON' :'Electricity'
                                                 ,'sends'   :  ['DON', 'DOF']
                                                 ,'accepts' : {'UPDATE' : {   'ISYtext' :'Update System Data'
@@ -215,7 +224,7 @@ class isyProfile:
                                     ,'data' :{'name' :self.systemName}
                         }
                     }
-                
+    '''
         
         #self.setupStruct = {'nodeDef': nodeNbr: { 'nodeDef':{}
         ##                                    ,'sts':{}
@@ -245,6 +254,14 @@ class isyProfile:
         print ('Creating Setup file')
         self.createSetupFiles('./profile/nodedef/nodedefs.xml','./profile/editor/editors.xml', './profile/nls/en_us.txt')
         self.ISYmap = self.createISYmapping()
+
+    def ISYunit(self, name):
+        if name.lower() in ISYunit:
+            return(self. ISYunit[name.lower()])
+        else:
+            print('unknown unit : '+str(name))
+            return(None)
+
 
 
     def createISYmapping(self):
@@ -286,12 +303,20 @@ class isyProfile:
    
                                                     
 
-    def addIsyVaraiable (name, ISYuom, ISYmin, ISYmax, ISYsubset,ISYstep,ISYprecision, nlsText, nlsValues):
+    def addIsyVaraiable (name, node,  ISYuom, ISYmin, ISYmax, ISYsubset,ISYstep,ISYprecision, nlsText, nlsValues):
         tempDict = {name:{ 'ISYeditor':
                             {'ISYuom':ISYuom, 'ISYmin':ISYmin, 'ISYmax':ISYmax, 'ISYsubset':ISYsubset, 'ISYstep':ISYstep, 'ISYprec':ISYprecision}
                             ,'ISYnls' : {'nlsTEXT' : nlsText, 'nlsValues' : nlsValues} }   
         }
-        self.sData[self.systemID]['KeyInfo'] = tempDict
+        if self.sData[node] in None:
+            self.sData[node] =   {  'ISYnode' : {}
+                                    ,'KeyInfo' :{}
+                                    ,'data' : {}
+                                  }
+        elif self.sData[node]['KeyInfo'][name] in None:
+            self.sData[node]['KeyInfo'] = tempDict
+        else:
+            print('Error: valiable '+ str(name) + ' already exists: )
 
         
 

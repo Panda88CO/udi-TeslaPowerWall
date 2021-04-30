@@ -14,6 +14,7 @@ class isyProfile:
         self.systemID = ISYcontrollerName
         self.systemName = systemName
         self.sData  = {}
+        self.ISYunit = {'boolean':2, 'list':25, 'kw':30, 'percent':51}
         '''
         'ISYnode' : {}
 
@@ -224,7 +225,7 @@ class isyProfile:
                                     ,'data' :{'name' :self.systemName}
                         }
                     }
-    '''
+        '''
         
         #self.setupStruct = {'nodeDef': nodeNbr: { 'nodeDef':{}
         ##                                    ,'sts':{}
@@ -248,16 +249,16 @@ class isyProfile:
         #Dummy check to see if there is connection to Messana system)
 
 
-        print('Setting up ISY profile structure')
-        self.addSystemDefStruct(self.systemID)
-        print(self.systemID + ' added')
-        print ('Creating Setup file')
-        self.createSetupFiles('./profile/nodedef/nodedefs.xml','./profile/editor/editors.xml', './profile/nls/en_us.txt')
-        self.ISYmap = self.createISYmapping()
+        #print('Setting up ISY profile structure')
+        #self.addSystemDefStruct(self.systemID)
+        #print(self.systemID + ' added')
+        #print ('Creating Setup file')
+        #self.createSetupFiles('./profile/nodedef/nodedefs.xml','./profile/editor/editors.xml', './profile/nls/en_us.txt')
+        #self.ISYmap = self.createISYmapping()
 
-    def ISYunit(self, name):
-        if name.lower() in ISYunit:
-            return(self. ISYunit[name.lower()])
+    def getISYunit(self, name):
+        if name.lower() in self.ISYunit:
+            return(self.ISYunit[name.lower()])
         else:
             print('unknown unit : '+str(name))
             return(None)
@@ -300,23 +301,45 @@ class isyProfile:
             info['uom'] = self.setupFile['editors'][editor]['ISYuom']
         return(info)
 
-   
-                                                    
-
-    def addIsyVaraiable (name, node,  ISYuom, ISYmin, ISYmax, ISYsubset,ISYstep,ISYprecision, nlsText, nlsValues):
-        tempDict = {name:{ 'ISYeditor':
-                            {'ISYuom':ISYuom, 'ISYmin':ISYmin, 'ISYmax':ISYmax, 'ISYsubset':ISYsubset, 'ISYstep':ISYstep, 'ISYprec':ISYprecision}
-                            ,'ISYnls' : {'nlsTEXT' : nlsText, 'nlsValues' : nlsValues} }   
-        }
-        if self.sData[node] in None:
-            self.sData[node] =   {  'ISYnode' : {}
-                                    ,'KeyInfo' :{}
-                                    ,'data' : {}
-                                  }
-        elif self.sData[node]['KeyInfo'][name] in None:
-            self.sData[node]['KeyInfo'] = tempDict
+    def addISYnode(self,  nodeId, name, icon ):
+        tempDict = {'nlsICON':icon, 'nlsName': name }
+        if not(nodeId in self.sData):
+            self.sData[nodeId]={}
+            self.sData[nodeId]['ISYnode'] = {'sends':[], 'accepts':{}}
+            self.sData[nodeId]['ISYnode'].update(tempDict)
         else:
-            print('Error: valiable '+ str(name) + ' already exists: )
+            print('node '+ str(nodeId) + ' already exists')
+
+    def addISYcommandSend(self, nodeId,  sendCmd):
+        if nodeId in self.sData:
+            self.sData[nodeId]['ISYnode']['sends'].append(sendCmd)
+        else:
+            print('must create node first')
+
+
+    def addISYcommandReceive(self, nodeId, cmdName, cmdText, cmdVariable):
+        if nodeId in self.sData:
+            tempDict = {'ISYtext':cmdText, 'ISYeditor':cmdVariable}
+            self.sData[nodeId]['ISYnode']['accepts'][cmdName] = tempDict
+        else:
+            print('must create node first')
+
+    def addIsyVaraiable (self, name, nodeId,  ISYuom, ISYmin, ISYmax, ISYsubset,ISYstep,ISYprecision, nlsText, nlsValues):
+        
+        uom = self.getISYunit(ISYuom)
+        tempDict = { 'ISYeditor':
+                            {'ISYuom':uom, 'ISYmin':ISYmin, 'ISYmax':ISYmax, 'ISYsubset':ISYsubset, 'ISYstep':ISYstep, 'ISYprec':ISYprecision}
+                            ,'ISYnls' : {'nlsTEXT' : nlsText, 'nlsValues' : nlsValues} 
+        }
+        if not(nodeId in self.sData):
+            print('Must create node '+str(nodeId)+' first.' )
+        elif not('KeyInfo' in self.sData[nodeId]):
+            self.sData[nodeId]['KeyInfo'] = {}
+            self.sData[nodeId]['KeyInfo'][name] = tempDict
+        elif not(name in self.sData[nodeId]['KeyInfo']):
+            self.sData[nodeId]['KeyInfo'][name] = tempDict
+        else:
+            print('Error: valiable '+ str(name) + ' already exists:' )
 
         
 
@@ -324,14 +347,14 @@ class isyProfile:
         self.keyCount = 0
         nodeId.lower()
         print('addNodeDefStruct: ' + nodeName+ ' ' + str(nodeNbr) + ' '+nodeId)
-        self.name = nodeName+str(nodeNbr)
+        self.name = nodeId+str(nodeNbr)
         self.nlsKey = 'nls' + self.name
         self.nlsKey.lower()
         #editorName = nodeName+'_'+str(keyCount)
         self.setupFile['nodeDef'][self.name]={}
         self.setupFile['nodeDef'][self.name]['CodeId'] = nodeId
         self.setupFile['nodeDef'][self.name]['nlsId'] = self.nlsKey
-        self.setupFile['nodeDef'][self.name]['nlsNAME']=self.sData[nodeName]['data'][nodeNbr]['name']
+        self.setupFile['nodeDef'][self.name]['nlsNAME']=self.sData[nodeName]['ISYnode']['nlsName']
         self.setupFile['nodeDef'][self.name]['nlsICON']=self.sData[nodeName]['ISYnode']['nlsICON']
         self.setupFile['nodeDef'][self.name]['sts']={}
 
@@ -377,72 +400,67 @@ class isyProfile:
             self.setupFile['nodeDef'][self.name]['cmds']['sends'] = self.sData[nodeName]['ISYnode']['sends']                                 
         return()
 
-    def addSystemDefStruct(self, nodeId):
+    def addControllerDefStruct(self, controllerName, controllerId):
         self.keyCount = 0
-        nodeId.lower()
-        self.nlsKey= 'nls' + nodeId
+        controllerId.lower()
+        self.nlsKey= 'nls' + controllerId
         self.nlsKey.lower()
-        #print('addSystemDefStruct: ' + nodeId)
-        self.setupFile['nodeDef'][ self.systemID]={}
-        self.setupFile['nodeDef'][ self.systemID]['CodeId'] = nodeId
-        self.setupFile['nodeDef'][ self.systemID]['nlsId'] = self.nlsKey
-        self.setupFile['nodeDef'][ self.systemID]['nlsNAME']=self.sData[ self.systemID]['data']['name']
-        self.setupFile['nodeDef'][ self.systemID]['nlsICON']=self.sData[ self.systemID]['ISYnode']['nlsICON']
-        self.setupFile['nodeDef'][ self.systemID]['sts']={}
+        #print('addControllerDefStruct: ' + controllerId)
+        self.setupFile['nodeDef'][ controllerId]={}
+        self.setupFile['nodeDef'][ controllerId]['CodeId'] = controllerId
+        self.setupFile['nodeDef'][ controllerId]['nlsId'] = self.nlsKey
+        self.setupFile['nodeDef'][ controllerId]['nlsNAME']=self.sData[controllerId]['ISYnode']['nlsName']
+        self.setupFile['nodeDef'][ controllerId]['nlsICON']=self.sData[controllerId]['ISYnode']['nlsICON']
+        self.setupFile['nodeDef'][ controllerId]['sts']={}
 
-        #for mKey in self.sData[ self.systemID]['data']: 
-        for mKey in self.sData[ self.systemID]['KeyInfo']:    
-            #make check if system has unit installed
-            if self.sData[ self.systemID]['KeyInfo'][mKey]['ISYeditor']['ISYuom']:
-                if ((self.sData[ self.systemID]['KeyInfo'][mKey]['ISYeditor']['ISYuom'] == 112
-                   and self.sData[ self.systemID]['data'][mKey] != 0)
-                   or self.sData[ self.systemID]['KeyInfo'][mKey]['ISYeditor']['ISYuom'] != 112):
+        #for mKey in self.sData[ controllerId]['data']: 
+        for mKey in self.sData[ controllerId]['KeyInfo']:    
+            #make check if controller has unit installed
+            if self.sData[ controllerId]['KeyInfo'][mKey]['ISYeditor']['ISYuom']:
+                if ((self.sData[ controllerId]['KeyInfo'][mKey]['ISYeditor']['ISYuom'] == 112
+                   and self.sData[ controllerId]['data'][mKey] != 0)
+                   or self.sData[ controllerId]['KeyInfo'][mKey]['ISYeditor']['ISYuom'] != 112):
                     self.keyCount = self.keyCount + 1
-                    editorName = 'SYSTEM_'+str(self.keyCount)
+                    editorName = 'CONTROLLER_'+str(self.keyCount)
                     nlsName = editorName
                     ISYvar = 'GV'+str(self.keyCount)
-                    self.setupFile['nodeDef'][ self.systemID]['sts'][mKey]={ISYvar:editorName}
+                    self.setupFile['nodeDef'][ controllerId]['sts'][mKey]={ISYvar:editorName}
                     self.setupFile['editors'][editorName]={}
                     #self.setupFile['nls'][editorName][ISYparam]
-                    for ISYparam in self.sData[ self.systemID]['KeyInfo'][mKey]['ISYeditor']:
-                        if self.sData[ self.systemID]['KeyInfo'][mKey]['ISYeditor'][ISYparam]!= None:
-                            self.setupFile['editors'][editorName][ISYparam]=self.sData[ self.systemID]['KeyInfo'][mKey]['ISYeditor'][ISYparam]
+                    for ISYparam in self.sData[ controllerId]['KeyInfo'][mKey]['ISYeditor']:
+                        if self.sData[ controllerId]['KeyInfo'][mKey]['ISYeditor'][ISYparam]!= None:
+                            self.setupFile['editors'][editorName][ISYparam]=self.sData[ controllerId]['KeyInfo'][mKey]['ISYeditor'][ISYparam]
 
-                    if self.sData[ self.systemID]['KeyInfo'][mKey]['ISYnls']:
+                    if self.sData[ controllerId]['KeyInfo'][mKey]['ISYnls']:
                         self.setupFile['nls'][nlsName]={}
-                    for ISYnls in self.sData[ self.systemID]['KeyInfo'][mKey]['ISYnls']:
+                    for ISYnls in self.sData[ controllerId]['KeyInfo'][mKey]['ISYnls']:
                         #print( mKey + ' ' + ISYnls)
-                        if  self.sData[ self.systemID]['KeyInfo'][mKey]['ISYnls'][ISYnls]:      
-                            self.setupFile['nls'][nlsName][ISYnls] = self.sData[ self.systemID]['KeyInfo'][mKey]['ISYnls'][ISYnls]
+                        if  self.sData[ controllerId]['KeyInfo'][mKey]['ISYnls'][ISYnls]:      
+                            self.setupFile['nls'][nlsName][ISYnls] = self.sData[ controllerId]['KeyInfo'][mKey]['ISYnls'][ISYnls]
                             if ISYnls == 'nlsValues':
                                 self.setupFile['editors'][editorName]['nlsKey'] = nlsName
         
-        self.setupFile['nodeDef'][ self.systemID]['cmds']={}
-        if 'accepts' in self.sData[ self.systemID]['ISYnode']:
-            self.setupFile['nodeDef'][ self.systemID]['cmds']['accepts'] = {}
-            for key in  self.sData[ self.systemID]['ISYnode']['accepts']:     
-                if self.sData[ self.systemID]['ISYnode']['accepts'][key]['ISYeditor'] in self.setupFile['nodeDef'][ self.systemID]['sts']:
-                    mVal = self.sData[ self.systemID]['ISYnode']['accepts'][key]['ISYeditor']
-                    self.setupFile['nodeDef'][ self.systemID]['cmds']['accepts'][key]= self.setupFile['nodeDef'][ self.systemID]['sts'][mVal]
-                    self.setupFile['nodeDef'][ self.systemID]['cmds']['accepts'][key]['ISYInfo']=self.sData[ self.systemID]['ISYnode']['accepts'][key]
+        self.setupFile['nodeDef'][ controllerId]['cmds']={}
+        if 'accepts' in self.sData[ controllerId]['ISYnode']:
+            self.setupFile['nodeDef'][ controllerId]['cmds']['accepts'] = {}
+            for key in  self.sData[ controllerId]['ISYnode']['accepts']:     
+                if self.sData[ controllerId]['ISYnode']['accepts'][key]['ISYeditor'] in self.setupFile['nodeDef'][ controllerId]['sts']:
+                    mVal = self.sData[ controllerId]['ISYnode']['accepts'][key]['ISYeditor']
+                    self.setupFile['nodeDef'][ controllerId]['cmds']['accepts'][key]= self.setupFile['nodeDef'][ controllerId]['sts'][mVal]
+                    self.setupFile['nodeDef'][ controllerId]['cmds']['accepts'][key]['ISYInfo']=self.sData[ controllerId]['ISYnode']['accepts'][key]
                 else:
-                    self.setupFile['nodeDef'][ self.systemID]['cmds']['accepts'][key]= {}
-                    self.setupFile['nodeDef'][ self.systemID]['cmds']['accepts'][key]['ISYInfo']= self.sData[ self.systemID]['ISYnode']['accepts'][key]   
-        if 'sends' in self.sData[ self.systemID]['ISYnode']:
-            self.setupFile['nodeDef'][ self.systemID]['cmds']['sends']=self.sData[ self.systemID]['ISYnode']['sends']                              
+                    self.setupFile['nodeDef'][ controllerId]['cmds']['accepts'][key]= {}
+                    self.setupFile['nodeDef'][ controllerId]['cmds']['accepts'][key]['ISYInfo']= self.sData[ controllerId]['ISYnode']['accepts'][key]   
+        if 'sends' in self.sData[ controllerId]['ISYnode']:
+            self.setupFile['nodeDef'][ controllerId]['cmds']['sends']=self.sData[ controllerId]['ISYnode']['sends']                              
         return()
-
-
-
-   
-    
   
     #Setup file generation 
     def createSetupFiles(self, nodeDefFileName, editorFileName, nlsFileName):
         #print ('Create Setup Files')
         status = True
         try:
-            print('opening files')
+            #print('opening files')
             if not(os.path.exists('./profile')):
                 os.mkdir('./profile')       
             if not(os.path.exists('./profile/editor')):
@@ -564,7 +582,6 @@ class isyProfile:
             editorFile.write('</editors> \n')
             editorFile.close()
             nlsFile.close()
-        
         except:
             print('something went wrong in creating setup files')
             status = False
@@ -572,9 +589,9 @@ class isyProfile:
             editorFile.close()
             nlsFile.close()
         return(status)
+    
 
-    def getMessanaSystemKey(self, ISYkey):
-        return(self.ISYmap[ self.systemID][ISYkey]['system'])
+
 
     def getSystemISYdriverInfo(self, mKey):
         info = {}

@@ -5,9 +5,10 @@ from tesla_powerwall import Powerwall
 
 from TeslaInfo import tesla_info
 from  ISYprofile import isyProfile
-isyinfo = isyProfile('teslawall','powerwall')
+#isyinfo = isyProfile('teslawall','powerwall')
 PowerWall = Powerwall("192.168.1.151")
-PowerWall.login("coe123COE", "christian.olgaard@gmail.com")
+PowerWall.login( 'coe123COE', 'christian.olgaard@gmail.com')
+#test = tesla_info("192.168.1.151", "coe123COE", "christian.olgaard@gmail.com")
 
 #self.teslaInfo = tesla_info('192.168.1.151', 'coe123COE', 'christian.olgaard@gmail.com')
 print(PowerWall.is_authenticated())
@@ -38,24 +39,32 @@ print (test1)
 print('\nget sitemaster ' )
 test2 = PowerWall.get_sitemaster() #Needed
 
+
 print(test2.is_connected_to_tesla, test2.is_running, test2.status)
 print('\n get Meters ' )
 #print( PowerWall.get_meters())
 
 print('\n get grid status ' ) # Needed
 test3 = PowerWall.get_grid_status() # Needed
+print(test3)
 
 print('\n get grid services active ')
 test4 = PowerWall.is_grid_services_active() # Needed
+print(test4)
 
+print('\n get operation mode ')
 test5 = PowerWall.get_operation_mode()
-print('\n get grid services ')
+print(test5)
+
+print('\n get site info ')
 test6 = PowerWall.get_site_info()
+print(test5)
 
 #print(PowerWall.set_site_name(, site_name: str))
 
 print('\n get status ')
 test7 = PowerWall.get_status() # NEeded
+print(test7)
 #print(PowerWall.get_grid_status()) # Needed
 
 

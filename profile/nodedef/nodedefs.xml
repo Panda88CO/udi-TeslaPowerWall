@@ -2,20 +2,20 @@
    <nodeDef id="teslawall" nls="nlsteslawall">
       <editors />
       <sts>
-         <st id="GV1" editor="SYSTEM_1" />
-         <st id="GV2" editor="SYSTEM_2" />
-         <st id="GV3" editor="SYSTEM_3" />
-         <st id="GV4" editor="SYSTEM_4" />
-         <st id="GV5" editor="SYSTEM_5" />
-         <st id="GV6" editor="SYSTEM_6" />
-         <st id="GV7" editor="SYSTEM_7" />
-         <st id="GV8" editor="SYSTEM_8" />
-         <st id="GV9" editor="SYSTEM_9" />
-         <st id="GV10" editor="SYSTEM_10" />
-         <st id="GV11" editor="SYSTEM_11" />
-         <st id="GV12" editor="SYSTEM_12" />
-         <st id="GV13" editor="SYSTEM_13" />
-         <st id="GV14" editor="SYSTEM_14" />
+         <st id="GV1" editor="CONTROLLER_1" />
+         <st id="GV2" editor="CONTROLLER_2" />
+         <st id="GV3" editor="CONTROLLER_3" />
+         <st id="GV4" editor="CONTROLLER_4" />
+         <st id="GV5" editor="CONTROLLER_5" />
+         <st id="GV6" editor="CONTROLLER_6" />
+         <st id="GV7" editor="CONTROLLER_7" />
+         <st id="GV8" editor="CONTROLLER_8" />
+         <st id="GV9" editor="CONTROLLER_9" />
+         <st id="GV10" editor="CONTROLLER_10" />
+         <st id="GV11" editor="CONTROLLER_11" />
+         <st id="GV12" editor="CONTROLLER_12" />
+         <st id="GV13" editor="CONTROLLER_13" />
+         <st id="GV14" editor="CONTROLLER_14" />
       </sts>
       <cmds>
          <sends>
@@ -24,6 +24,9 @@
          </sends>
          <accepts>
             <cmd id="UPDATE" /> 
+            <cmd id="TEST" > 
+               <p id="" editor="CONTROLLER_1" init="GV1" /> 
+            </cmd> 
          </accepts>
       </cmds>
    </nodeDef> 

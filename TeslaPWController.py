@@ -13,7 +13,7 @@ class TeslaPWController(polyinterface.Controller):
         LOGGER.info('_init_ Tesla Power Wall Controller')
         self.messanaImportOK = 0
         self.ISYforced = False
-        self.name = 'Tesla POwer Wall'
+        self.name = 'Tesla Power Wall'
         self.address ='teslapw'
         self.id = self.address
         #LOGGER.debug('Name/address: '+ self.name + ' ' + self.address)

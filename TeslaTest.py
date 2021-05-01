@@ -6,9 +6,9 @@ from tesla_powerwall import Powerwall
 from TeslaInfo import tesla_info
 from  ISYprofile import isyProfile
 #isyinfo = isyProfile('teslawall','powerwall')
-PowerWall = Powerwall("192.168.1.151")
-PowerWall.login( 'coe123COE', 'christian.olgaard@gmail.com')
-#test = tesla_info("192.168.1.151", "coe123COE", "christian.olgaard@gmail.com")
+#PowerWall = Powerwall("192.168.1.151")
+#PowerWall.login( 'coe123COE', 'christian.olgaard@gmail.com')
+test = tesla_info("192.168.1.151", "coe123COE", "christian.olgaard@gmail.com")
 
 #self.teslaInfo = tesla_info('192.168.1.151', 'coe123COE', 'christian.olgaard@gmail.com')
 print(PowerWall.is_authenticated())

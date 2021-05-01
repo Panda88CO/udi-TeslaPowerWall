@@ -30,3 +30,6 @@ CONTROLLER_13-1 = True
 ST-nlsteslawall-GV14-NAME = Power Supply Mode
 CONTROLLER_14-0 = False
 CONTROLLER_14-1 = True
+ST-nlsteslawall-GV15-NAME = Grid Services Active (supplying?)
+CONTROLLER_15-0 = False
+CONTROLLER_15-1 = True

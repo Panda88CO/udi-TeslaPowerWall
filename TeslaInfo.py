@@ -30,9 +30,10 @@ class tesla_info:
         self.ConnectedTesla = 'connectedTesla'
         self.running = 'running'
         self.powerSupplyMode = 'powerSupplyMode'
+        self.gridServiceActive = 'gridServiceActive'
 
         ISYinfo = isyProfile( self.controllerName ,self.controllerID )
-        self.ISYvariables = []
+        self.ISYvariables = {}
 
         #self.ISYname
        
@@ -43,35 +44,35 @@ class tesla_info:
         ISYinfo.addISYcommandReceive(self.controllerID, 'TEST', 'Test', self.chargeLevel)
 
         ISYinfo.addIsyVaraiable(self.chargeLevel, self.controllerID, 'percent', 0, 100, None, None, 1, 'Battery Charge Level', None )
-        self.ISYvariables.append(self.chargeLevel)
-        ISYinfo.addIsyVaraiable (self.backupLevel, self.controllerID, 'percent', 0, 100, None, None, 1, 'Battery Hold-off Level', None )
-        self.ISYvariables.append(self.backupLevel)
+        self.addISYvariables(self.chargeLevel, self.controllerID)
+        ISYinfo.addIsyVaraiable(self.backupLevel, self.controllerID, 'percent', 0, 100, None, None, 1, 'Battery Hold-off Level', None )
+        self.addISYvariables(self.backupLevel, self.controllerID)
         ISYinfo.addIsyVaraiable (self.gridStatus, self.controllerID, 'list', None, None, '0-3', None, None, 'Grid Status', {0:GridStatus.CONNECTED.value, 1:GridStatus.ISLANEDED_READY.value, 2:GridStatus.ISLANEDED.value, 3:GridStatus.TRANSITION_TO_GRID.value } )
-        self.ISYvariables.append(self.gridStatus)
+        self.addISYvariables(self.gridStatus, self.controllerID)
         ISYinfo.addIsyVaraiable (self.solarSupply, self.controllerID, 'KW', 0, 20, None, None, 1, 'Current Solar Supply', None ) 
-        self.ISYvariables.append(self.solarSupply)
+        self.addISYvariables(self.solarSupply, self.controllerID)
         ISYinfo.addIsyVaraiable (self.batterySupply, self.controllerID, 'KW', -20, 20, None, None, 1, 'Current Battery Supply', None ) 
-        self.ISYvariables.append(self.batterySupply)
+        self.addISYvariables(self.batterySupply, self.controllerID)
         ISYinfo.addIsyVaraiable (self.gridSupply, self.controllerID, 'KW', -100, 100, None, None, 1, 'Current Grid Supply', None ) 
-        self.ISYvariables.append(self.gridSupply)
+        self.addISYvariables(self.gridSupply, self.controllerID)
         ISYinfo.addIsyVaraiable (self.load, self.controllerID, 'KW', -100, 100, None, None, 1, 'Current Load', None ) 
-        self.ISYvariables.append(self.load)
+        self.addISYvariables(self.load, self.controllerID)
         ISYinfo.addIsyVaraiable (self.dailySolar, self.controllerID, 'KW', 0, 1000, None, None, 1, 'Solar Power today', None ) 
-        self.ISYvariables.append(self.dailySolar)
+        self.addISYvariables(self.dailySolar, self.controllerID)
         ISYinfo.addIsyVaraiable (self.dailyConsumption, self.controllerID, 'KW', 0, 1000, None, None, 1, 'Power Consumed today', None ) 
-        self.ISYvariables.append(self.dailyConsumption)
+        self.addISYvariables(self.dailyConsumption, self.controllerID)
         ISYinfo.addIsyVaraiable (self.dailyGeneration, self.controllerID, 'KW', 0, 1000, None, None, 1, 'Net Power today', None ) 
-        self.ISYvariables.append(self.dailyGeneration)
+        self.addISYvariables(self.dailyGeneration, self.controllerID)
         ISYinfo.addIsyVaraiable (self.operationMode, self.controllerID, 'list', None, None, '0-3', None, 1, 'Operation Mode', {0:OperationMode.BACKUP.value, 1:OperationMode.SELF_CONSUMPTION.value, 2:OperationMode.AUTONOMOUS.value, 3:OperationMode.SITE_CONTROL.value } )                
-        self.ISYvariables.append(self.operationMode)
+        self.addISYvariables(self.operationMode, self.controllerID)
         ISYinfo.addIsyVaraiable (self.ConnectedTesla, self.controllerID, 'boolean', None,None, 0-1,None, None, 'Connected to Tesla', { 0:'False', 1: 'True' }) 
-        self.ISYvariables.append(self.ConnectedTesla)
+        self.addISYvariables(self.ConnectedTesla, self.controllerID)
         ISYinfo.addIsyVaraiable (self.running, self.controllerID, 'boolean', None,None, 0-1,None, None, 'Power Wall Running', { 0:'False', 1: 'True' }) 
-        self.ISYvariables.append(self.running)
+        self.addISYvariables(self.running, self.controllerID)
         ISYinfo.addIsyVaraiable (self.powerSupplyMode, self.controllerID, 'boolean', None,None, 0-1,None, None, 'Power Supply Mode', { 0:'False', 1: 'True' }) 
-        self.ISYvariables.append(self.powerSupplyMode)
+        self.addISYvariables(self.powerSupplyMode, self.controllerID)
         ISYinfo.addIsyVaraiable (self.gridServiceActive, self.controllerID, 'boolean', None,None, 0-1,None, None, 'Grid Services Active (supplying?)', { 0:'False', 1: 'True' }) 
-        self.ISYvariables.append(self.gridServiceActive)
+        self.addISYvariables(self.gridServiceActive, self.controllerID)
 
         ISYinfo.addControllerDefStruct(self.controllerName, self.controllerID )
         ISYinfo.createSetupFiles('./profile/nodedef/nodedefs.xml','./profile/editor/editors.xml', './profile/nls/en_us.txt')
@@ -80,7 +81,13 @@ class tesla_info:
         if not(self.TPW.is_authenticated()):
             print('Error Logging into Tesla Power Wall')
 
-    
+    def addISYvariables(self, variable, ID):
+        if ID in self.ISYvariables:
+            self.ISYvariables[ID].append(variable)
+        else:
+            self.ISYvariables[ID] = []
+            self.ISYvariables[ID].append(variable)
+
     def setSendCommand(self, name, NodeId):
         print()
 

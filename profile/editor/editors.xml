@@ -41,4 +41,7 @@
   <editor id = "CONTROLLER_14" > 
      <range  uom="2" subset="-1" nls="CONTROLLER_14" />
 </editor>
+  <editor id = "CONTROLLER_15" > 
+     <range  uom="2" subset="-1" nls="CONTROLLER_15" />
+</editor>
 </editors> 

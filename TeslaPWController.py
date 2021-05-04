@@ -82,8 +82,8 @@ class TeslaPWController(polyinterface.Controller):
             LOGGER.debug ('Install Profile')    
             self.poly.installprofile()
             self.ISYparams = TPW.supportedParamters(self.id)
-            for key in ISYparams:
-                info = ISYparams[key]
+            for key in self.ISYparams:
+                info = self.ISYparams[key]
                 if info != {}:
                     val = TPW.getSystemISYValue(key, self.id)
                     self.drivers.append({'driver':key, 'value':value, 'uom':info['uom'] })

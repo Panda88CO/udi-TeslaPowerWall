@@ -78,7 +78,7 @@ class TeslaPWController(polyinterface.Controller):
 
         else:
             LOGGER.info('Connecting to Tesla Power Wall')
-            TPW = tesla_info(self.IPAddress, self.UserPassword, self.UserEmail, self.name, self.id )
+            self.TPW = tesla_info(self.IPAddress, self.UserPassword, self.UserEmail, self.name, self.id )
             LOGGER.debug ('Install Profile')    
             self.poly.installprofile()
             self.ISYparams = TPW.supportedParamters(self.id)
@@ -90,9 +90,6 @@ class TeslaPWController(polyinterface.Controller):
                     self.setDriver(key, value, report = True, force = True)   
         self.nodeDefineDone = True
         self.discover()
-
-
-              
 
 
     def stop(self):
@@ -111,7 +108,7 @@ class TeslaPWController(polyinterface.Controller):
     
     def shortPoll(self):
         LOGGER.debug('Tesla Power Wall Controller shortPoll')
-        TPW.pollSystemData()
+        self.TPW.pollSystemData()
         self.updateISYdrivers()
         
 
@@ -124,7 +121,7 @@ class TeslaPWController(polyinterface.Controller):
         for key in ISYparams:
             info = ISYparams[key]
             if info != {}:
-                value = TPW.getISYValue(key, self.id)
+                value = self.TPW.getISYValue(key, self.id)
                 LOGGER.debug('Update ISY drivers :' + str(ISYkey)+ ' ' + info['systemVar']+ ' value:' + str(value) )
                 self.setDriver(key, value, report = True, force = False)          
 
@@ -143,7 +140,7 @@ class TeslaPWController(polyinterface.Controller):
 
     def ISYupdate (self, command):
         LOGGER.info('ISY-update called')
-        TPW.pollSystemData()
+        self.TPW.pollSystemData()
         self.updateISYdrivers()
         self.reportDrivers()
  

@@ -85,7 +85,7 @@ class TeslaPWController(polyinterface.Controller):
             for key in self.ISYparams:
                 info = self.ISYparams[key]
                 if info != {}:
-                    val = TPW.getSystemISYValue(key, self.id)
+                    val = TPW.getISYValue(key, self.id)
                     self.drivers.append({'driver':key, 'value':value, 'uom':info['uom'] })
                     self.setDriver(key, value, report = True, force = True)   
         self.nodeDefineDone = True

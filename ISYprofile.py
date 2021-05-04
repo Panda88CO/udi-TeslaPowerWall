@@ -9,10 +9,10 @@ from tesla_powerwall import GridStatus, OperationMode
 
 
 class isyProfile:
-    def __init__ (self,  ISYcontrollerName, systemName):
+    def __init__ (self):
         # Note all xxIDs must be lower case without special characters (ISY requirement)
-        self.systemID = ISYcontrollerName
-        self.systemName = systemName
+        #self.systemID = ISYcontrollerName
+        #self.systemName = systemName
         self.sData  = {}
         self.ISYunit = {'boolean':2, 'list':25, 'kw':30, 'percent':51}
         '''
@@ -42,16 +42,6 @@ class isyProfile:
                             ,'nls':{}}
 
         
-        
-        #Dummy check to see if there is connection to Messana system)
-
-
-        #print('Setting up ISY profile structure')
-        #self.addSystemDefStruct(self.systemID)
-        #print(self.systemID + ' added')
-        #print ('Creating Setup file')
-        #self.createSetupFiles('./profile/nodedef/nodedefs.xml','./profile/editor/editors.xml', './profile/nls/en_us.txt')
-        #self.ISYmap = self.createISYmapping()
 
     def getISYunit(self, name):
         if name.lower() in self.ISYunit:
@@ -78,7 +68,7 @@ class isyProfile:
         return (temp)
 
 
-
+    '''    
     def getnodeISYdriverInfo(self, node, nodeNbr, mKey):
         info = {}
         if mKey in self.setupFile['nodeDef'][ self.systemID]['sts']:
@@ -99,7 +89,7 @@ class isyProfile:
 
             info['uom'] = self.setupFile['editors'][editor]['ISYuom']
         return(info)
-
+    '''
     def addISYnode(self,  nodeId, name, icon ):
         tempDict = {'nlsICON':icon, 'nlsName': name }
         if not(nodeId in self.sData):
@@ -115,6 +105,10 @@ class isyProfile:
         else:
             print('must create node first')
 
+    def getISYSendCommands(self, nodeId):
+        return(self.sData[nodeId]['ISYnode']['sends'])
+
+
 
     def addISYcommandReceive(self, nodeId, cmdName, cmdText, cmdVariable):
         if nodeId in self.sData:
@@ -122,6 +116,12 @@ class isyProfile:
             self.sData[nodeId]['ISYnode']['accepts'][cmdName] = tempDict
         else:
             print('must create node first')
+
+    def getISYReceiveCommands(self, nodeId): 
+        tempList = []
+        for key in self.sData[nodeId]['ISYnode']['accepts']:
+            tempList.append({key:self.sData[nodeId]['ISYnode']['accepts'][key]['ISYeditor']} )
+        return(tempList)
 
     def addIsyVaraiable (self, name, nodeId,  ISYuom, ISYmin, ISYmax, ISYsubset,ISYstep,ISYprecision, nlsText, nlsValues):
         
@@ -140,7 +140,9 @@ class isyProfile:
         else:
             print('Error: valiable '+ str(name) + ' already exists:' )
 
-        
+    def removeISYvariable(self, nodeId, cmdName):
+        if cmdName in self.sData[nodeId]['KeyInfo']:
+             self.sData[nodeId]['KeyInfo'].pop(cmdName)
 
     def addNodeDefStruct(self, nodeNbr, nodeName, nodeId):
         self.keyCount = 0
@@ -391,7 +393,7 @@ class isyProfile:
     
 
 
-
+    '''
     def getSystemISYdriverInfo(self, mKey):
         info = {}
         if mKey in self.setupFile['nodeDef'][ self.systemID]['sts']:
@@ -413,4 +415,4 @@ class isyProfile:
             info['uom'] = self.setupFile['editors'][editor]['ISYuom']
         return(info)
 
- 
+    '''

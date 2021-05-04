@@ -7,18 +7,34 @@ from TeslaInfo import tesla_info
 from  ISYprofile import isyProfile
 
 drivers = []
-#isyinfo = isyProfile('teslawall','powerwall')
 PowerWall = Powerwall("192.168.1.151")
 PowerWall.login( 'coe123COE', 'christian.olgaard@gmail.com')
+
+
+controllerName = 'powerwall'
 id = 'tpwid'
-tpw = tesla_info("192.168.1.151", "coe123COE", "christian.olgaard@gmail.com", id)
-ISYparams = tpw.supportedParamters(id)
+TPW = tesla_info("192.168.1.151", "coe123COE", "christian.olgaard@gmail.com", controllerName, id)
+ISYparams = TPW.supportedParamters(id)
 for key in ISYparams:
     test = ISYparams[key]
     if  test != {}:
-        val = tpw.getISYvalue(key, id)
-        print(val)
+        val = TPW.getISYvalue(key, id)
+        print(test['systemVar'] + ' : '+ str(val))
         drivers.append({'driver':key, 'value':val, 'uom':test['uom'] })
+print()
+
+
+for i in range(100):
+    for key in ISYparams:
+        test = ISYparams[key]
+        if  test != {}:
+            val = TPW.getISYvalue(key, id)
+            print(test['systemVar'] + ' : '+ str(val))
+    time.sleep(60)
+    TPW.pollSystemData()
+    print('\nineration : ' + str(i))
+
+
         #LOGGER.debug(  'driver:  ' +  temp['driver'])
 
 #self.teslaInfo = tesla_info('192.168.1.151', 'coe123COE', 'christian.olgaard@gmail.com')

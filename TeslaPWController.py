@@ -8,7 +8,7 @@ LOGGER = polyinterface.LOGGER
                
 class TeslaPWController(polyinterface.Controller):
 
-    def __init__(self, messanaName):
+    def __init__(self, controllerName):
         super(TeslaPWController, self).__init__(polyglot)
         LOGGER.info('_init_ Tesla Power Wall Controller')
         self.ISYforced = False
@@ -18,9 +18,6 @@ class TeslaPWController(polyinterface.Controller):
         #LOGGER.debug('Name/address: '+ self.name + ' ' + self.address)
         self.primary = self.address
         self.hb = 0
-        self.ISYdrivers=[]
-        self.ISYcommands = {}
-        self.ISYTempUnit = 0
         self.drivers = []
         self.nodeDefineDone = False
 
@@ -76,33 +73,18 @@ class TeslaPWController(polyinterface.Controller):
             self.stop()
 
         else:
-            LOGGER.info('Retrieving info from Messana System')
-            TPW = tesla_info(self.IPAddress, self.UserPassword, self.UserEmail, self.id )
-            self.ISYparams = TPW.supportedParamters(self.id)
-
-            '''
-            self.messana = messanaInfo( self.IPAddress, self.MessanaKey, self.address )
-            if self.messana == False:
-                self.stop()
-            self.id = self.messana.getSystemAddress()
-            self.address = self.messana.getSystemAddress()
-            self.messana.updateSystemData('all')
-            self.systemGETKeys = self.messana.systemPullKeys()
-            self.systemPUTKeys = self.messana.systemPushKeys()
-            self.systemActiveKeys = self.messana.systemActiveKeys()
-            '''
-            
-            for key in self.ISYparams:
-                
-                if  temp != {}:
-                    self.drivers.append(temp)
-                    #LOGGER.debug(  'driver:  ' +  temp['driver'])
-
+            LOGGER.info('Connecting to Tesla Power Wall')
+            TPW = tesla_info(self.IPAddress, self.UserPassword, self.UserEmail, self.name, self.id )
             LOGGER.debug ('Install Profile')    
             self.poly.installprofile()
-            #LOGGER.debug('Install Profile done')
-        self.updateISYdrivers('all')
-        self.messanaImportOK = 1
+            self.ISYparams = TPW.supportedParamters(self.id)
+            for key in ISYparams:
+                info = ISYparams[key]
+                if info != {}:
+                    val = TPW.getSystemISYValue(key, self.id)
+                    self.drivers.append({'driver':key, 'value':value, 'uom':info['uom'] })
+                    self.setDriver(key, value, report = True, force = True)   
+        self.nodeDefineDone = True
         self.discover()
 
 
@@ -124,117 +106,41 @@ class TeslaPWController(polyinterface.Controller):
 
     
     def shortPoll(self):
-        LOGGER.debug('Messana Controller shortPoll')
-
-        if self.messanaImportOK == 1:
-            LOGGER.debug('Short Poll System Up')
-            if self.ISYforced:
-                #self.messana.updateSystemData('active')
-                self.updateISYdrivers('active')
-            else:
-                #self.messana.updateSystemData('all')
-                self.updateISYdrivers('all')
-            self.ISYforced = True
-            LOGGER.debug('Short POll controller: ' )
-            if self.nodeDefineDone == True:
-                for node in self.nodes:
-                    if node != self.address and node != 'controller':
-                        #LOGGER.debug('Calling SHORT POLL for node : ' + node )
-                        self.nodes[node].shortPoll()      
+        LOGGER.debug('Tesla Power Wall Controller shortPoll')
+        TPW.pollSystemData()
+        self.updateISYdrivers()
+        
 
     def longPoll(self):
-        LOGGER.debug('Messana Controller longPoll')
-        if self.messanaImportOK == 1:
-            self.heartbeat()
-            self.messana.updateSystemData('all')
-            LOGGER.debug( self.drivers)
-            self.updateISYdrivers('all')
-            self.reportDrivers()
-            self.ISYforced = True   
-            if self.nodeDefineDone == True:       
-                for node in self.nodes:
-                    if node != self.address and node != 'controller':
-                        #LOGGER.debug('Calling LONG POLL for node : ' + node )
-                        self.nodes[node].longPoll()
-                    
-                    
+        LOGGER.debug('Tesla Power Wall  Controller longPoll - heat beat')
+        self.heartbeat()            
 
-    def updateISYdrivers(self, level):
+    def updateISYdrivers(self):
         LOGGER.debug('System updateISYdrivers')
-        for ISYdriver in self.drivers:
-            ISYkey = ISYdriver['driver']
-            if level == 'active':
-                temp = self.messana.getMessanaSystemKey(ISYkey)
-                if temp in self.systemActiveKeys:
-                    #LOGGER.debug('MessanaController ISYdrivers ACTIVE ' + temp)
-                    status, value = self.messana.getSystemISYValue(ISYkey)
-                    if status:
-                        if self.ISYforced:
-                            self.setDriver(ISYdriver['driver'], value, report = True, force = False)
-                        else:
-                            self.setDriver(ISYdriver['driver'], value, report = True, force = True)
-                        #LOGGER.debug('driver updated :' + ISYdriver['driver'] + ' =  '+str(value))
-                    else:
-                        LOGGER.error('Error getting ' + ISYdriver['driver'])
-            elif level == 'all':
-                temp = self.messana.getMessanaSystemKey(ISYkey)
-                #LOGGER.debug('MessanaController ISYdrivers ACTIVE ' + temp)
-                status, value = self.messana.getSystemISYValue(ISYkey)
-                if status:
-                    if self.ISYforced:
-                        self.setDriver(ISYdriver['driver'], value, report = True, force = False)
-                    else:
-                        self.setDriver(ISYdriver['driver'], value, report = True, force = True)
-                    #LOGGER.debug('driver updated :' + ISYdriver['driver'] + ' =  '+str(value))
-                else:
-                    LOGGER.error('Error getting ' + ISYdriver['driver'])
-            else:
-                 LOGGER.error('Error!  Unknown level passed: ' + level)
-
+        for key in ISYparams:
+            info = ISYparams[key]
+            if info != {}:
+                value = TPW.getSystemISYValue(key, self.id)
+                LOGGER.debug('Update ISY drivers :' + str(ISYkey)+ ' ' + info['systemVar']+ ' value:' + str(value) )
+                self.setDriver(key, value, report = True, force = False)          
 
     def query(self, command=None):
         LOGGER.debug('TOP querry')
-        self.teslaPW.updateSystemData('all')
+        self.updateISYdrivers()
         self.reportDrivers()
 
     def discover(self, command=None):
-
-        LOGGER.debug('discover zones')
+        #LOGGER.debug('discover zones')
         self.nodeDefineDone = True
-  
-    
 
     def check_params(self, command=None):
         LOGGER.debug('Check Params')
  
-    def setStatus(self, command):
-        #LOGGER.debug('set Status Called')
-        value = int(command.get('value'))
-        LOGGER.debug('set Status Recived:' + str(value))
-        if self.messana.systemSetStatus(value):
-            ISYdriver = self.messana.getSystemStatusISYdriver()
-            self.setDriver(ISYdriver, value, report = True)
-
-    def setEnergySave(self, command):
-        #LOGGER.debug('setEnergySave Called')
-        value = int(command.get('value'))
-        LOGGER.debug('SetEnergySave Recived:' + str(value))
-        if self.messana.systemSetEnergySave(value):
-            ISYdriver = self.messana.getSystemEnergySaveISYdriver()
-            self.setDriver(ISYdriver, value, report = True)
-
-    def setSetback(self, command):
-        #LOGGER.debug('setSetback Called')
-        value = int(command.get('value'))
-        LOGGER.debug('setSetback Reeived:' + str(value))
-        if self.messana.systemSetback(value):
-            ISYdriver = self.messana.getSystemSetbackISYdriver()
-            self.setDriver(ISYdriver, value, report = True)
 
     def ISYupdate (self, command):
         LOGGER.info('ISY-update called')
-        self.messana.updateSystemData('all')
-        self.updateISYdrivers('all')
+        TPW.pollSystemData()
+        self.updateISYdrivers()
         self.reportDrivers()
  
 

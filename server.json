@@ -6,14 +6,14 @@
     "install": "install.sh",
     "description": "Nodeserver to allow integration of Tesla Power Wall Control",
     "notice": "Uses on https://github.com/jrester/tesla_powerwall API - not official Tesla API ",
-    "shortPoll": "60",
+    "shortPoll": "30",
     "longPoll": "180",
     "credits": [
         {
             "title": "A NodeServer to integrate Tesla Power Wall Controll system",
             "author": "Panda88CO",
             "version": "0.0.1",
-            "date": "April 20, 2021",
+            "date": "May 4,  2021",
             "source": "https://https://github.com/Panda88CO/udi-TeslaPW",
             "license": "Uses https://github.com/jrester/tesla_powerwall (MIT license). This code is also under MIT license "
         }

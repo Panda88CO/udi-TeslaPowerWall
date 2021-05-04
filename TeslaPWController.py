@@ -61,11 +61,12 @@ class TeslaPWController(polyinterface.Controller):
             LOGGER.error('No IPaddress retrieved:' )
         else:
             LOGGER.debug('IPaddress retrieved: ' + self.IPAddress)
-        self.MessanaKey = self.getCustomParam('USER_EMAIL')
+        self.UserEmail = self.getCustomParam('USER_EMAIL')
         if self.UserEmail == None:
             LOGGER.error('No USER_EMAILretrieved:')
         else:
             LOGGER.debug('USER_EMAIL retrieved: '+ self.UserEmail)
+        self.UserPassword =self.getCustomParam('USER_PASSWORD')
         if self.UserPassword == None:
             LOGGER.error('No USER_PASSWORD:')
         else:

@@ -11,7 +11,6 @@ class TeslaPWController(polyinterface.Controller):
     def __init__(self, messanaName):
         super(TeslaPWController, self).__init__(polyglot)
         LOGGER.info('_init_ Tesla Power Wall Controller')
-        self.messanaImportOK = 0
         self.ISYforced = False
         self.name = 'Tesla Power Wall'
         self.address ='teslapw'
@@ -30,21 +29,26 @@ class TeslaPWController(polyinterface.Controller):
     def defineInputParams(self):
         self.IPAddress = self.getCustomParam('IP_ADDRESS')
         if self.IPAddress is None:
-            self.addNotice('Please Set IP address of Messana system (IP_ADDRESS)')
+            self.addNotice('Please Set IP address of Tesla Power Wall system (IP_ADDRESS)')
             self.addNotice('E.g. 192.168.1.2')
             LOGGER.error('IP address not set')
             self.addCustomParam({'IP_ADDRESS': '192.168.1.2'})
-            #self.IPAddress= '192.168.2.65'
-            #self.addCustomParam({'IP_ADDRESS': self.IPAddress})
-        
-        if self.MessanaKey is None:
-            self.addNotice('Please Set Messana API access Key (MESSANA_KEY)')
-            self.addNotice('E.g. 12345678-90ab-cdef-1234-567890abcdef')
-            LOGGER.error('check_params: Messana Key not specified')
-            self.addCustomParam({'MESSANA_KEY': '12345678-90ab-cdef-1234-567890abcdef'})
 
-            #self.MessanaKey =  '9bf711fc-54e2-4387-9c7f-991bbb02ab3a'
-            #self.addCustomParam({'MESSANA_KEY': self.MessanaKey})
+
+        self.UserEmail = self.getCustomParam('USER_EMAIL')
+        if self.UserEmail is None:
+            self.addNotice('Please Set Tesla Power Wall login email (USER_EMAIL)')
+            self.addNotice('E.g. nobody@email.com')
+            LOGGER.error('check_params: user email not specified')
+            self.addCustomParam({'USER_EMAIL': 'nobody@email.com'})
+
+        self.UserPassword= self.getCustomParam('USER_PASSWORD')
+        if self.UserEmail is None:
+            self.addNotice('Please Set Tesla Power Wall password (USER_PASSWORD)')
+            self.addNotice('E.g. XXXXXXXX')
+            LOGGER.error('check_params: user password not specified')
+            self.addCustomParam({'USER_PASSWORD': 'XXXXXXXX'})
+
         self.addNotice('Please restart Node server after setting the parameters')
 
 
@@ -57,18 +61,26 @@ class TeslaPWController(polyinterface.Controller):
             LOGGER.error('No IPaddress retrieved:' )
         else:
             LOGGER.debug('IPaddress retrieved: ' + self.IPAddress)
-        self.MessanaKey = self.getCustomParam('MESSANA_KEY')
-        if self.MessanaKey == None:
-            LOGGER.error('No MESSANA_KEY retrieved:')
+        self.MessanaKey = self.getCustomParam('USER_EMAIL')
+        if self.UserEmail == None:
+            LOGGER.error('No USER_EMAILretrieved:')
         else:
-            LOGGER.debug('MESSANA_KEY retrieved: '+ self.MessanaKey)
+            LOGGER.debug('USER_EMAIL retrieved: '+ self.UserEmail)
+        if self.UserPassword == None:
+            LOGGER.error('No USER_PASSWORD:')
+        else:
+            LOGGER.debug('USER_PASSWORD retrieved: XXXXXXXX')
 
-        if (self.IPAddress is None) or (self.MessanaKey is None):
+        if (self.IPAddress is None) or (self.UserEmail is None) or(self.UserPassword is None)  :
             self.defineInputParams()
             self.stop()
 
         else:
             LOGGER.info('Retrieving info from Messana System')
+            TPW = tesla_info(self.IPAddress, self.UserPassword, self.UserEmail, self.id )
+            self.ISYparams = TPW.supportedParamters(self.id)
+
+            '''
             self.messana = messanaInfo( self.IPAddress, self.MessanaKey, self.address )
             if self.messana == False:
                 self.stop()
@@ -78,10 +90,10 @@ class TeslaPWController(polyinterface.Controller):
             self.systemGETKeys = self.messana.systemPullKeys()
             self.systemPUTKeys = self.messana.systemPushKeys()
             self.systemActiveKeys = self.messana.systemActiveKeys()
+            '''
             
-            
-            for key in self.systemGETKeys:
-                temp = self.messana.getSystemISYdriverInfo(key)
+            for key in self.ISYparams:
+                
                 if  temp != {}:
                     self.drivers.append(temp)
                     #LOGGER.debug(  'driver:  ' +  temp['driver'])
@@ -227,7 +239,6 @@ class TeslaPWController(polyinterface.Controller):
  
 
     commands = { 'UPDATE': ISYupdate
-
                 }
 
   

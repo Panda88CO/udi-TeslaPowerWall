@@ -5,10 +5,21 @@ from tesla_powerwall import Powerwall
 
 from TeslaInfo import tesla_info
 from  ISYprofile import isyProfile
+
+drivers = []
 #isyinfo = isyProfile('teslawall','powerwall')
-#PowerWall = Powerwall("192.168.1.151")
-#PowerWall.login( 'coe123COE', 'christian.olgaard@gmail.com')
-test = tesla_info("192.168.1.151", "coe123COE", "christian.olgaard@gmail.com")
+PowerWall = Powerwall("192.168.1.151")
+PowerWall.login( 'coe123COE', 'christian.olgaard@gmail.com')
+id = 'tpwid'
+tpw = tesla_info("192.168.1.151", "coe123COE", "christian.olgaard@gmail.com", id)
+ISYparams = tpw.supportedParamters(id)
+for key in ISYparams:
+    test = ISYparams[key]
+    if  test != {}:
+        val = tpw.getISYvalue(key, id)
+        print(val)
+        drivers.append({'driver':key, 'value':val, 'uom':test['uom'] })
+        #LOGGER.debug(  'driver:  ' +  temp['driver'])
 
 #self.teslaInfo = tesla_info('192.168.1.151', 'coe123COE', 'christian.olgaard@gmail.com')
 print(PowerWall.is_authenticated())

@@ -1,5 +1,5 @@
 <nodeDefs> 
-   <nodeDef id="teslawall" nls="nlsteslawall">
+   <nodeDef id="tpwid" nls="nlstpwid">
       <editors />
       <sts>
          <st id="GV1" editor="CONTROLLER_1" />

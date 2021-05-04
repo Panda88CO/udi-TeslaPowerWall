@@ -7,8 +7,8 @@ from datetime import date
 import time
 from tesla_powerwall import Powerwall, GridStatus, OperationMode
 from  ISYprofile import isyProfile
-#import polyinterface
-#LOGGER = polyinterface.LOGGER
+import polyinterface
+LOGGER = polyinterface.LOGGER
 
 #ISYunit = {'boolean':2, 'list':25, 'KW' :30, 'percent':51}
 class tesla_info:
@@ -47,7 +47,7 @@ class tesla_info:
         self.TPW = Powerwall(IPaddress)
         self.TPW.login(password, email)
         if not(self.TPW.is_authenticated()):
-            print('Error Logging into Tesla Power Wall')            
+            LOGGER.debug('Error Logging into Tesla Power Wall')            
         else:        
             self.pollSystemData()       
             ISYinfo.addISYnode(self.controllerID,self.controllerName,'Electricity' )
@@ -82,11 +82,11 @@ class tesla_info:
             self.ISYmap = ISYinfo.createISYmapping()/profile/editor/editor
 
     def getISYSendCommands(self, nodeId):
-        print('getISYSendCommands :' + str(nodeId))
+        LOGGER.debug('getISYSendCommands :' + str(nodeId))
         ISYinfo.getISYSendCommands(nodeId)
     
     def getISYReceiveCommands(self, nodeId,):
-        print('getISYReceiveCommands :' + str(nodeId))
+        LOGGER.debug('getISYReceiveCommands :' + str(nodeId))
         ISYinfo.getISYReceiveCommands(nodeId)
 
 
@@ -95,7 +95,7 @@ class tesla_info:
         if nodeId in self.ISYmap:
             temp = self.ISYmap[nodeId]
         else:
-            print('Unknown Node Id: ' + str(nodeId))
+            LOGGER.debug('Unknown Node Id: ' + str(nodeId))
             temp = None
         return(temp)
 
@@ -149,15 +149,15 @@ class tesla_info:
             elif self.teslaVarName == self.gridServiceActive:
                 return(self.getTPW_gridServiceActive())
             else:
-                print('Error - unknown variable: ' + str(self.teslaVarName )) 
+                LOGGER.debug('Error - unknown variable: ' + str(self.teslaVarName )) 
         else:
-            print('Error - unknown variable: ' + str(ISYvar)) 
+            LOGGER.debug('Error - unknown variable: ' + str(ISYvar)) 
 
     def setSendCommand(self, name, NodeId):
-        print()
+        LOGGER.debug()
 
     def setAcceptCommand(self, name, nodeId, TeslaVariable, ButtonText):
-        print()
+        LOGGER.debug()
 
     def setTeslaCredentials (self, IPaddress, password, email):
         self.IPaddress = IPaddress
@@ -198,19 +198,19 @@ class tesla_info:
         return(round(self.meters.load.instant_power/1000, 2))
 
     def getTPW_dailySolar(self):
-        #print(round((self.meters.solar.energy_exported/1000),2) )
-        #print(round((self.metersDayStart.solar.energy_exported/1000),2) )
+        #LOGGER.debug(round((self.meters.solar.energy_exported/1000),2) )
+        #LOGGER.debug(round((self.metersDayStart.solar.energy_exported/1000),2) )
         return(round((self.meters.solar.energy_exported - self.metersDayStart.solar.energy_exported)/1000,2))
 
     def getTPW_dailyConsumption(self):
-        #print(round((self.meters.load.energy_imported/1000),2) )
-        #print(round((self.metersDayStart.load.energy_imported/1000),2) )
+        #LOGGER.debug(round((self.meters.load.energy_imported/1000),2) )
+        #LOGGER.debug(round((self.metersDayStart.load.energy_imported/1000),2) )
         return(round((self.meters.load.energy_imported - self.metersDayStart.load.energy_imported)/1000,2))
 
 
     def getTPW_dailyGeneration(self):
-        #print(round((self.meters.site.energy_exported/1000),2) )
-        #print(round((self.metersDayStart.site.energy_exported/1000),2) )        
+        #LOGGER.debug(round((self.meters.site.energy_exported/1000),2) )
+        #LOGGER.debug(round((self.metersDayStart.site.energy_exported/1000),2) )        
         return(round((self.meters.site.energy_exported - self.metersDayStart.site.energy_exported)/1000,2))
 
 

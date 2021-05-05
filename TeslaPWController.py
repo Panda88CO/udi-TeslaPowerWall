@@ -4,10 +4,8 @@ import sys
 import polyinterface
 LOGGER = polyinterface.LOGGER
 from TeslaInfo import tesla_info
-#from  ISYprofile import isyProfile
+from ISYprofile import isyProfile
 
-
-LOGGER = polyinterface.LOGGER
                
 class TeslaPWController(polyinterface.Controller):
 

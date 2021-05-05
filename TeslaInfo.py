@@ -1,24 +1,23 @@
 #!/usr/bin/env python3
 import requests
-#from subprocess import call
 import json
 import os 
 from datetime import date
 import time
 from tesla_powerwall import Powerwall, GridStatus, OperationMode
 from  ISYprofile import isyProfile
+
 import polyinterface
 LOGGER = polyinterface.LOGGER
 
 #ISYunit = {'boolean':2, 'list':25, 'KW' :30, 'percent':51}
 class tesla_info:
     def __init__ (self, IPaddress, password, email, ISYname, ISY_Id):
-        LOGGER.debug('class tesla_info - init')
+        LOGGER.info('class tesla_info - init')
         self.TPW = Powerwall(IPaddress)
         self.TPW.login(password, email)
         self.controllerID = ISY_Id
         self.controllerName = ISYname
-
 
         self.chargeLevel = 'chargeLevel'
         self.backupLevel = 'backupLevel'

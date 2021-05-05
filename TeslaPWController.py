@@ -14,7 +14,7 @@ class TeslaPWController(polyinterface.Controller):
         super(TeslaPWController, self).__init__(polyglot)
         LOGGER.info('_init_ Tesla Power Wall Controller')
         self.ISYforced = False
-        self.name = 'Tesla Power Wall'
+        self.name = controllerName
         self.address ='teslapw'
         self.id = self.address
         #LOGGER.debug('Name/address: '+ self.name + ' ' + self.address)

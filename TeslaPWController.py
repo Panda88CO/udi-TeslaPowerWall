@@ -40,7 +40,7 @@ class TeslaPWController(polyinterface.Controller):
 
         self.UserPassword= self.getCustomParam('USER_PASSWORD')
         if self.UserEmail is None:
-            self.addNotice('Please Set Tesla Power Wall password (USER_PASSWORD) - E.g. XXXXXXXX'))
+            self.addNotice('Please Set Tesla Power Wall password (USER_PASSWORD) - E.g. XXXXXXXX')
             LOGGER.error('check_params: user password not specified')
             self.addCustomParam({'USER_PASSWORD': 'XXXXXXXX'})
 

@@ -75,16 +75,18 @@ class TeslaPWController(polyinterface.Controller):
             LOGGER.info('Connecting to Tesla Power Wall')
             self.TPW = tesla_info(self.IPAddress, self.UserPassword, self.UserEmail, self.name, self.id )
             LOGGER.debug ('Install Profile')    
-            self.poly.installprofile()
             self.ISYparams = self.TPW.supportedParamters(self.id)
             for key in self.ISYparams:
                 info = self.ISYparams[key]
                 if info != {}:
                     value = self.TPW.getISYvalue(key, self.id)
                     self.drivers.append({'driver':key, 'value':value, 'uom':info['uom'] })
-                    self.setDriver(key, value, report = True, force = True)   
-        self.nodeDefineDone = True
-        self.discover()
+                    #self.setDriver(key, value, report = True, force = True)   
+            self.poly.installprofile()
+
+            self.discover()
+            self.nodeDefineDone = True
+        
 
 
     def stop(self):

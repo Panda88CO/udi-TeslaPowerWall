@@ -100,19 +100,39 @@ class tesla_info:
 
 
     def pollSystemData(self):
-        self.meters = self.TPW.get_meters()
-        self.status = self.TPW.get_sitemaster()
-        if self.metersStart: 
-            self.metersDayStart = self.meters
-            self.lastDay = date.today() 
-            time.sleep(1)
-            self.metersStart = False
-        self.nowDay = date.today()    
-        if self.lastDay.day != self.nowDay.day: # we passed midnight
-            self.metersDayStart = self.meters
-        self.lastDay = self.nowDay
-
-
+        try:
+            self.status = self.TPW.get_sitemaster()       
+            self.meters = self.TPW.get_meters()
+            if self.metersStart: 
+                self.metersDayStart = self.meters
+                self.lastDay = date.today() 
+                time.sleep(1)
+                self.metersStart = False
+            self.nowDay = date.today()    
+            if self.lastDay.day != self.nowDay.day: # we passed midnight
+                self.metersDayStart = self.meters
+            self.lastDay = self.nowDay
+            return(True)
+        except:
+            LOGGER.info('problems extracting data from tesla power wall')
+            if self.TPW.is_authenticated():
+                LOGGER.debug('Connected to POwer Wall but error occured')
+                return(False)
+            else:
+                try:
+                    self.TPW.close()
+                    self.TPW = Powerwall(IPaddress)
+                    self.TPW.login(password, email)
+                    if self.TPW.is_authenticated():
+                        LOGGER.debug('Reconnect to Tesla Power Wall Successful')
+                        return(True)
+                    else:
+                        LOGGER.debug('Reconnect to Tesla Power Wall Failed')
+                        return(False)
+                except:
+                    LOGGER.debug('Reconnect to Tesla Power Wall Failed')
+                    return(False)
+                        
 
     def getISYvalue(self, ISYvar, node):
         LOGGER.debug( 'getISYvalue')

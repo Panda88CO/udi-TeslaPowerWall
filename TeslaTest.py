@@ -3,13 +3,13 @@ import time
 import json
 from tesla_powerwall import Powerwall
 
-from TeslaInfo import tesla_info
-from  ISYprofile import isyProfile
+#from TeslaInfo import tesla_info
+#from  ISYprofile import isyProfile
 
 drivers = []
 PowerWall = Powerwall("192.168.1.151")
-PowerWall.login( 'coe123COE', 'christian.olgaard@gmail.com')
-
+temp = PowerWall.login( 'coe123COE', 'christian.olgaard@gmail.com')
+print(PowerWall.is_authenticated())
 
 controllerName = 'powerwall'
 id = 'tpwid'

@@ -73,7 +73,12 @@ class TeslaPWController(polyinterface.Controller):
 
         else:
             LOGGER.info('Connecting to Tesla Power Wall')
-            self.TPW = tesla_info(self.IPAddress, self.UserPassword, self.UserEmail, self.name, self.id )
+            try:
+                self.TPW = tesla_info(self.IPAddress, self.UserPassword, self.UserEmail, self.name, self.id )
+            except:
+                LOGGER.debug('Did not connect to power wall')
+                self.stop()
+
             LOGGER.debug ('Install Profile')    
             self.ISYparams = self.TPW.supportedParamters(self.id)
             for key in self.ISYparams:
@@ -84,6 +89,9 @@ class TeslaPWController(polyinterface.Controller):
                     LOGGER.debug('driver' + str(key)+ ' value:' + str(value) + ' uom:' + info['uom'] )
                     #self.setDriver(key, value, report = True, force = True)   
             self.poly.installprofile()
+            if self.TPW.pollSystemData():
+                self.updateISYdrivers()
+                self.reportDrivers()
 
             self.discover()
             self.nodeDefineDone = True
@@ -106,13 +114,16 @@ class TeslaPWController(polyinterface.Controller):
     
     def shortPoll(self):
         LOGGER.debug('Tesla Power Wall Controller shortPoll')
-        self.TPW.pollSystemData()
-        self.updateISYdrivers()
+        if self.TPW.pollSystemData():
+            self.updateISYdrivers()
+        else:
+            LOGGER.debug ('Problem polling data from Tesla system')
         
 
     def longPoll(self):
         LOGGER.debug('Tesla Power Wall  Controller longPoll - heat beat')
-        self.heartbeat()            
+        self.heartbeat()
+        self.reportDrivers()        
 
     def updateISYdrivers(self):
         LOGGER.debug('System updateISYdrivers')
@@ -138,9 +149,9 @@ class TeslaPWController(polyinterface.Controller):
 
     def ISYupdate (self, command):
         LOGGER.info('ISY-update called')
-        self.TPW.pollSystemData()
-        self.updateISYdrivers()
-        self.reportDrivers()
+        if self.TPW.pollSystemData():
+            self.updateISYdrivers()
+            self.reportDrivers()
  
 
     commands = { 'UPDATE': ISYupdate
@@ -149,8 +160,8 @@ class TeslaPWController(polyinterface.Controller):
   
 if __name__ == "__main__":
     try:
-        LOGGER.info('Starting Messana Controller')
-        polyglot = polyinterface.Interface('TeslaPowerWall')
+        LOGGER.info('Starting Tesla Power Wall Controller')
+        polyglot = polyinterface.Interface('Tesla_Power_Wall')
         polyglot.start()
         control = TeslaPWController(polyglot)
         control.runForever()

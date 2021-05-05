@@ -2,21 +2,21 @@
    <nodeDef id="tpwid" nls="nlstpwid">
       <editors />
       <sts>
-         <st id="GV1" editor="CONTROLLER_1" />
-         <st id="GV2" editor="CONTROLLER_2" />
-         <st id="GV3" editor="CONTROLLER_3" />
-         <st id="GV4" editor="CONTROLLER_4" />
-         <st id="GV5" editor="CONTROLLER_5" />
-         <st id="GV6" editor="CONTROLLER_6" />
-         <st id="GV7" editor="CONTROLLER_7" />
-         <st id="GV8" editor="CONTROLLER_8" />
-         <st id="GV9" editor="CONTROLLER_9" />
-         <st id="GV10" editor="CONTROLLER_10" />
-         <st id="GV11" editor="CONTROLLER_11" />
-         <st id="GV12" editor="CONTROLLER_12" />
-         <st id="GV13" editor="CONTROLLER_13" />
-         <st id="GV14" editor="CONTROLLER_14" />
-         <st id="GV15" editor="CONTROLLER_15" />
+         <st id="GV1" editor="CTRL_1" />
+         <st id="GV2" editor="CTRL_2" />
+         <st id="GV3" editor="CTRL_3" />
+         <st id="GV4" editor="CTRL_4" />
+         <st id="GV5" editor="CTRL_5" />
+         <st id="GV6" editor="CTRL_6" />
+         <st id="GV7" editor="CTRL_7" />
+         <st id="GV8" editor="CTRL_8" />
+         <st id="GV9" editor="CTRL_9" />
+         <st id="GV10" editor="CTRL_10" />
+         <st id="GV11" editor="CTRL_11" />
+         <st id="GV12" editor="CTRL_12" />
+         <st id="GV13" editor="CTRL_13" />
+         <st id="GV14" editor="CTRL_14" />
+         <st id="GV15" editor="CTRL_15" />
       </sts>
       <cmds>
          <sends>
@@ -26,7 +26,7 @@
          <accepts>
             <cmd id="UPDATE" /> 
             <cmd id="TEST" > 
-               <p id="" editor="CONTROLLER_1" init="GV1" /> 
+               <p id="" editor="CTRL_1" init="GV1" /> 
             </cmd> 
          </accepts>
       </cmds>

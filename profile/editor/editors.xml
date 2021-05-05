@@ -1,47 +1,47 @@
 <editors> 
-  <editor id = "CONTROLLER_1" > 
+  <editor id = "CTRL_1" > 
      <range  uom="51" min="0" max="100" prec="1" />
 </editor>
-  <editor id = "CONTROLLER_2" > 
+  <editor id = "CTRL_2" > 
      <range  uom="51" min="0" max="100" prec="1" />
 </editor>
-  <editor id = "CONTROLLER_3" > 
-     <range  uom="25" subset="0-3" nls="CONTROLLER_3" />
+  <editor id = "CTRL_3" > 
+     <range  uom="25" subset="0-3" nls="CTRL_3" />
 </editor>
-  <editor id = "CONTROLLER_4" > 
+  <editor id = "CTRL_4" > 
      <range  uom="30" min="-20" max="20" prec="1" />
 </editor>
-  <editor id = "CONTROLLER_5" > 
+  <editor id = "CTRL_5" > 
      <range  uom="30" min="-100" max="100" prec="1" />
 </editor>
-  <editor id = "CONTROLLER_6" > 
+  <editor id = "CTRL_6" > 
      <range  uom="30" min="-100" max="100" prec="1" />
 </editor>
-  <editor id = "CONTROLLER_7" > 
+  <editor id = "CTRL_7" > 
      <range  uom="30" min="0" max="1000" prec="1" />
 </editor>
-  <editor id = "CONTROLLER_8" > 
+  <editor id = "CTRL_8" > 
      <range  uom="30" min="0" max="1000" prec="1" />
 </editor>
-  <editor id = "CONTROLLER_9" > 
-     <range  uom="25" subset="0-3" prec="1" nls="CONTROLLER_9" />
+  <editor id = "CTRL_9" > 
+     <range  uom="25" subset="0-3" prec="1" nls="CTRL_9" />
 </editor>
-  <editor id = "CONTROLLER_10" > 
-     <range  uom="2" subset="-1" nls="CONTROLLER_10" />
+  <editor id = "CTRL_10" > 
+     <range  uom="2" subset="-1" nls="CTRL_10" />
 </editor>
-  <editor id = "CONTROLLER_11" > 
-     <range  uom="2" subset="-1" nls="CONTROLLER_11" />
+  <editor id = "CTRL_11" > 
+     <range  uom="2" subset="-1" nls="CTRL_11" />
 </editor>
-  <editor id = "CONTROLLER_12" > 
-     <range  uom="2" subset="-1" nls="CONTROLLER_12" />
+  <editor id = "CTRL_12" > 
+     <range  uom="2" subset="-1" nls="CTRL_12" />
 </editor>
-  <editor id = "CONTROLLER_13" > 
-     <range  uom="2" subset="-1" nls="CONTROLLER_13" />
+  <editor id = "CTRL_13" > 
+     <range  uom="2" subset="-1" nls="CTRL_13" />
 </editor>
-  <editor id = "CONTROLLER_14" > 
+  <editor id = "CTRL_14" > 
      <range  uom="30" min="0" max="20" prec="1" />
 </editor>
-  <editor id = "CONTROLLER_15" > 
+  <editor id = "CTRL_15" > 
      <range  uom="30" min="0" max="1000" prec="1" />
 </editor>
 </editors> 

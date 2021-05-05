@@ -3,8 +3,8 @@ import time
 import json
 from tesla_powerwall import Powerwall
 
-#from TeslaInfo import tesla_info
-#from  ISYprofile import isyProfile
+from TeslaInfo import tesla_info
+from  ISYprofile import isyHandling
 
 drivers = []
 PowerWall = Powerwall("192.168.1.151")
@@ -20,6 +20,7 @@ for key in ISYparams:
     if  test != {}:
         val = TPW.getISYvalue(key, id)
         print(test['systemVar'] + ' : '+ str(val))
+        
         drivers.append({'driver':key, 'value':val, 'uom':test['uom'] })
 print()
 

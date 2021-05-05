@@ -4,8 +4,8 @@ import requests
 import json
 import os 
 from tesla_powerwall import GridStatus, OperationMode
-import polyinterface
-LOGGER = polyinterface.LOGGER
+#import polyinterface
+#LOGGER = polyinterface.LOGGER
 
 
 class isyHandling:
@@ -13,7 +13,7 @@ class isyHandling:
         # Note all xxIDs must be lower case without special characters (ISY requirement)
         #self.systemID = ISYcontrollerName
         #self.systemName = systemName
-        LOGGER.debug('isyProfile - init')
+        print('isyProfile - init')
         self.sData  = {}
         self.ISYunit = {'boolean':2, 'list':25, 'kw':30, 'percent':51}
         '''
@@ -48,7 +48,7 @@ class isyHandling:
         if name.lower() in self.ISYunit:
             return(self.ISYunit[name.lower()])
         else:
-            LOGGER.debug('unknown unit : '+str(name))
+            print('unknown unit : '+str(name))
             return(None)
 
 
@@ -65,7 +65,7 @@ class isyHandling:
                         editorName = self.setupFile['nodeDef'][nodes]['sts'][mKeys][ISYkey]
                         temp[nodes][ISYkey].update({'editor': editorName})
                         temp[nodes][ISYkey].update({'uom': self.setupFile['editors'][editorName]['ISYuom']})
-        #LOGGER.debug(temp) 
+        #print(temp) 
         return (temp)
 
 
@@ -98,13 +98,13 @@ class isyHandling:
             self.sData[nodeId]['ISYnode'] = {'sends':[], 'accepts':{}}
             self.sData[nodeId]['ISYnode'].update(tempDict)
         else:
-            LOGGER.debug('node '+ str(nodeId) + ' already exists')
+            print('node '+ str(nodeId) + ' already exists')
 
     def addISYcommandSend(self, nodeId,  sendCmd):
         if nodeId in self.sData:
             self.sData[nodeId]['ISYnode']['sends'].append(sendCmd)
         else:
-            LOGGER.debug('must create node first')
+            print('must create node first')
 
     def getISYSendCommands(self, nodeId):
         return(self.sData[nodeId]['ISYnode']['sends'])
@@ -116,7 +116,7 @@ class isyHandling:
             tempDict = {'ISYtext':cmdText, 'ISYeditor':cmdVariable}
             self.sData[nodeId]['ISYnode']['accepts'][cmdName] = tempDict
         else:
-            LOGGER.debug('must create node first')
+            print('must create node first')
 
     def getISYReceiveCommands(self, nodeId): 
         tempList = []
@@ -132,14 +132,14 @@ class isyHandling:
                             ,'ISYnls' : {'nlsTEXT' : nlsText, 'nlsValues' : nlsValues} 
         }
         if not(nodeId in self.sData):
-            LOGGER.debug('Must create node '+str(nodeId)+' first.' )
+            print('Must create node '+str(nodeId)+' first.' )
         elif not('KeyInfo' in self.sData[nodeId]):
             self.sData[nodeId]['KeyInfo'] = {}
             self.sData[nodeId]['KeyInfo'][name] = tempDict
         elif not(name in self.sData[nodeId]['KeyInfo']):
             self.sData[nodeId]['KeyInfo'][name] = tempDict
         else:
-            LOGGER.debug('Error: valiable '+ str(name) + ' already exists:' )
+            print('Error: valiable '+ str(name) + ' already exists:' )
 
     def removeISYvariable(self, nodeId, cmdName):
         if cmdName in self.sData[nodeId]['KeyInfo']:
@@ -148,7 +148,7 @@ class isyHandling:
     def addNodeDefStruct(self, nodeNbr, nodeName, nodeId):
         self.keyCount = 0
         nodeId.lower()
-        LOGGER.debug('addNodeDefStruct: ' + nodeName+ ' ' + str(nodeNbr) + ' '+nodeId)
+        print('addNodeDefStruct: ' + nodeName+ ' ' + str(nodeNbr) + ' '+nodeId)
         self.name = nodeId+str(nodeNbr)
         self.nlsKey = 'nls' + self.name
         self.nlsKey.lower()
@@ -178,7 +178,7 @@ class isyHandling:
                 if self.sData[nodeName]['KeyInfo'][mKey]['ISYnls']:
                     self.setupFile['nls'][nlsName]={}
                 for ISYnls in self.sData[nodeName]['KeyInfo'][mKey]['ISYnls']:
-                    #LOGGER.debug( mKey + ' ' + ISYnls)
+                    #print( mKey + ' ' + ISYnls)
                     if  self.sData[nodeName]['KeyInfo'][mKey]['ISYnls'][ISYnls]:      
                         self.setupFile['nls'][nlsName][ISYnls] = self.sData[nodeName]['KeyInfo'][mKey]['ISYnls'][ISYnls]
                         if ISYnls == 'nlsValues':
@@ -196,7 +196,7 @@ class isyHandling:
                         self.setupFile['nodeDef'][self.name]['cmds']['accepts'][key]={}
                         self.setupFile['nodeDef'][self.name]['cmds']['accepts'][key]['ISYInfo']= self.sData[nodeName]['ISYnode']['accepts'][key]
                 else:
-                    LOGGER.debug('Removed "accepts" for : ' + key + ' not supported')
+                    print('Removed "accepts" for : ' + key + ' not supported')
                     
         if 'sends' in self.sData[nodeName]['ISYnode']:         
             self.setupFile['nodeDef'][self.name]['cmds']['sends'] = self.sData[nodeName]['ISYnode']['sends']                                 
@@ -207,7 +207,7 @@ class isyHandling:
         controllerId.lower()
         self.nlsKey= 'nls' + controllerId
         self.nlsKey.lower()
-        #LOGGER.debug('addControllerDefStruct: ' + controllerId)
+        #print('addControllerDefStruct: ' + controllerId)
         self.setupFile['nodeDef'][ controllerId]={}
         self.setupFile['nodeDef'][ controllerId]['CodeId'] = controllerId
         self.setupFile['nodeDef'][ controllerId]['nlsId'] = self.nlsKey
@@ -236,7 +236,7 @@ class isyHandling:
                     if self.sData[ controllerId]['KeyInfo'][mKey]['ISYnls']:
                         self.setupFile['nls'][nlsName]={}
                     for ISYnls in self.sData[ controllerId]['KeyInfo'][mKey]['ISYnls']:
-                        #LOGGER.debug( mKey + ' ' + ISYnls)
+                        #print( mKey + ' ' + ISYnls)
                         if  self.sData[ controllerId]['KeyInfo'][mKey]['ISYnls'][ISYnls]:      
                             self.setupFile['nls'][nlsName][ISYnls] = self.sData[ controllerId]['KeyInfo'][mKey]['ISYnls'][ISYnls]
                             if ISYnls == 'nlsValues':
@@ -259,10 +259,10 @@ class isyHandling:
   
     #Setup file generation 
     def createSetupFiles(self, nodeDefFileName, editorFileName, nlsFileName):
-        #LOGGER.debug ('Create Setup Files')
+        #print ('Create Setup Files')
         status = True
         try:
-            #LOGGER.debug('opening files')
+            #print('opening files')
             if not(os.path.exists('./profile')):
                 os.mkdir('./profile')       
             if not(os.path.exists('./profile/editor')):
@@ -274,13 +274,13 @@ class isyHandling:
             nodeFile = open(nodeDefFileName, 'w+')
             editorFile = open(editorFileName, 'w+')
             nlsFile = open(nlsFileName, 'w+')
-            #LOGGER.debug('Opening Files OK')
+            #print('Opening Files OK')
 
             editorFile.write('<editors> \n')
             nodeFile.write('<nodeDefs> \n')
             for node in self.setupFile['nodeDef']:
                 nodeDefStr ='   <nodeDef id="' + self.setupFile['nodeDef'][node]['CodeId']+'" '+ 'nls="'+self.setupFile['nodeDef'][node]['nlsId']+'">\n'
-                #LOGGER.debug(nodeDefStr)
+                #print(nodeDefStr)
                 nodeFile.write(nodeDefStr)
                 nodeFile.write('      <editors />\n')
                 nodeFile.write('      <sts>\n')
@@ -294,14 +294,14 @@ class isyHandling:
                     cmdName =  self.setupFile['nodeDef'][node]['cmds']['accepts'][acceptCmd]['ISYInfo']['ISYtext']
                     nlsStr = 'CMD-' + self.setupFile['nodeDef'][node]['nlsId']+'-'+acceptCmd+'-NAME = ' + cmdName +'\n'
                     nlsFile.write(nlsStr)
-                    #LOGGER.debug(nlsStr)
+                    #print(nlsStr)
 
                 for status in self.setupFile['nodeDef'][node]['sts']:
                     for statusId in self.setupFile['nodeDef'][node]['sts'][status]:
                         if statusId != 'ISYInfo':
                             nodeName = self.setupFile['nodeDef'][node]['sts'][status][statusId]
                             nodeDefStr =  '         <st id="' + statusId+'" editor="'+nodeName+'" />\n'
-                            #LOGGER.debug(nodeDefStr)
+                            #print(nodeDefStr)
                             nodeFile.write(nodeDefStr)
                             editorFile.write( '  <editor id = '+'"'+nodeName+'" > \n')
                             editorStr = '     <range '
@@ -324,9 +324,9 @@ class isyHandling:
                                     nlsEditorKey = str(self.setupFile['editors'][nodeName][key])
                                     editorStr = editorStr + ' nls="'+ nlsEditorKey+'"'
                                 else:
-                                    LOGGER.debug('unknown editor keyword: ' + str(key))
+                                    print('unknown editor keyword: ' + str(key))
                             editorStr = editorStr + ' />\n'
-                            #LOGGER.debug(editorStr)
+                            #print(editorStr)
                             editorFile.write(editorStr)
                             editorFile.write('</editor>\n')
 
@@ -342,7 +342,7 @@ class isyHandling:
                                         nlsStr = nlsEditorKey+'-'+str(nlsValues)+' = '+self.setupFile['nls'][nodeName][nlsInfo][key]+'\n'
                                         nlsFile.write(nlsStr)
                                         nlsValues = nlsValues + 1
-                                #LOGGER.debug(nlsStr)
+                                #print(nlsStr)
 
                 nodeFile.write('      </sts>\n')
                 nodeFile.write('      <cmds>\n')                
@@ -351,7 +351,7 @@ class isyHandling:
                     if len(self.setupFile['nodeDef'][node]['cmds']['sends']) != 0:
                         for sendCmd in self.setupFile['nodeDef'][node]['cmds']['sends']:
                             cmdStr = '            <cmd id="' +sendCmd +'" /> \n'
-                            #LOGGER.debug(cmdStr)
+                            #print(cmdStr)
                             nodeFile.write(cmdStr)
                 nodeFile.write('         </sends>\n')               
                 nodeFile.write('         <accepts>\n')      
@@ -366,12 +366,12 @@ class isyHandling:
                                         nodeFile.write(cmdStr)  
                                         cmdStr = '               <p id="" editor="'
                                         cmdStr = cmdStr + self.setupFile['nodeDef'][node]['cmds']['accepts'][acceptCmd][key]+ '" init="' + key +'" /> \n' 
-                                        #LOGGER.debug(cmdStr)                              
+                                        #print(cmdStr)                              
                                         nodeFile.write(cmdStr)
                                         nodeFile.write('            </cmd> \n')
                             else:
                                 cmdStr = '            <cmd id="' +acceptCmd+'" /> \n' 
-                                #LOGGER.debug(cmdStr)
+                                #print(cmdStr)
                                 nodeFile.write(cmdStr)  
                 nodeFile.write('         </accepts>\n')                   
 
@@ -385,7 +385,7 @@ class isyHandling:
             editorFile.close()
             nlsFile.close()
         except:
-            LOGGER.debug('something went wrong in creating setup files')
+            print('something went wrong in creating setup files')
             status = False
             nodeFile.close()
             editorFile.close()

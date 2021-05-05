@@ -6,14 +6,14 @@ from datetime import date
 import time
 from tesla_powerwall import Powerwall, GridStatus, OperationMode
 from  ISYprofile import isyHandling
-import polyinterface
-LOGGER = polyinterface.LOGGER
+#import polyinterface
+#LOGGER = polyinterface.LOGGER
 
 #ISYunit = {'boolean':2, 'list':25, 'KW' :30, 'percent':51}
 class tesla_info:
     def __init__ (self, IPaddress, password, email, ISYname, ISY_Id):
         
-        LOGGER.debug('class tesla_info - init')
+        print('class tesla_info - init')
         self.TPW = Powerwall(IPaddress)
         self.TPW.login(password, email)
         self.controllerID = ISY_Id
@@ -46,7 +46,7 @@ class tesla_info:
         self.TPW = Powerwall(IPaddress)
         self.TPW.login(password, email)
         if not(self.TPW.is_authenticated()):
-            LOGGER.debug('Error Logging into Tesla Power Wall')            
+            print('Error Logging into Tesla Power Wall')            
         else:        
             self.pollSystemData()       
             self.ISYinfo.addISYnode(self.controllerID,self.controllerName,'Electricity' )
@@ -81,11 +81,11 @@ class tesla_info:
             self.ISYmap = self.ISYinfo.createISYmapping()/profile/editor/editor
 
     def getISYSendCommands(self, nodeId):
-        LOGGER.debug('getISYSendCommands :' + str(nodeId))
+        print('getISYSendCommands :' + str(nodeId))
         self.ISYinfo.getISYSendCommands(nodeId)
     
     def getISYReceiveCommands(self, nodeId,):
-        LOGGER.debug('getISYReceiveCommands :' + str(nodeId))
+        print('getISYReceiveCommands :' + str(nodeId))
         self.ISYinfo.getISYReceiveCommands(nodeId)
 
 
@@ -94,7 +94,7 @@ class tesla_info:
         if nodeId in self.ISYmap:
             temp = self.ISYmap[nodeId]
         else:
-            LOGGER.debug('Unknown Node Id: ' + str(nodeId))
+            print('Unknown Node Id: ' + str(nodeId))
             temp = None
         return(temp)
 
@@ -116,7 +116,7 @@ class tesla_info:
         except:
             LOGGER.info('problems extracting data from tesla power wall')
             if self.TPW.is_authenticated():
-                LOGGER.debug('Connected to POwer Wall but error occured')
+                print('Connected to POwer Wall but error occured')
                 return(False)
             else:
                 try:
@@ -124,18 +124,18 @@ class tesla_info:
                     self.TPW = Powerwall(IPaddress)
                     self.TPW.login(password, email)
                     if self.TPW.is_authenticated():
-                        LOGGER.debug('Reconnect to Tesla Power Wall Successful')
+                        print('Reconnect to Tesla Power Wall Successful')
                         return(True)
                     else:
-                        LOGGER.debug('Reconnect to Tesla Power Wall Failed')
+                        print('Reconnect to Tesla Power Wall Failed')
                         return(False)
                 except:
-                    LOGGER.debug('Reconnect to Tesla Power Wall Failed')
+                    print('Reconnect to Tesla Power Wall Failed')
                     return(False)
                         
 
     def getISYvalue(self, ISYvar, node):
-        LOGGER.debug( 'getISYvalue')
+        print( 'getISYvalue')
         if ISYvar in self.ISYmap[node]:
             self.teslaVarName = self.ISYmap[node][ISYvar]['systemVar']
             if self.teslaVarName == self.chargeLevel: 
@@ -169,15 +169,15 @@ class tesla_info:
             elif self.teslaVarName == self.gridServiceActive:
                 return(self.getTPW_gridServiceActive())
             else:
-                LOGGER.debug('Error - unknown variable: ' + str(self.teslaVarName )) 
+                print('Error - unknown variable: ' + str(self.teslaVarName )) 
         else:
-            LOGGER.debug('Error - unknown variable: ' + str(ISYvar)) 
+            print('Error - unknown variable: ' + str(ISYvar)) 
 
     def setSendCommand(self, name, NodeId):
-        LOGGER.debug()
+        print()
 
     def setAcceptCommand(self, name, nodeId, TeslaVariable, ButtonText):
-        LOGGER.debug()
+        print()
 
     def setTeslaCredentials (self, IPaddress, password, email):
         self.IPaddress = IPaddress
@@ -218,19 +218,19 @@ class tesla_info:
         return(round(self.meters.load.instant_power/1000, 2))
 
     def getTPW_dailySolar(self):
-        #LOGGER.debug(round((self.meters.solar.energy_exported/1000),2) )
-        #LOGGER.debug(round((self.metersDayStart.solar.energy_exported/1000),2) )
+        #print(round((self.meters.solar.energy_exported/1000),2) )
+        #print(round((self.metersDayStart.solar.energy_exported/1000),2) )
         return(round((self.meters.solar.energy_exported - self.metersDayStart.solar.energy_exported)/1000,2))
 
     def getTPW_dailyConsumption(self):
-        #LOGGER.debug(round((self.meters.load.energy_imported/1000),2) )
-        #LOGGER.debug(round((self.metersDayStart.load.energy_imported/1000),2) )
+        #print(round((self.meters.load.energy_imported/1000),2) )
+        #print(round((self.metersDayStart.load.energy_imported/1000),2) )
         return(round((self.meters.load.energy_imported - self.metersDayStart.load.energy_imported)/1000,2))
 
 
     def getTPW_dailyGeneration(self):
-        #LOGGER.debug(round((self.meters.site.energy_exported/1000),2) )
-        #LOGGER.debug(round((self.metersDayStart.site.energy_exported/1000),2) )        
+        #print(round((self.meters.site.energy_exported/1000),2) )
+        #print(round((self.metersDayStart.site.energy_exported/1000),2) )        
         return(round((self.meters.site.energy_exported - self.metersDayStart.site.energy_exported)/1000,2))
 
 
@@ -243,13 +243,25 @@ class tesla_info:
         return(EnumVal)
     
     def getTPW_running(self):
-        return(self.status.is_running)   
-    
+        if self.status.is_running:  
+           return(1)   
+        else:
+           return(0)
+            
     def getTPW_powerSupplyMode(self):
-        return(self.status.is_power_supply_mode)   
+        if self.status.is_power_supply_mode:
+           return(1)   
+        else:
+           return(0)            
 
     def getTPW_ConnectedTesla(self):
-        return(self.status.is_connected_to_tesla)   
-    
+        if self.status.is_connected_to_tesla:
+            return(1)   
+        else:
+            return(0)
+
     def getTPW_gridServiceActive(self):
-        return(self.TPW.is_grid_services_active())
+        if self.TPW.is_grid_services_active():
+           return(1)   
+        else:
+           return(0)            

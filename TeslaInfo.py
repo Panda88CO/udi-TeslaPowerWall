@@ -39,7 +39,7 @@ class tesla_info:
         self.metersStart = True
         self.gridStatusEnum = {0:GridStatus.CONNECTED.value, 1:GridStatus.ISLANEDED_READY.value, 2:GridStatus.ISLANEDED.value, 3:GridStatus.TRANSITION_TO_GRID.value }
         self.operationEnum =  {0:OperationMode.BACKUP.value, 1:OperationMode.SELF_CONSUMPTION.value, 2:OperationMode.AUTONOMOUS.value, 3:OperationMode.SITE_CONTROL.value }
-        ISYinfo = isyProfile()
+        self.ISYinfo = isyHandling()
         self.ISYvariables = {}
 
         #self.ISYname
@@ -49,44 +49,44 @@ class tesla_info:
             LOGGER.debug('Error Logging into Tesla Power Wall')            
         else:        
             self.pollSystemData()       
-            ISYinfo.addISYnode(self.controllerID,self.controllerName,'Electricity' )
+            self.ISYinfo.addISYnode(self.controllerID,self.controllerName,'Electricity' )
             
-            ISYinfo.addISYcommandSend(self.controllerID, 'DON')
-            ISYinfo.addISYcommandSend(self.controllerID, 'DOF')
-            ISYinfo.addISYcommandReceive(self.controllerID, 'UPDATE', 'Update System Data', None)
-            ISYinfo.addISYcommandReceive(self.controllerID, 'TEST', 'Test', self.chargeLevel)
-            ISYinfo.addIsyVaraiable(self.chargeLevel, self.controllerID, 'percent', 0, 100, None, None, 1, 'Battery Charge Level', None )
-            ISYinfo.addIsyVaraiable(self.backupLevel, self.controllerID, 'percent', 0, 100, None, None, 1, 'Battery Hold-off Level', None )       
-            ISYinfo.addIsyVaraiable (self.gridStatus, self.controllerID, 'list', None, None, '0-3', None, None, 'Grid Status', self.gridStatusEnum ) 
-            ISYinfo.addIsyVaraiable (self.batterySupply, self.controllerID, 'KW', -20, 20, None, None, 1, 'Current Battery Supply', None ) 
-            ISYinfo.addIsyVaraiable (self.gridSupply, self.controllerID, 'KW', -100, 100, None, None, 1, 'Current Grid Supply', None ) 
-            ISYinfo.addIsyVaraiable (self.load, self.controllerID, 'KW', -100, 100, None, None, 1, 'Current Load', None ) 
-            ISYinfo.addIsyVaraiable (self.dailyConsumption, self.controllerID, 'KW', 0, 1000, None, None, 1, 'Power Consumed today', None ) 
-            ISYinfo.addIsyVaraiable (self.dailyGeneration, self.controllerID, 'KW', 0, 1000, None, None, 1, 'Net Power today', None ) 
-            ISYinfo.addIsyVaraiable (self.operationMode, self.controllerID, 'list', None, None, '0-3', None, 1, 'Operation Mode', self.operationEnum )                
-            ISYinfo.addIsyVaraiable (self.ConnectedTesla, self.controllerID, 'boolean', None,None, 0-1,None, None, 'Connected to Tesla', { 0:'False', 1: 'True' }) 
-            ISYinfo.addIsyVaraiable (self.running, self.controllerID, 'boolean', None,None, 0-1,None, None, 'Power Wall Running', { 0:'False', 1: 'True' }) 
-            ISYinfo.addIsyVaraiable (self.powerSupplyMode, self.controllerID, 'boolean', None,None, 0-1,None, None, 'Power Supply Mode', { 0:'False', 1: 'True' }) 
-            ISYinfo.addIsyVaraiable (self.gridServiceActive, self.controllerID, 'boolean', None,None, 0-1,None, None, 'Grid Services Active (supplying?)', { 0:'False', 1: 'True' }) 
+            self.ISYinfo.addISYcommandSend(self.controllerID, 'DON')
+            self.ISYinfo.addISYcommandSend(self.controllerID, 'DOF')
+            self.ISYinfo.addISYcommandReceive(self.controllerID, 'UPDATE', 'Update System Data', None)
+            self.ISYinfo.addISYcommandReceive(self.controllerID, 'TEST', 'Test', self.chargeLevel)
+            self.ISYinfo.addIsyVaraiable(self.chargeLevel, self.controllerID, 'percent', 0, 100, None, None, 1, 'Battery Charge Level', None )
+            self.ISYinfo.addIsyVaraiable(self.backupLevel, self.controllerID, 'percent', 0, 100, None, None, 1, 'Battery Hold-off Level', None )       
+            self.ISYinfo.addIsyVaraiable (self.gridStatus, self.controllerID, 'list', None, None, '0-3', None, None, 'Grid Status', self.gridStatusEnum ) 
+            self.ISYinfo.addIsyVaraiable (self.batterySupply, self.controllerID, 'KW', -20, 20, None, None, 1, 'Current Battery Supply', None ) 
+            self.ISYinfo.addIsyVaraiable (self.gridSupply, self.controllerID, 'KW', -100, 100, None, None, 1, 'Current Grid Supply', None ) 
+            self.ISYinfo.addIsyVaraiable (self.load, self.controllerID, 'KW', -100, 100, None, None, 1, 'Current Load', None ) 
+            self.ISYinfo.addIsyVaraiable (self.dailyConsumption, self.controllerID, 'KW', 0, 1000, None, None, 1, 'Power Consumed today', None ) 
+            self.ISYinfo.addIsyVaraiable (self.dailyGeneration, self.controllerID, 'KW', 0, 1000, None, None, 1, 'Net Power today', None ) 
+            self.ISYinfo.addIsyVaraiable (self.operationMode, self.controllerID, 'list', None, None, '0-3', None, 1, 'Operation Mode', self.operationEnum )                
+            self.ISYinfo.addIsyVaraiable (self.ConnectedTesla, self.controllerID, 'boolean', None,None, 0-1,None, None, 'Connected to Tesla', { 0:'False', 1: 'True' }) 
+            self.ISYinfo.addIsyVaraiable (self.running, self.controllerID, 'boolean', None,None, 0-1,None, None, 'Power Wall Running', { 0:'False', 1: 'True' }) 
+            self.ISYinfo.addIsyVaraiable (self.powerSupplyMode, self.controllerID, 'boolean', None,None, 0-1,None, None, 'Power Supply Mode', { 0:'False', 1: 'True' }) 
+            self.ISYinfo.addIsyVaraiable (self.gridServiceActive, self.controllerID, 'boolean', None,None, 0-1,None, None, 'Grid Services Active (supplying?)', { 0:'False', 1: 'True' }) 
             if self.TPW.get_solars() != None:
-                ISYinfo.addIsyVaraiable (self.solarSupply, self.controllerID, 'KW', 0, 20, None, None, 1, 'Current Solar Supply', None ) 
-                ISYinfo.addIsyVaraiable (self.dailySolar, self.controllerID, 'KW', 0, 1000, None, None, 1, 'Solar Power today', None ) 
+                self.ISYinfo.addIsyVaraiable (self.solarSupply, self.controllerID, 'KW', 0, 20, None, None, 1, 'Current Solar Supply', None ) 
+                self.ISYinfo.addIsyVaraiable (self.dailySolar, self.controllerID, 'KW', 0, 1000, None, None, 1, 'Solar Power today', None ) 
 
-            ISYinfo.addControllerDefStruct(self.controllerName, self.controllerID )
-            ISYinfo.createSetupFiles('./profile/nodedef/nodedefs.xml','./profile/editor/editors.xml', './profile/nls/en_us.txt')
-            self.ISYmap = ISYinfo.createISYmapping()
+            self.ISYinfo.addControllerDefStruct(self.controllerName, self.controllerID )
+            self.ISYinfo.createSetupFiles('./profile/nodedef/nodedefs.xml','./profile/editor/editors.xml', './profile/nls/en_us.txt')
+            self.ISYmap = self.ISYinfo.createISYmapping()
 
     def createISYsetupfiles(self, nodeDefFile, editorFile, nlsFile):
-            ISYinfo.createSetupFiles(nodeDefFile, editorFile, nlsFile)
-            self.ISYmap = ISYinfo.createISYmapping()/profile/editor/editor
+            self.ISYinfo.createSetupFiles(nodeDefFile, editorFile, nlsFile)
+            self.ISYmap = self.ISYinfo.createISYmapping()/profile/editor/editor
 
     def getISYSendCommands(self, nodeId):
         LOGGER.debug('getISYSendCommands :' + str(nodeId))
-        ISYinfo.getISYSendCommands(nodeId)
+        self.ISYinfo.getISYSendCommands(nodeId)
     
     def getISYReceiveCommands(self, nodeId,):
         LOGGER.debug('getISYReceiveCommands :' + str(nodeId))
-        ISYinfo.getISYReceiveCommands(nodeId)
+        self.ISYinfo.getISYReceiveCommands(nodeId)
 
 
 

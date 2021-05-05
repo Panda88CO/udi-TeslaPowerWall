@@ -5,7 +5,7 @@ import os
 from datetime import date
 import time
 from tesla_powerwall import Powerwall, GridStatus, OperationMode
-from  ISYprofile import isyProfile
+from  ISYprofile import isyHandling
 
 import polyinterface
 LOGGER = polyinterface.LOGGER

@@ -8,7 +8,7 @@ from tesla_powerwall import GridStatus, OperationMode
 #LOGGER = polyinterface.LOGGER
 
 
-class isyProfile:
+class isyHandling:
     def __init__ (self):
         # Note all xxIDs must be lower case without special characters (ISY requirement)
         #self.systemID = ISYcontrollerName

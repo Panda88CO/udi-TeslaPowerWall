@@ -223,7 +223,7 @@ class isyHandling:
                    and self.sData[ controllerId]['data'][mKey] != 0)
                    or self.sData[ controllerId]['KeyInfo'][mKey]['ISYeditor']['ISYuom'] != 112):
                     self.keyCount = self.keyCount + 1
-                    editorName = 'CONTROLLER_'+str(self.keyCount)
+                    editorName = 'CTRL_'+str(self.keyCount)
                     nlsName = editorName
                     ISYvar = 'GV'+str(self.keyCount)
                     self.setupFile['nodeDef'][ controllerId]['sts'][mKey]={ISYvar:editorName}

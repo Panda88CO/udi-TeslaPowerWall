@@ -14,7 +14,7 @@ class TeslaPWController(polyinterface.Controller):
         super(TeslaPWController, self).__init__(polyglot)
         LOGGER.info('_init_ Tesla Power Wall Controller')
         self.ISYforced = False
-        self.name = controllerName
+        self.name = 'Tesla Power Wall Control'
         self.address ='teslapw'
         self.id = self.address
         #LOGGER.debug('Name/address: '+ self.name + ' ' + self.address)
@@ -81,6 +81,7 @@ class TeslaPWController(polyinterface.Controller):
                 if info != {}:
                     value = self.TPW.getISYvalue(key, self.id)
                     self.drivers.append({'driver':key, 'value':value, 'uom':info['uom'] })
+                    LOGGER.debug('driver' + str(key)+ ' value:' + str(value) + ' uom:' + info['uom'] )
                     #self.setDriver(key, value, report = True, force = True)   
             self.poly.installprofile()
 
@@ -149,7 +150,7 @@ class TeslaPWController(polyinterface.Controller):
 if __name__ == "__main__":
     try:
         LOGGER.info('Starting Messana Controller')
-        polyglot = polyinterface.Interface('Tesla Power Wall Control')
+        polyglot = polyinterface.Interface('TeslaPowerWall')
         polyglot.start()
         control = TeslaPWController(polyglot)
         control.runForever()

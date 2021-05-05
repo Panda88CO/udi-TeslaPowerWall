@@ -81,7 +81,7 @@ class TeslaPWController(polyinterface.Controller):
             self.TPW = tesla_info(self.IPAddress, self.UserPassword, self.UserEmail, self.name, self.id )
             LOGGER.debug ('Install Profile')    
             self.poly.installprofile()
-            self.ISYparams = TPW.supportedParamters(self.id)
+            self.ISYparams = self.TPW.supportedParamters(self.id)
             for key in self.ISYparams:
                 info = self.ISYparams[key]
                 if info != {}:

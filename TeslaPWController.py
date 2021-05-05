@@ -98,8 +98,8 @@ class TeslaPWController(polyinterface.Controller):
         
 
 
-    def stop(self):Panda88CO
-        #self.removeNoticesAll()
+    def stop(self):
+        self.removeNoticesAll()
         LOGGER.debug('stop - Cleaning up')
 
     def heartbeat(self):

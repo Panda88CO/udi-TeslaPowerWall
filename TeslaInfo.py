@@ -57,7 +57,7 @@ class tesla_info:
             #self.ISYinfo.addISYcommandReceive(self.controllerID, 'TEST', 'Test', self.chargeLevel)
             self.ISYinfo.addIsyVaraiable(self.chargeLevel, self.controllerID, 'percent', 0, 100, None, None, 1, 'Battery Charge Level', None )
             self.ISYinfo.addIsyVaraiable(self.backupLevel, self.controllerID, 'percent', 0, 100, None, None, 1, 'Battery Hold-off Level', None )       
-            self.ISYinfo.addIsyVaraiable (self.gridStatus, self.controllerID, 'list', None, None, '0-3', None, None, 'Grid Status', self.gridStatusEnum ) 
+            
             if self.TPW.get_solars() != None:
                 self.ISYinfo.addIsyVaraiable (self.solarSupply, self.controllerID, 'KW', 0, 20, None, None, 1, 'Current Solar Supply', None ) 
             self.ISYinfo.addIsyVaraiable (self.batterySupply, self.controllerID, 'KW', -20, 20, None, None, 1, 'Current Battery Supply', None ) 
@@ -67,6 +67,7 @@ class tesla_info:
                 self.ISYinfo.addIsyVaraiable (self.dailySolar, self.controllerID, 'KW', 0, 1000, None, None, 1, 'Solar Power today', None ) 
             self.ISYinfo.addIsyVaraiable (self.dailyConsumption, self.controllerID, 'KW', 0, 1000, None, None, 1, 'Power Consumed today', None ) 
             self.ISYinfo.addIsyVaraiable (self.dailyGeneration, self.controllerID, 'KW', 0, 1000, None, None, 1, 'Net Power today', None ) 
+            self.ISYinfo.addIsyVaraiable (self.gridStatus, self.controllerID, 'list', None, None, '0-3', None, None, 'Grid Status', self.gridStatusEnum ) 
             self.ISYinfo.addIsyVaraiable (self.operationMode, self.controllerID, 'list', None, None, '0-3', None, None, 'Operation Mode', self.operationEnum )                
             self.ISYinfo.addIsyVaraiable (self.ConnectedTesla, self.controllerID, 'boolean', None,None, 0-1,None, None, 'Connected to Tesla', { 0:'False', 1: 'True' }) 
             self.ISYinfo.addIsyVaraiable (self.running, self.controllerID, 'boolean', None,None, 0-1,None, None, 'Power Wall Running', { 0:'False', 1: 'True' }) 
@@ -232,7 +233,8 @@ class tesla_info:
     def getTPW_dailyGeneration(self):
         #print(round((self.meters.site.energy_exported/1000),2) )
         #print(round((self.metersDayStart.site.energy_exported/1000),2) )        
-        return(round((self.meters.site.energy_exported - self.metersDayStart.site.energy_exported)/1000,2))
+        return(round((self.meters.site.energy_exported - self.metersDayStart.site.energy_exported - 
+                      self.meters.site.energy_imported - self.metersDayStart.site.energy_imported)/1000,2))
 
 
     def getTPW_operationMode(self):

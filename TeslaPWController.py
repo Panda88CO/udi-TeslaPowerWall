@@ -154,8 +154,7 @@ class TeslaPWController(polyinterface.Controller):
             self.reportDrivers()
  
 
-    commands = { 'UPDATE': ISYupdate
-                }
+    commands = { 'UPDATE': ISYupdate }
 
   
 if __name__ == "__main__":

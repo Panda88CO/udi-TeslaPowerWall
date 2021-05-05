@@ -22,6 +22,7 @@ class TeslaPWController(polyinterface.Controller):
         self.hb = 0
         self.drivers = []
         self.nodeDefineDone = False
+        self.heartbeat()
 
 
 

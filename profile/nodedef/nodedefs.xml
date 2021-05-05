@@ -25,9 +25,6 @@
          </sends>
          <accepts>
             <cmd id="UPDATE" /> 
-            <cmd id="TEST" > 
-               <p id="" editor="CTRL_1" init="GV1" /> 
-            </cmd> 
          </accepts>
       </cmds>
    </nodeDef> 

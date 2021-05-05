@@ -4,8 +4,8 @@ import requests
 import json
 import os 
 from tesla_powerwall import GridStatus, OperationMode
-#import polyinterface
-#LOGGER = polyinterface.LOGGER
+import polyinterface
+LOGGER = polyinterface.LOGGER
 
 
 class isyHandling:

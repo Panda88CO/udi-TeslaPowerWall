@@ -6,14 +6,14 @@ from datetime import date
 import time
 from tesla_powerwall import Powerwall, GridStatus, OperationMode
 from  ISYprofile import isyHandling
-
 import polyinterface
 LOGGER = polyinterface.LOGGER
 
 #ISYunit = {'boolean':2, 'list':25, 'KW' :30, 'percent':51}
 class tesla_info:
     def __init__ (self, IPaddress, password, email, ISYname, ISY_Id):
-        LOGGER.info('class tesla_info - init')
+        
+        LOGGER.debug('class tesla_info - init')
         self.TPW = Powerwall(IPaddress)
         self.TPW.login(password, email)
         self.controllerID = ISY_Id

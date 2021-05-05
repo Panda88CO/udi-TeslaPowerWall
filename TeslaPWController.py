@@ -28,22 +28,19 @@ class TeslaPWController(polyinterface.Controller):
     def defineInputParams(self):
         self.IPAddress = self.getCustomParam('IP_ADDRESS')
         if self.IPAddress is None:
-            self.addNotice('Please Set IP address of Tesla Power Wall system (IP_ADDRESS)')
-            self.addNotice('E.g. 192.168.1.2')
+            self.addNotice('Please Set IP address of Tesla Power Wall system (IP_ADDRESS) - E.g. 192.168.1.2') 
             LOGGER.error('IP address not set')
             self.addCustomParam({'IP_ADDRESS': '192.168.1.2'})
 
         self.UserEmail = self.getCustomParam('USER_EMAIL')
         if self.UserEmail is None:
-            self.addNotice('Please Set Tesla Power Wall login email (USER_EMAIL)')
-            self.addNotice('E.g. nobody@email.com')
+            self.addNotice('Please Set Tesla Power Wall login email (USER_EMAIL) - (E.g. nobody@email.com')
             LOGGER.error('check_params: user email not specified')
             self.addCustomParam({'USER_EMAIL': 'nobody@email.com'})
 
         self.UserPassword= self.getCustomParam('USER_PASSWORD')
         if self.UserEmail is None:
-            self.addNotice('Please Set Tesla Power Wall password (USER_PASSWORD)')
-            self.addNotice('E.g. XXXXXXXX')
+            self.addNotice('Please Set Tesla Power Wall password (USER_PASSWORD) - E.g. XXXXXXXX'))
             LOGGER.error('check_params: user password not specified')
             self.addCustomParam({'USER_PASSWORD': 'XXXXXXXX'})
 

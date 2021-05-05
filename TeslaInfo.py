@@ -13,7 +13,7 @@ LOGGER = polyinterface.LOGGER
 #ISYunit = {'boolean':2, 'list':25, 'KW' :30, 'percent':51}
 class tesla_info:
     def __init__ (self, IPaddress, password, email, ISYname, ISY_Id):
-       
+        LOGGER.debug('class tesla_info - init')
         self.TPW = Powerwall(IPaddress)
         self.TPW.login(password, email)
         self.controllerID = ISY_Id
@@ -116,6 +116,7 @@ class tesla_info:
 
 
     def getISYvalue(self, ISYvar, node):
+        LOGGER.debug( 'getISYvalue')
         if ISYvar in self.ISYmap[node]:
             self.teslaVarName = self.ISYmap[node][ISYvar]['systemVar']
             if self.teslaVarName == self.chargeLevel: 

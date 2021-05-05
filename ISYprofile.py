@@ -13,6 +13,7 @@ class isyProfile:
         # Note all xxIDs must be lower case without special characters (ISY requirement)
         #self.systemID = ISYcontrollerName
         #self.systemName = systemName
+        LOGGER.debug('isyProfile - init')
         self.sData  = {}
         self.ISYunit = {'boolean':2, 'list':25, 'kw':30, 'percent':51}
         '''

@@ -234,7 +234,7 @@ class tesla_info:
         #print(round((self.meters.site.energy_exported/1000),2) )
         #print(round((self.metersDayStart.site.energy_exported/1000),2) )        
         return(round((self.meters.site.energy_exported - self.metersDayStart.site.energy_exported - 
-                      self.meters.site.energy_imported - self.metersDayStart.site.energy_imported)/1000,2))
+                      (self.meters.site.energy_imported - self.metersDayStart.site.energy_imported))/1000,2))
 
 
     def getTPW_operationMode(self):

@@ -39,7 +39,7 @@ class TeslaPWController(polyinterface.Controller):
             self.addCustomParam({'USER_EMAIL': 'nobody@email.com'})
 
         self.UserPassword= self.getCustomParam('USER_PASSWORD')
-        if self.UserEmail is None:
+        if self.UserPassword is None:
             self.addNotice('Please Set Tesla Power Wall password (USER_PASSWORD) - E.g. XXXXXXXX')
             LOGGER.error('check_params: user password not specified')
             self.addCustomParam({'USER_PASSWORD': 'XXXXXXXX'})
@@ -86,7 +86,7 @@ class TeslaPWController(polyinterface.Controller):
                 if info != {}:
                     value = self.TPW.getISYvalue(key, self.id)
                     self.drivers.append({'driver':key, 'value':value, 'uom':info['uom'] })
-                    LOGGER.debug('driver' + str(key)+ ' value:' + str(value) + ' uom:' + info['uom'] )
+                    LOGGER.debug('driver' + str(key)+ ' value:' + str(value) + ' uom:' + str(info['uom']) )
                     #self.setDriver(key, value, report = True, force = True)   
             self.poly.installprofile()
             if self.TPW.pollSystemData():
@@ -98,7 +98,7 @@ class TeslaPWController(polyinterface.Controller):
         
 
 
-    def stop(self):
+    def stop(self):Panda88CO
         #self.removeNoticesAll()
         LOGGER.debug('stop - Cleaning up')
 

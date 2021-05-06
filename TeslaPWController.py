@@ -51,7 +51,7 @@ class TeslaPWController(polyinterface.Controller):
 
     def start(self):
         self.removeNoticesAll()
-        LOGGER.info('Start Messana Main NEW')
+        LOGGER.info('Start Tesla Power Wall Main NEW')
         self.IPAddress = self.getCustomParam('IP_ADDRESS')
         if self.IPAddress == None:
             LOGGER.error('No IPaddress retrieved:' )
@@ -77,7 +77,7 @@ class TeslaPWController(polyinterface.Controller):
             try:
                 self.TPW = tesla_info(self.IPAddress, self.UserPassword, self.UserEmail, self.name, self.id )
             except:
-                LOGGER.debug('Did not connect to power wall')
+                LOGGER.error('Did not connect to power wall')
                 self.stop()
 
             LOGGER.debug ('Install Profile')    

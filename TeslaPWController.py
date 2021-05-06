@@ -68,10 +68,9 @@ class TeslaPWController(polyinterface.Controller):
         else:
             LOGGER.debug('USER_PASSWORD retrieved: XXXXXXXX')
 
-        if (self.IPAddress is None) or (self.UserEmail is None) or(self.UserPassword is None)  :
+        if (self.IPAddress is None) or (self.UserEmail is None) or (self.UserPassword is None)  :
             self.defineInputParams()
             self.stop()
-
         else:
             LOGGER.info('Connecting to Tesla Power Wall')
             try:

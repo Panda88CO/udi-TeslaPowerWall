@@ -98,6 +98,13 @@ class tesla_info:
         LOGGER.debug('getISYReceiveCommands :' + str(nodeId))
         self.ISYinfo.getISYReceiveCommands(nodeId)
 
+    def supportedParamters (self, nodeId):
+        if nodeId in self.ISYmap:
+            temp = self.ISYmap[nodeId]
+        else:
+            LOGGER.error('Unknown Node Id: ' + str(nodeId))
+            temp = None
+        return(temp)
 
     def pollSystemData(self):
         try:

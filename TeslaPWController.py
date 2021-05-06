@@ -28,7 +28,7 @@ class TeslaPWController(polyinterface.Controller):
         if self.IPAddress is None:
             self.addNotice('Please Set IP address of Tesla Power Wall system (IP_ADDRESS) - E.g. 192.168.1.2') 
             LOGGER.error('IP address not set')
-            self.addCustomParam({'IP_ADDRESS': '192.168.1.2'})
+            self.addCustomParam({'IP_ADDRESS': '192.168.1.100'})
 
         self.UserEmail = self.getCustomParam('USER_EMAIL')
         if self.UserEmail is None:

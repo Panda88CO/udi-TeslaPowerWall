@@ -133,8 +133,8 @@ class tesla_info:
                     self.lastDay = date.today() 
                     time.sleep(1)
                     self.metersStart = False
-                self.nowDay = date.today() or self.TEST 
-                if self.lastDay.day != self.nowDay.day: # we passed midnight
+                self.nowDay = date.today() 
+                if (self.lastDay.day != self.nowDay.day) or self.TEST  : # we passed midnight
                     self.dailyTotalSolar =  self.getTPW_dailySolar()
                     self.dailyTotalConsumption = self.getTPW_dailyConsumption()
                     self.dailyTotalGeneraton = self.getTPW_dailyGeneration()

@@ -83,7 +83,7 @@ class TeslaPWController(polyinterface.Controller):
                     #LOGGER.debug('driver' + str(key)+ ' value:' + str(value) + ' uom:' + str(info['uom']) )
             self.poly.installprofile()
             if self.TPW.pollSystemData('all'):
-                self.updateISYdrivers()
+                self.updateISYdrivers('all')
                 self.reportDrivers()
 
             self.discover()
@@ -149,10 +149,12 @@ class TeslaPWController(polyinterface.Controller):
                 #LOGGER.debug('Update ISY drivers :' + str(key)+ ' ' + info['systemVar']+ ' value:' + str(value) )
                 self.setDriver(key, value, report = True, force = False)          
 
+    '''
     def query(self, command=None):
         LOGGER.debug('TOP querry')
-        self.updateISYdrivers()
-        self.reportDrivers()
+        self.updateISYdrivers(ll''a)
+        self.reportDrivers('all')
+    '''
 
     def discover(self, command=None):
         #LOGGER.debug('discover zones')

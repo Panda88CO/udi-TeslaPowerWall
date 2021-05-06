@@ -70,30 +70,29 @@ class TeslaPWController(polyinterface.Controller):
             self.stop()
         else:
             LOGGER.info('Connecting to Tesla Power Wall')
-            #try:
-            self.TPW = tesla_info(self.IPAddress, self.UserPassword, self.UserEmail, self.name, self.id )
-            LOGGER.debug ('Install Profile')    
-            self.ISYparams = self.TPW.supportedParamters(self.id)
-            self.ISYcriticalParams = self.TPW.criticalParamters(self.id)
-            for key in self.ISYparams:
-                info = self.ISYparams[key]
-                if info != {}:
-                    value = self.TPW.getISYvalue(key, self.id)
-                    self.drivers.append({'driver':key, 'value':value, 'uom':info['uom'] })
-                    #LOGGER.debug('driver' + str(key)+ ' value:' + str(value) + ' uom:' + str(info['uom']) )
-            self.poly.installprofile()
-            if self.TPW.pollSystemData('all'):
-                self.updateISYdrivers('all')
-                self.reportDrivers()
+            try:
+                self.TPW = tesla_info(self.IPAddress, self.UserPassword, self.UserEmail, self.name, self.id )
+                LOGGER.debug ('Install Profile')    
+                self.ISYparams = self.TPW.supportedParamters(self.id)
+                self.ISYcriticalParams = self.TPW.criticalParamters(self.id)
+                for key in self.ISYparams:
+                    info = self.ISYparams[key]
+                    if info != {}:
+                        value = self.TPW.getISYvalue(key, self.id)
+                        self.drivers.append({'driver':key, 'value':value, 'uom':info['uom'] })
+                        #LOGGER.debug('driver' + str(key)+ ' value:' + str(value) + ' uom:' + str(info['uom']) )
+                self.poly.installprofile()
+                if self.TPW.pollSystemData('all'):
+                    self.updateISYdrivers('all')
+                    self.reportDrivers()
+                self.discover()
+                self.nodeDefineDone = True
 
-            self.discover()
-            self.nodeDefineDone = True
-            '''
             except:
                 LOGGER.error('Did not connect to power wall')
                 self.disconnectTPW()
                 self.stop()
-            '''
+
         
 
 

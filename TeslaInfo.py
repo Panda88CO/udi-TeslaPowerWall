@@ -74,12 +74,12 @@ class tesla_info:
             self.addISYCriticalParam(self.controllerID, self.powerSupplyMode)
             self.ISYinfo.addIsyVaraiable (self.gridServiceActive, self.controllerID, 'boolean', None,None, 0-1,None, None, 'Grid Services Active', { 0:'False', 1: 'True' }) 
             self.ISYinfo.addControllerDefStruct(self.controllerName, self.controllerID )
-            self.ISYinfo.createSetupFiles('nodedefs.xml','editors.xml', 'en_us.txt')
+            self.ISYinfo.createSetupFiles('nodedefs.xml', 'editors.xml', 'en_us.txt')
             self.ISYmap = self.ISYinfo.createISYmapping()
 
     def createISYsetupfiles(self, nodeDefFile, editorFile, nlsFile):
             self.ISYinfo.createSetupFiles(nodeDefFile, editorFile, nlsFile)
-            self.ISYmap = self.ISYinfo.createISYmapping()/profile/editor/editor
+            self.ISYmap = self.ISYinfo.createISYmapping()
 
     def storeDailyData(self, filename, solar, consumption, generation, dayInfo ):
         try:

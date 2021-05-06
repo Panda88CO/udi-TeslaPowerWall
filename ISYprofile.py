@@ -231,9 +231,9 @@ class isyHandling:
                 os.mkdir('./profile/nls')           
             if not(os.path.exists('./profile/nodedef')):
                 os.mkdir('./profile/nodedef')
-            nodeFile = open('./profile/nodedef'+nodeDefFileName, 'w+')
-            editorFile = open('./profile/editor'+editorFileName, 'w+')
-            nlsFile = open('./profile/nls'+nlsFileName, 'w+')
+            nodeFile = open('./profile/nodedef/'+nodeDefFileName, 'w+')
+            editorFile = open('./profile/editor/'+editorFileName, 'w+')
+            nlsFile = open('./profile/nls/'+nlsFileName, 'w+')
             #LOGGER.debug('Opening Files OK')
 
             editorFile.write('<editors> \n')

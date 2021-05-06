@@ -56,13 +56,13 @@ class isyHandling:
             self.sData[nodeId]['ISYnode'].update(tempDict)
         else:
             LOGGER.error('node '+ str(nodeId) + ' already exists')
-            print()
+            
     def addISYcommandSend(self, nodeId,  sendCmd):
         if nodeId in self.sData:
             self.sData[nodeId]['ISYnode']['sends'].append(sendCmd)
         else:
             LOGGER.error('must create node first')
-            print()
+            
 
     def getISYSendCommands(self, nodeId):
         return(self.sData[nodeId]['ISYnode']['sends'])
@@ -75,7 +75,7 @@ class isyHandling:
             self.sData[nodeId]['ISYnode']['accepts'][cmdName] = tempDict
         else:
             LOGGER.error('must create node first')
-            print()
+            
 
     def getISYReceiveCommands(self, nodeId): 
         tempList = []
@@ -92,7 +92,7 @@ class isyHandling:
         }
         if not(nodeId in self.sData):
             LOGGER.error('Must create node '+str(nodeId)+' first.' )
-            print()
+            
         elif not('KeyInfo' in self.sData[nodeId]):
             self.sData[nodeId]['KeyInfo'] = {}
             self.sData[nodeId]['KeyInfo'][name] = tempDict
@@ -100,7 +100,7 @@ class isyHandling:
             self.sData[nodeId]['KeyInfo'][name] = tempDict
         else:
             LOGGER.error('Error: valiable '+ str(name) + ' already exists:' )
-            print()
+            
     def removeISYvariable(self, nodeId, cmdName):
         if cmdName in self.sData[nodeId]['KeyInfo']:
              self.sData[nodeId]['KeyInfo'].pop(cmdName)
@@ -157,7 +157,7 @@ class isyHandling:
                         self.setupFile['nodeDef'][self.name]['cmds']['accepts'][key]['ISYInfo']= self.sData[nodeName]['ISYnode']['accepts'][key]
                 else:
                     LOGGER.debug('Removed "accepts" for : ' + key + ' not supported')
-                    print()
+                    
 
         if 'sends' in self.sData[nodeName]['ISYnode']:         
             self.setupFile['nodeDef'][self.name]['cmds']['sends'] = self.sData[nodeName]['ISYnode']['sends']                                 
@@ -283,7 +283,7 @@ class isyHandling:
                                     editorStr = editorStr + ' nls="'+ nlsEditorKey+'"'
                                 else:
                                     LOGGER.debug('unknown editor keyword: ' + str(key))
-                                    print()
+                                    
                             editorStr = editorStr + ' />\n'
                             #LOGGER.debug(editorStr)
                             editorFile.write(editorStr)

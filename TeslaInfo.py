@@ -47,7 +47,6 @@ class tesla_info:
         self.TPW.login(password, email)
         if not(self.TPW.is_authenticated()):
             LOGGER.error('Error Logging into Tesla Power Wall')            
-            print()
         else:        
             self.pollSystemData()
             self.ISYinfo.addISYnode(self.controllerID,self.controllerName,'Electricity' )
@@ -90,7 +89,7 @@ class tesla_info:
             dataFile.write('Date,'+str(dayInfo)+ ','+'solarKW,'+str(solar)+',ConsumptionKW,'+str(consumption)+',Generation,'+str(generation)+'\n')
             dataFile.close()
         except: 
-            print()
+            
             LOGGER.debug ('Failed to add data to '+str(filename))
         
 
@@ -195,17 +194,17 @@ class tesla_info:
                 return(self.getTPW_gridServiceActive())
             else:
                 LOGGER.error('Error - unknown variable: ' + str(self.teslaVarName )) 
-                print()
+                
         else:
-            print()
+            
             LOGGER.error('Error - unknown variable: ' + str(ISYvar)) 
 
     def setSendCommand(self, name, NodeId):
-        print()
+        
         LOGGER.debug('setSendCommand - Not implemented yet ')
 
     def setAcceptCommand(self, name, nodeId, TeslaVariable, ButtonText):
-        print()
+        
         LOGGER.debug('setAcceptCommand - Not implemented yet ')
 
     def setTeslaCredentials (self, IPaddress, password, email):

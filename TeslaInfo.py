@@ -67,11 +67,11 @@ class tesla_info:
             self.ISYinfo.addIsyVaraiable (self.dailyGeneration, self.controllerID, 'KW', 0, 1000, None, None, 1, 'Net Power today', None ) 
             self.ISYinfo.addIsyVaraiable (self.gridStatus, self.controllerID, 'list', None, None, '0-3', None, None, 'Grid Status', self.gridStatusEnum ) 
             self.ISYinfo.addIsyVaraiable (self.operationMode, self.controllerID, 'list', None, None, '0-3', None, None, 'Operation Mode', self.operationEnum )                
-            self.ISYCritical[self.controllerID].append(self.operationMode)
+            self.addISYCriticalParam(self.controllerID, self.operationMode)
             self.ISYinfo.addIsyVaraiable (self.ConnectedTesla, self.controllerID, 'boolean', None,None, 0-1,None, None, 'Connected to Tesla', { 0:'False', 1: 'True' }) 
             self.ISYinfo.addIsyVaraiable (self.running, self.controllerID, 'boolean', None,None, 0-1,None, None, 'Power Wall Running', { 0:'False', 1: 'True' }) 
             self.ISYinfo.addIsyVaraiable (self.powerSupplyMode, self.controllerID, 'boolean', None,None, 0-1,None, None, 'Power Supply Mode', { 0:'False', 1: 'True' }) 
-            self.ISYCritical[self.controllerID].append(self.powerSupplyMode)
+            self.addISYCriticalParam(self.controllerID, self.powerSupplyMode)
             self.ISYinfo.addIsyVaraiable (self.gridServiceActive, self.controllerID, 'boolean', None,None, 0-1,None, None, 'Grid Services Active', { 0:'False', 1: 'True' }) 
             self.ISYinfo.addControllerDefStruct(self.controllerName, self.controllerID )
             self.ISYinfo.createSetupFiles('nodedefs.xml','editors.xml', 'en_us.txt')
@@ -108,6 +108,13 @@ class tesla_info:
             LOGGER.error('Unknown Node Id: ' + str(nodeId))
             temp = None
         return(temp)
+
+    def addISYCriticalParam(self, Id, value):
+        if Id in self.ISYCritical:
+            self.ISYCritical[Id].append(value)
+        else:
+            self.ISYCritical[Id] = []
+            self.ISYCritical[Id].append(value)
 
 
     def criticalParamters (self, nodeId):

@@ -25,6 +25,14 @@ for i in range(100):
     generation = generation + i
 
 '''
+list1 = {}
+ID1 = 1
+ID2 = 2
+data1 = 100
+data2 = 200
+list[ID1].append
+
+
 drivers = []
 PowerWall = Powerwall("192.168.1.151")
 temp = PowerWall.login( 'coe123COE', 'christian.olgaard@gmail.com')

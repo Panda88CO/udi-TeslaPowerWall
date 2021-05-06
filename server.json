@@ -4,7 +4,7 @@
     "type": "python3",
     "executable": "TeslaPWController.py",
     "install": "install.sh",
-    "description": "Nodeserver to allow integration of Tesla Power Wall Control. ShortPoll updates data, long poll is for heartbeat.  Daily Totals are logged to file in directory dailyData",
+    "description": "Nodeserver to allow integration of Tesla Power Wall Control. ShortPoll updates critical data and  heartbeat, long poll is for all data.  Daily Totals are logged to file in directory dailyData",
     "notice": "Uses on https://github.com/jrester/tesla_powerwall API - not official Tesla API ",
     "shortPoll": "60",
     "longPoll": "180",
@@ -12,7 +12,7 @@
         {
             "title": "A NodeServer to integrate Tesla Power Wall Controll system",
             "author": "Panda88CO",
-            "version": "0.2.0",
+            "version": "0.3.0",
             "date": "May 6,  2021",
             "source": "https://https://github.com/Panda88CO/udi-TeslaPW",
             "license": "Uses https://github.com/jrester/tesla_powerwall (MIT license). This code is also under MIT license "

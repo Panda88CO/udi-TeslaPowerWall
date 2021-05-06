@@ -164,7 +164,7 @@ class TeslaPWController(polyinterface.Controller):
 
     def ISYupdate (self, command):
         LOGGER.info('ISY-update called')
-        if self.TPW.pollSystemData():
+        if self.TPW.pollSystemData('all'):
             self.updateISYdrivers('all')
             self.reportDrivers()
  

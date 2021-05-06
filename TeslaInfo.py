@@ -48,7 +48,7 @@ class tesla_info:
         if not(self.TPW.is_authenticated()):
             LOGGER.error('Error Logging into Tesla Power Wall')            
         else:        
-            self.pollSystemData()
+            self.pollSystemData('all')
             self.ISYinfo.addISYnode(self.controllerID,self.controllerName,'Electricity' )
             
             self.ISYinfo.addISYcommandSend(self.controllerID, 'DON')
@@ -216,7 +216,7 @@ class tesla_info:
         return(ISYvariables)
 
     def TPW_updateMeter(self):
-        self.pollSystemData()
+        self.pollSystemData('all')
         return(None)
 
     def getTPW_chargeLevel(self):

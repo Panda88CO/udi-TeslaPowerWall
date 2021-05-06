@@ -99,7 +99,7 @@ class TeslaPWController(polyinterface.Controller):
 
     def stop(self):
         self.removeNoticesAll()
-        self.TPW.disconect()
+        self.TPW.disconnect()
         LOGGER.debug('stop - Cleaning up')
 
     def heartbeat(self):

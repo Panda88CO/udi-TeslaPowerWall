@@ -82,6 +82,17 @@ class tesla_info:
             self.ISYinfo.createSetupFiles(nodeDefFile, editorFile, nlsFile)
             self.ISYmap = self.ISYinfo.createISYmapping()/profile/editor/editor
 
+    def storeDailyData(self, filename, solar, consumption, generation, dayInfo ):
+        try:
+            if not(os.path.exists('./dailyData')):
+                os.mkdir('./dailyData')
+            dataFile = open('./dailyData/'+filename, 'a')
+            dataFile.write('Date,'+str(dayInfo)+ ','+'solarKW,'+str(solar)+',ConsumptionKW,'+str(consumption)+',Generation,'+str(generation)+'\n')
+            dataFile.close()
+        except: 
+            LOGGER.debug ('Failed to add data to '+str(filename))
+        
+
     def getISYSendCommands(self, nodeId):
         print('getISYSendCommands :' + str(nodeId))
         self.ISYinfo.getISYSendCommands(nodeId)
@@ -89,8 +100,6 @@ class tesla_info:
     def getISYReceiveCommands(self, nodeId,):
         print('getISYReceiveCommands :' + str(nodeId))
         self.ISYinfo.getISYReceiveCommands(nodeId)
-
-
 
     def supportedParamters (self, nodeId):
         if nodeId in self.ISYmap:
@@ -112,6 +121,11 @@ class tesla_info:
                 self.metersStart = False
             self.nowDay = date.today()    
             if self.lastDay.day != self.nowDay.day: # we passed midnight
+                self.dailyTotalSolar =  self.getTPW_dailySolar()
+                self.dailyTotalConsumption = self.getTPW_dailyConsumption()
+                self.dailyTotalGeneraton = self.getTPW_dailyGeneration()
+                self.storeDailyData( 'dailydata.txt', self.dailyTotalSolar, self.dailyTotalConsumption, self.dailyTotalGeneraton, self.lastDay)
+        
                 self.metersDayStart = self.meters
             self.lastDay = self.nowDay
             return(True)

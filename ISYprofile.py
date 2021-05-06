@@ -69,28 +69,7 @@ class isyHandling:
         return (temp)
 
 
-    '''    
-    def getnodeISYdriverInfo(self, node, nodeNbr, mKey):
-        info = {}
-        if mKey in self.setupFile['nodeDef'][ self.systemID]['sts']:
-            keys = list(self.setupFile['nodeDef'][ self.systemID]['sts'][mKey].keys())
-            info['driver'] = keys[0]
-            tempData =  self.GETsData(mKey)
-            if tempData['statusOK']:
-                val = tempData['data']        
-                if val in  ['Celcius', 'Fahrenheit']:
-                    if val == 'Celcius':
-                        val = 0
-                    else:  
-                        val = 1 
-                info['value'] = val
-            else:
-                info['value'] = ''
-            editor = self.setupFile['nodeDef'][ self.systemID]['sts'][mKey][keys[0]]
 
-            info['uom'] = self.setupFile['editors'][editor]['ISYuom']
-        return(info)
-    '''
     def addISYnode(self,  nodeId, name, icon ):
         tempDict = {'nlsICON':icon, 'nlsName': name }
         if not(nodeId in self.sData):
@@ -392,28 +371,3 @@ class isyHandling:
             nlsFile.close()
         return(status)
     
-
-
-    '''
-    def getSystemISYdriverInfo(self, mKey):
-        info = {}
-        if mKey in self.setupFile['nodeDef'][ self.systemID]['sts']:
-            keys = list(self.setupFile['nodeDef'][ self.systemID]['sts'][mKey].keys())
-            info['driver'] = keys[0]
-            tempData =  self.GETsData(mKey)
-            if tempData['statusOK']:
-                val = tempData['data']        
-                if val in  ['Celcius', 'Fahrenheit']:
-                    if val == 'Celcius':
-                        val = 0
-                    else:  
-                        val = 1 
-                info['value'] = val
-            else:
-                info['value'] = ''
-            editor = self.setupFile['nodeDef'][ self.systemID]['sts'][mKey][keys[0]]
-
-            info['uom'] = self.setupFile['editors'][editor]['ISYuom']
-        return(info)
-
-    '''

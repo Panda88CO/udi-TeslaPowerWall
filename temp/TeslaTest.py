@@ -1,10 +1,29 @@
 
 import time
 import json
+import os
 from tesla_powerwall import Powerwall
 
-from TeslaInfo import tesla_info
-from  ISYprofile import isyHandling
+#from TeslaInfo import tesla_info
+#from  ISYprofile import isyHandling
+from datetime import date
+
+dayInfo = date.today()
+solar = 100
+generation = 1000
+consumption = 10
+filename = 'testFile.txt'
+for i in range(100):
+    if not(os.path.exists('./dailyData')):
+        os.mkdir('./dailyData')
+    dataFile = open('./dailyData/'+filename, 'a')
+    #print('Date,'+str(dayInfo)+ ','+'solarKW,'+str(solar)+',ConsumptionKW,'+str(consumption)+',Generation,'+str(generation)+'\n')
+    dataFile.write('Date,'+str(dayInfo)+ ','+'solarKW,'+str(solar)+',ConsumptionKW,'+str(consumption)+',Generation,'+str(generation)+'\n')
+    dataFile.close()
+    solar = solar + i
+    consumption = consumption+ i
+    generation = generation + i
+
 
 drivers = []
 PowerWall = Powerwall("192.168.1.151")

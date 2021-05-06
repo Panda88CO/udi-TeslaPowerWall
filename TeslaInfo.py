@@ -7,12 +7,12 @@ import time
 from tesla_powerwall import Powerwall, GridStatus, OperationMode
 from  ISYprofile import isyHandling
 #import polyinterface
-# LOGGER = polyinterface.# LOGGER
+LOGGER = polyinterface.LOGGER
 
 class tesla_info:
     def __init__ (self, IPaddress, password, email, ISYname, ISY_Id):
         self.TEST = True
-        # LOGGER.debug('class tesla_info - init')
+        LOGGER.debug('class tesla_info - init')
         self.TPW = Powerwall(IPaddress)
         self.TPW.login(password, email)
         self.controllerID = ISY_Id
@@ -46,7 +46,7 @@ class tesla_info:
         self.TPW = Powerwall(IPaddress)
         self.TPW.login(password, email)
         if not(self.TPW.is_authenticated()):
-            # LOGGER.error('Error Logging into Tesla Power Wall')            
+            LOGGER.error('Error Logging into Tesla Power Wall')            
             print()
         else:        
             self.pollSystemData()
@@ -91,22 +91,22 @@ class tesla_info:
             dataFile.close()
         except: 
             print()
-            # LOGGER.debug ('Failed to add data to '+str(filename))
+            LOGGER.debug ('Failed to add data to '+str(filename))
         
 
     def getISYSendCommands(self, nodeId):
-        # LOGGER.debug('getISYSendCommands :' + str(nodeId))
+        LOGGER.debug('getISYSendCommands :' + str(nodeId))
         self.ISYinfo.getISYSendCommands(nodeId)
     
     def getISYReceiveCommands(self, nodeId,):
-        # LOGGER.debug('getISYReceiveCommands :' + str(nodeId))
+        LOGGER.debug('getISYReceiveCommands :' + str(nodeId))
         self.ISYinfo.getISYReceiveCommands(nodeId)
 
     def supportedParamters (self, nodeId):
         if nodeId in self.ISYmap:
             temp = self.ISYmap[nodeId]
         else:
-            # LOGGER.error('Unknown Node Id: ' + str(nodeId))
+            LOGGER.error('Unknown Node Id: ' + str(nodeId))
             temp = None
         return(temp)
 
@@ -138,9 +138,9 @@ class tesla_info:
                 self.lastDay = self.nowDay
                 return(True)
         except:
-            # LOGGER.error('problems extracting data from tesla power wall')
+            LOGGER.error('problems extracting data from tesla power wall')
             if self.TPW.is_authenticated():
-                # LOGGER.error('Connected to Power Wall but error occured')
+                LOGGER.error('Connected to Power Wall but error occured')
                 return(False)
             else:
                 try:
@@ -148,18 +148,18 @@ class tesla_info:
                     self.TPW = Powerwall(IPaddress)
                     self.TPW.login(password, email)
                     if self.TPW.is_authenticated():
-                        # LOGGER.info('Reconnect to Tesla Power Wall Successful')
+                        LOGGER.info('Reconnect to Tesla Power Wall Successful')
                         return(True)
                     else:
-                        # LOGGER.error('Reconnect to Tesla Power Wall Failed')
+                        LOGGER.error('Reconnect to Tesla Power Wall Failed')
                         return(False)
                 except:
-                    # LOGGER.error('Reconnect to Tesla Power Wall Failed')
+                    LOGGER.error('Reconnect to Tesla Power Wall Failed')
                     return(False)
                     
 
     def getISYvalue(self, ISYvar, node):
-        ## LOGGER.debug( 'getISYvalue')
+        #LOGGER.debug( 'getISYvalue')
         if ISYvar in self.ISYmap[node]:
             self.teslaVarName = self.ISYmap[node][ISYvar]['systemVar']
             if self.teslaVarName == self.chargeLevel: 
@@ -193,19 +193,19 @@ class tesla_info:
             elif self.teslaVarName == self.gridServiceActive:
                 return(self.getTPW_gridServiceActive())
             else:
-                # LOGGER.error('Error - unknown variable: ' + str(self.teslaVarName )) 
+                LOGGER.error('Error - unknown variable: ' + str(self.teslaVarName )) 
                 print()
         else:
             print()
-            # LOGGER.error('Error - unknown variable: ' + str(ISYvar)) 
+            LOGGER.error('Error - unknown variable: ' + str(ISYvar)) 
 
     def setSendCommand(self, name, NodeId):
         print()
-        # LOGGER.debug('setSendCommand - Not implemented yet ')
+        LOGGER.debug('setSendCommand - Not implemented yet ')
 
     def setAcceptCommand(self, name, nodeId, TeslaVariable, ButtonText):
         print()
-        # LOGGER.debug('setAcceptCommand - Not implemented yet ')
+        LOGGER.debug('setAcceptCommand - Not implemented yet ')
 
     def setTeslaCredentials (self, IPaddress, password, email):
         self.IPaddress = IPaddress

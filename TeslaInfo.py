@@ -142,7 +142,7 @@ class tesla_info:
             
                     self.metersDayStart = self.meters
                 self.lastDay = self.nowDay
-                self.TEST = True
+                #self.TEST = True
                 return(True)
         except:
             LOGGER.error('problems extracting data from tesla power wall')

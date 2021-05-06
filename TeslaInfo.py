@@ -75,7 +75,7 @@ class tesla_info:
             self.ISYinfo.addIsyVaraiable (self.gridServiceActive, self.controllerID, 'boolean', None,None, 0-1,None, None, 'Grid Services Active', { 0:'False', 1: 'True' }) 
 
             self.ISYinfo.addControllerDefStruct(self.controllerName, self.controllerID )
-            self.ISYinfo.createSetupFiles('./profile/nodedef/nodedefs.xml','./profile/editor/editors.xml', './profile/nls/en_us.txt')
+            self.ISYinfo.createSetupFiles('nodedefs.xml','editors.xml', 'en_us.txt')
             self.ISYmap = self.ISYinfo.createISYmapping()
 
     def createISYsetupfiles(self, nodeDefFile, editorFile, nlsFile):

@@ -1,2 +1,2 @@
-requests>=2.22.0
 tesla_powerwall
+requests>=2.22.0

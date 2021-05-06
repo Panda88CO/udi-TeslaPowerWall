@@ -3,7 +3,7 @@
 import sys
 import polyinterface
 LOGGER = polyinterface.LOGGER
-#from tesla_powerwall import Powerwall, GridStatus, OperationMode
+from tesla_powerwall import Powerwall, GridStatus, OperationMode
 from TeslaInfo import tesla_info
 from ISYprofile import isyHandling
 import polyinterface
@@ -114,16 +114,22 @@ class TeslaPWController(polyinterface.Controller):
     
     def shortPoll(self):
         LOGGER.debug('Tesla Power Wall Controller shortPoll')
-        if self.TPW.pollSystemData():
-            self.updateISYdrivers()
+        if self.nodeDefineDone:
+            if self.TPW.pollSystemData():
+                self.updateISYdrivers()
+            else:
+                LOGGER.error ('Problem polling data from Tesla system')
         else:
-            LOGGER.debug ('Problem polling data from Tesla system')
+            LOGGER.debug('waiting for system/nodes to get created')
         
 
     def longPoll(self):
         LOGGER.debug('Tesla Power Wall  Controller longPoll - heat beat')
-        self.heartbeat()
-        self.reportDrivers()        
+        if self.nodeDefineDone:
+            self.heartbeat()
+            self.reportDrivers() 
+        else:
+            LOGGER.debug('waiting for system/nodes to get created')
 
     def updateISYdrivers(self):
         LOGGER.debug('System updateISYdrivers')

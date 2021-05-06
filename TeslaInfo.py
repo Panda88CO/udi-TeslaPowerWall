@@ -6,13 +6,13 @@ from datetime import date
 import time
 from tesla_powerwall import Powerwall, GridStatus, OperationMode
 from  ISYprofile import isyHandling
-import polyinterface
-LOGGER = polyinterface.LOGGER
+#import polyinterface
+# LOGGER = polyinterface.# LOGGER
 
 class tesla_info:
     def __init__ (self, IPaddress, password, email, ISYname, ISY_Id):
-        
-        LOGGER.debug('class tesla_info - init')
+        self.TEST = True
+        # LOGGER.debug('class tesla_info - init')
         self.TPW = Powerwall(IPaddress)
         self.TPW.login(password, email)
         self.controllerID = ISY_Id
@@ -40,14 +40,16 @@ class tesla_info:
         self.operationEnum =  {0:OperationMode.BACKUP.value, 1:OperationMode.SELF_CONSUMPTION.value, 2:OperationMode.AUTONOMOUS.value, 3:OperationMode.SITE_CONTROL.value }
         self.ISYinfo = isyHandling()
         self.ISYvariables = {}
+        self.ISYCritical = []
 
         #self.ISYname
         self.TPW = Powerwall(IPaddress)
         self.TPW.login(password, email)
         if not(self.TPW.is_authenticated()):
-            LOGGER.error('Error Logging into Tesla Power Wall')            
+            # LOGGER.error('Error Logging into Tesla Power Wall')            
+            print()
         else:        
-            self.pollSystemData()       
+            self.pollSystemData()
             self.ISYinfo.addISYnode(self.controllerID,self.controllerName,'Electricity' )
             
             self.ISYinfo.addISYcommandSend(self.controllerID, 'DON')
@@ -66,11 +68,12 @@ class tesla_info:
             self.ISYinfo.addIsyVaraiable (self.dailyGeneration, self.controllerID, 'KW', 0, 1000, None, None, 1, 'Net Power today', None ) 
             self.ISYinfo.addIsyVaraiable (self.gridStatus, self.controllerID, 'list', None, None, '0-3', None, None, 'Grid Status', self.gridStatusEnum ) 
             self.ISYinfo.addIsyVaraiable (self.operationMode, self.controllerID, 'list', None, None, '0-3', None, None, 'Operation Mode', self.operationEnum )                
+            self.ISYCritical.append(self.operationMode)
             self.ISYinfo.addIsyVaraiable (self.ConnectedTesla, self.controllerID, 'boolean', None,None, 0-1,None, None, 'Connected to Tesla', { 0:'False', 1: 'True' }) 
             self.ISYinfo.addIsyVaraiable (self.running, self.controllerID, 'boolean', None,None, 0-1,None, None, 'Power Wall Running', { 0:'False', 1: 'True' }) 
             self.ISYinfo.addIsyVaraiable (self.powerSupplyMode, self.controllerID, 'boolean', None,None, 0-1,None, None, 'Power Supply Mode', { 0:'False', 1: 'True' }) 
+            self.ISYCritical.append(self.powerSupplyMode)
             self.ISYinfo.addIsyVaraiable (self.gridServiceActive, self.controllerID, 'boolean', None,None, 0-1,None, None, 'Grid Services Active', { 0:'False', 1: 'True' }) 
-
             self.ISYinfo.addControllerDefStruct(self.controllerName, self.controllerID )
             self.ISYinfo.createSetupFiles('nodedefs.xml','editors.xml', 'en_us.txt')
             self.ISYmap = self.ISYinfo.createISYmapping()
@@ -87,48 +90,57 @@ class tesla_info:
             dataFile.write('Date,'+str(dayInfo)+ ','+'solarKW,'+str(solar)+',ConsumptionKW,'+str(consumption)+',Generation,'+str(generation)+'\n')
             dataFile.close()
         except: 
-            LOGGER.debug ('Failed to add data to '+str(filename))
+            print()
+            # LOGGER.debug ('Failed to add data to '+str(filename))
         
 
     def getISYSendCommands(self, nodeId):
-        LOGGER.debug('getISYSendCommands :' + str(nodeId))
+        # LOGGER.debug('getISYSendCommands :' + str(nodeId))
         self.ISYinfo.getISYSendCommands(nodeId)
     
     def getISYReceiveCommands(self, nodeId,):
-        LOGGER.debug('getISYReceiveCommands :' + str(nodeId))
+        # LOGGER.debug('getISYReceiveCommands :' + str(nodeId))
         self.ISYinfo.getISYReceiveCommands(nodeId)
 
     def supportedParamters (self, nodeId):
         if nodeId in self.ISYmap:
             temp = self.ISYmap[nodeId]
         else:
-            LOGGER.error('Unknown Node Id: ' + str(nodeId))
+            # LOGGER.error('Unknown Node Id: ' + str(nodeId))
             temp = None
         return(temp)
 
-    def pollSystemData(self):
+
+    def criticalParamters (self, nodeId):
+        return(self.ISYCritical)
+
+    def pollSystemData(self, level):
         try:
-            self.status = self.TPW.get_sitemaster()       
-            self.meters = self.TPW.get_meters()
-            if self.metersStart: 
-                self.metersDayStart = self.meters
-                self.lastDay = date.today() 
-                time.sleep(1)
-                self.metersStart = False
-            self.nowDay = date.today()    
-            if self.lastDay.day != self.nowDay.day: # we passed midnight
-                self.dailyTotalSolar =  self.getTPW_dailySolar()
-                self.dailyTotalConsumption = self.getTPW_dailyConsumption()
-                self.dailyTotalGeneraton = self.getTPW_dailyGeneration()
-                self.storeDailyData( 'dailydata.txt', self.dailyTotalSolar, self.dailyTotalConsumption, self.dailyTotalGeneraton, self.lastDay)
-        
-                self.metersDayStart = self.meters
-            self.lastDay = self.nowDay
-            return(True)
+            if level == 'critical':
+                self.status = self.TPW.get_sitemaster() 
+                return(True)
+            if level == 'all':
+                self.status = self.TPW.get_sitemaster() 
+                self.meters = self.TPW.get_meters()
+                if self.metersStart: 
+                    self.metersDayStart = self.meters
+                    self.lastDay = date.today() 
+                    time.sleep(1)
+                    self.metersStart = False
+                self.nowDay = date.today() or self.TEST 
+                if self.lastDay.day != self.nowDay.day: # we passed midnight
+                    self.dailyTotalSolar =  self.getTPW_dailySolar()
+                    self.dailyTotalConsumption = self.getTPW_dailyConsumption()
+                    self.dailyTotalGeneraton = self.getTPW_dailyGeneration()
+                    self.storeDailyData( 'dailydata.txt', self.dailyTotalSolar, self.dailyTotalConsumption, self.dailyTotalGeneraton, self.lastDay)
+            
+                    self.metersDayStart = self.meters
+                self.lastDay = self.nowDay
+                return(True)
         except:
-            LOGGER.error('problems extracting data from tesla power wall')
+            # LOGGER.error('problems extracting data from tesla power wall')
             if self.TPW.is_authenticated():
-                LOGGER.error('Connected to Power Wall but error occured')
+                # LOGGER.error('Connected to Power Wall but error occured')
                 return(False)
             else:
                 try:
@@ -136,18 +148,18 @@ class tesla_info:
                     self.TPW = Powerwall(IPaddress)
                     self.TPW.login(password, email)
                     if self.TPW.is_authenticated():
-                        LOGGER.info('Reconnect to Tesla Power Wall Successful')
+                        # LOGGER.info('Reconnect to Tesla Power Wall Successful')
                         return(True)
                     else:
-                        LOGGER.error('Reconnect to Tesla Power Wall Failed')
+                        # LOGGER.error('Reconnect to Tesla Power Wall Failed')
                         return(False)
                 except:
-                    LOGGER.error('Reconnect to Tesla Power Wall Failed')
+                    # LOGGER.error('Reconnect to Tesla Power Wall Failed')
                     return(False)
-                        
+                    
 
     def getISYvalue(self, ISYvar, node):
-        #LOGGER.debug( 'getISYvalue')
+        ## LOGGER.debug( 'getISYvalue')
         if ISYvar in self.ISYmap[node]:
             self.teslaVarName = self.ISYmap[node][ISYvar]['systemVar']
             if self.teslaVarName == self.chargeLevel: 
@@ -181,15 +193,19 @@ class tesla_info:
             elif self.teslaVarName == self.gridServiceActive:
                 return(self.getTPW_gridServiceActive())
             else:
-                LOGGER.error('Error - unknown variable: ' + str(self.teslaVarName )) 
+                # LOGGER.error('Error - unknown variable: ' + str(self.teslaVarName )) 
+                print()
         else:
-            LOGGER.error('Error - unknown variable: ' + str(ISYvar)) 
+            print()
+            # LOGGER.error('Error - unknown variable: ' + str(ISYvar)) 
 
     def setSendCommand(self, name, NodeId):
-        LOGGER.debug('setSendCommand - Not implemented yet ')
+        print()
+        # LOGGER.debug('setSendCommand - Not implemented yet ')
 
     def setAcceptCommand(self, name, nodeId, TeslaVariable, ButtonText):
-        LOGGER.debug('setAcceptCommand - Not implemented yet ')
+        print()
+        # LOGGER.debug('setAcceptCommand - Not implemented yet ')
 
     def setTeslaCredentials (self, IPaddress, password, email):
         self.IPaddress = IPaddress

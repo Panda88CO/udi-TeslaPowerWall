@@ -1,0 +1,47 @@
+<editors> 
+  <editor id = "CTRL_1" > 
+     <range  uom="51" min="0" max="100" prec="1" />
+</editor>
+  <editor id = "CTRL_2" > 
+     <range  uom="51" min="0" max="100" prec="1" />
+</editor>
+  <editor id = "CTRL_3" > 
+     <range  uom="30" min="0" max="20" prec="1" />
+</editor>
+  <editor id = "CTRL_4" > 
+     <range  uom="30" min="-20" max="20" prec="1" />
+</editor>
+  <editor id = "CTRL_5" > 
+     <range  uom="30" min="-100" max="100" prec="1" />
+</editor>
+  <editor id = "CTRL_6" > 
+     <range  uom="30" min="-100" max="100" prec="1" />
+</editor>
+  <editor id = "CTRL_7" > 
+     <range  uom="30" min="0" max="1000" prec="1" />
+</editor>
+  <editor id = "CTRL_8" > 
+     <range  uom="30" min="0" max="1000" prec="1" />
+</editor>
+  <editor id = "CTRL_9" > 
+     <range  uom="30" min="0" max="1000" prec="1" />
+</editor>
+  <editor id = "CTRL_10" > 
+     <range  uom="25" subset="0-3" nls="CTRL_10" />
+</editor>
+  <editor id = "CTRL_11" > 
+     <range  uom="25" subset="0-3" nls="CTRL_11" />
+</editor>
+  <editor id = "CTRL_12" > 
+     <range  uom="2" subset="-1" nls="CTRL_12" />
+</editor>
+  <editor id = "CTRL_13" > 
+     <range  uom="2" subset="-1" nls="CTRL_13" />
+</editor>
+  <editor id = "CTRL_14" > 
+     <range  uom="2" subset="-1" nls="CTRL_14" />
+</editor>
+  <editor id = "CTRL_15" > 
+     <range  uom="2" subset="-1" nls="CTRL_15" />
+</editor>
+</editors> 

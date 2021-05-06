@@ -11,7 +11,7 @@ LOGGER = polyinterface.LOGGER
 
 class tesla_info:
     def __init__ (self, IPaddress, password, email, ISYname, ISY_Id):
-        self.TEST = True
+        self.TEST = False
         LOGGER.debug('class tesla_info - init')
         self.TPW = Powerwall(IPaddress)
         self.TPW.login(password, email)
@@ -136,6 +136,7 @@ class tesla_info:
             
                     self.metersDayStart = self.meters
                 self.lastDay = self.nowDay
+                self.TEST = True
                 return(True)
         except:
             LOGGER.error('problems extracting data from tesla power wall')

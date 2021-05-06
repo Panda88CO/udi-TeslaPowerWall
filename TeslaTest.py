@@ -4,8 +4,8 @@ import json
 import os
 from tesla_powerwall import Powerwall
 
-from TeslaInfo import tesla_info
-from  ISYprofile import isyHandling
+#from TeslaInfo import tesla_info
+#from  ISYprofile import isyHandling
 from datetime import date
 '''
 dayInfo = date.today()
@@ -29,7 +29,7 @@ drivers = []
 PowerWall = Powerwall("192.168.1.151")
 temp = PowerWall.login( 'coe123COE', 'christian.olgaard@gmail.com')
 print(PowerWall.is_authenticated())
-
+PowerWall.close()
 controllerName = 'powerwall'
 id = 'tpwid'
 TPW = tesla_info("192.168.1.151", "coe123COE", "christian.olgaard@gmail.com", controllerName, id)

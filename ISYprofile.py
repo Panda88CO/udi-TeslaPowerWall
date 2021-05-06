@@ -3,7 +3,7 @@ import requests
 import json
 import os 
 from tesla_powerwall import GridStatus, OperationMode
-import polyinterface
+#import polyinterface
 LOGGER = polyinterface.LOGGER
 
 

@@ -40,7 +40,7 @@ class tesla_info:
         self.operationEnum =  {0:OperationMode.BACKUP.value, 1:OperationMode.SELF_CONSUMPTION.value, 2:OperationMode.AUTONOMOUS.value, 3:OperationMode.SITE_CONTROL.value }
         self.ISYinfo = isyHandling()
         self.ISYvariables = {}
-        self.ISYCritical = []
+        self.ISYCritical = {}
 
         #self.ISYname
         self.TPW = Powerwall(IPaddress)
@@ -67,11 +67,11 @@ class tesla_info:
             self.ISYinfo.addIsyVaraiable (self.dailyGeneration, self.controllerID, 'KW', 0, 1000, None, None, 1, 'Net Power today', None ) 
             self.ISYinfo.addIsyVaraiable (self.gridStatus, self.controllerID, 'list', None, None, '0-3', None, None, 'Grid Status', self.gridStatusEnum ) 
             self.ISYinfo.addIsyVaraiable (self.operationMode, self.controllerID, 'list', None, None, '0-3', None, None, 'Operation Mode', self.operationEnum )                
-            self.ISYCritical.append(self.operationMode)
+            self.ISYCritical[self.controllerID].append(self.operationMode)
             self.ISYinfo.addIsyVaraiable (self.ConnectedTesla, self.controllerID, 'boolean', None,None, 0-1,None, None, 'Connected to Tesla', { 0:'False', 1: 'True' }) 
             self.ISYinfo.addIsyVaraiable (self.running, self.controllerID, 'boolean', None,None, 0-1,None, None, 'Power Wall Running', { 0:'False', 1: 'True' }) 
             self.ISYinfo.addIsyVaraiable (self.powerSupplyMode, self.controllerID, 'boolean', None,None, 0-1,None, None, 'Power Supply Mode', { 0:'False', 1: 'True' }) 
-            self.ISYCritical.append(self.powerSupplyMode)
+            self.ISYCritical[self.controllerID].append(self.powerSupplyMode)
             self.ISYinfo.addIsyVaraiable (self.gridServiceActive, self.controllerID, 'boolean', None,None, 0-1,None, None, 'Grid Services Active', { 0:'False', 1: 'True' }) 
             self.ISYinfo.addControllerDefStruct(self.controllerName, self.controllerID )
             self.ISYinfo.createSetupFiles('nodedefs.xml','editors.xml', 'en_us.txt')
@@ -288,3 +288,6 @@ class tesla_info:
            return(1)   
         else:
            return(0)            
+
+    def TPWdisconnect(self):
+        self.TPW.close()

@@ -3,7 +3,7 @@
 import sys
 import polyinterface
 LOGGER = polyinterface.LOGGER
-from tesla_powerwall import Powerwall, GridStatus, OperationMode
+#from tesla_powerwall import Powerwall, GridStatus, OperationMode
 from TeslaInfo import tesla_info
 from ISYprofile import isyHandling
 import polyinterface
@@ -18,7 +18,6 @@ class TeslaPWController(polyinterface.Controller):
         self.name = 'Tesla Power Wall Control'
         self.address ='teslapw'
         self.id = self.address
-        #LOGGER.debug('Name/address: '+ self.name + ' ' + self.address)
         self.primary = self.address
         self.hb = 0
         self.drivers = []
@@ -36,7 +35,7 @@ class TeslaPWController(polyinterface.Controller):
 
         self.UserEmail = self.getCustomParam('USER_EMAIL')
         if self.UserEmail is None:
-            self.addNotice('Please Set Tesla Power Wall login email (USER_EMAIL) - (E.g. nobody@email.com')
+            self.addNotice('Please Set Tesla Power Wall login email (USER_EMAIL) - E.g. nobody@email.com')
             LOGGER.error('check_params: user email not specified')
             self.addCustomParam({'USER_EMAIL': 'nobody@email.com'})
 
@@ -88,8 +87,7 @@ class TeslaPWController(polyinterface.Controller):
                 if info != {}:
                     value = self.TPW.getISYvalue(key, self.id)
                     self.drivers.append({'driver':key, 'value':value, 'uom':info['uom'] })
-                    LOGGER.debug('driver' + str(key)+ ' value:' + str(value) + ' uom:' + str(info['uom']) )
-                    #self.setDriver(key, value, report = True, force = True)   
+                    #LOGGER.debug('driver' + str(key)+ ' value:' + str(value) + ' uom:' + str(info['uom']) )
             self.poly.installprofile()
             if self.TPW.pollSystemData():
                 self.updateISYdrivers()
@@ -133,7 +131,7 @@ class TeslaPWController(polyinterface.Controller):
             info = self.ISYparams[key]
             if info != {}:
                 value = self.TPW.getISYvalue(key, self.id)
-                LOGGER.debug('Update ISY drivers :' + str(key)+ ' ' + info['systemVar']+ ' value:' + str(value) )
+                #LOGGER.debug('Update ISY drivers :' + str(key)+ ' ' + info['systemVar']+ ' value:' + str(value) )
                 self.setDriver(key, value, report = True, force = False)          
 
     def query(self, command=None):

@@ -91,7 +91,7 @@ class TeslaPWController(polyinterface.Controller):
             '''
             except:
                 LOGGER.error('Did not connect to power wall')
-                self.TPW.disconect()
+                self.disconnectTPW()
                 self.stop()
             '''
         
@@ -99,7 +99,7 @@ class TeslaPWController(polyinterface.Controller):
 
     def stop(self):
         self.removeNoticesAll()
-        self.TPW.disconnect()
+        self.TPW.disconnectTPW()
         LOGGER.debug('stop - Cleaning up')
 
     def heartbeat(self):

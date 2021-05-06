@@ -3,6 +3,7 @@
 import sys
 import polyinterface
 LOGGER = polyinterface.LOGGER
+from tesla_powerwall import Powerwall, GridStatus, OperationMode
 from TeslaInfo import tesla_info
 from ISYprofile import isyHandling
 import polyinterface

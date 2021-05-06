@@ -140,7 +140,7 @@ class TeslaPWController(polyinterface.Controller):
         elif level == 'critical':
             params = self.ISYparams
         else:
-            debug.error('wronf parameter passed: ' + str(level))
+            debug.error('Wrong parameter passed: ' + str(level))
         for key in params:
             info = params[key]
             if info != {}:

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-import requests
+import requests 
 import json
 import os 
 from tesla_powerwall import GridStatus, OperationMode

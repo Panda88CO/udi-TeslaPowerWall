@@ -85,8 +85,7 @@ class tesla_info:
         try:
             if not(os.path.exists('./dailyData')):
                 os.mkdir('./dailyData')
-            if os.path.isfile('./dailyData/'+filename):
-                dataFile = open('./dailyData/'+filename, 'a')
+            dataFile = open('./dailyData/'+filename, 'a')
             if os.stat('./dailyData/'+filename).st_size == 0:
                 dataFile.write('Date,SolarKW,ConsumptionKW,GenerationKW\n')
             dataFile.write(str(dayInfo)+','+str(solar)+','+str(consumption)+','+str(generation)+'\n')
@@ -144,7 +143,7 @@ class tesla_info:
                     self.storeDailyData( 'dailydata.txt', self.dailyTotalSolar, self.dailyTotalConsumption, self.dailyTotalGeneraton, self.lastDay)
                     self.metersDayStart = self.meters
                 self.lastDay = self.nowDay
-                self.TEST = True
+                #self.TEST = True
                 return(True)
         except:
             LOGGER.error('problems extracting data from tesla power wall')

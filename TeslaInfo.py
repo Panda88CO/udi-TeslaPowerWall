@@ -90,9 +90,9 @@ class tesla_info:
                 dataFile.write('Date,SolarKW,ConsumptionKW,GenerationKW\n')
             dataFile.write(str(dayInfo)+','+str(solar)+','+str(consumption)+','+str(generation)+'\n')
             dataFile.close()
+            LOGGER.debug('Added data to file')
         except: 
-            
-            LOGGER.debug ('Failed to add data to '+str(filename))
+                LOGGER.debug ('Failed to add data to '+str(filename))
         
 
     def getISYSendCommands(self, nodeId):

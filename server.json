@@ -4,7 +4,7 @@
     "type": "python3",
     "executable": "TeslaPWController.py",
     "install": "install.sh",
-    "description": "Nodeserver to allow integration of Tesla Power Wall Control. S",
+    "description": "Nodeserver to allow integration of Tesla Power Wall.",
     "notice": "Uses on https://github.com/jrester/tesla_powerwall API - not official Tesla API ",
     "shortPoll": "60",
     "longPoll": "180",

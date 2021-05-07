@@ -141,11 +141,12 @@ class TeslaPWController(polyinterface.Controller):
             params = self.ISYparams
         else:
             debug.error('Wrong parameter passed: ' + str(level))
+        LOGGER.debug('updateISYdrivers '+ level)
         for key in params:
             info = params[key]
             if info != {}:
                 value = self.TPW.getISYvalue(key, self.id)
-                #LOGGER.debug('Update ISY drivers :' + str(key)+ ' ' + info['systemVar']+ ' value:' + str(value) )
+                LOGGER.debug('Update ISY drivers :' + str(key)+ ' ' + info['systemVar']+ ' value:' + str(value) )
                 self.setDriver(key, value, report = True, force = False)          
 
     '''

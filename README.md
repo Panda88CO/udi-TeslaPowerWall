@@ -2,7 +2,7 @@
 
 [![license]( MIT 3 license - see license file)
 
-Utilizes po
+Utilizes https://github.com/jrester/tesla_powerwall API (not official Tesla API - MIT license)
 
 This Poly provides an interface between Tesla Power and system and [Polyglot v2](https://github.com/UniversalDevicesInc/polyglot-v2) server.
 

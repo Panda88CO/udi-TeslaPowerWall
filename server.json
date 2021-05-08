@@ -5,7 +5,7 @@
     "executable": "TeslaPWController.py",
     "install": "install.sh",
     "description": "Nodeserver to allow integration of Tesla Power Wall.",
-    "notice": "Uses on https://github.com/jrester/tesla_powerwall API - not official Tesla API ",
+    "notice": "Uses on https://github.com/jrester/tesla_powerwall API - not official Tesla API.  In case installation on POLISY fails single click reset button to upgrade all packages to latest version ",
     "shortPoll": "60",
     "longPoll": "180",
     "credits": [

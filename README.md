@@ -17,6 +17,8 @@ More data could easily be made available if needed
 ### Installation instructions
 Make sure that you have a `zip` executable on the system, install using your OS package manager if necessarily.
 You can install NodeServer from the Polyglot store or manually running
+
+If installing on POLISY and installation fails, single click reset button to upgrade all packages to latest version.  This will usually solve installation problems 
 ```
 cd ~/.polyglot/nodeservers
 git clone https://github.com/Panda88CO/udi-TeslaPowerWall.git udi-TeslaPOwerWall

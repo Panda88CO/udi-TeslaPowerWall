@@ -1,4 +1,4 @@
-ND-tpwid-NAME = powerwall 
+ND-tpwid-NAME = powerwall  
 ND-tpwid-ICON = Electricity
 CMD-nlstpwid-UPDATE-NAME = Update System Data
 ST-nlstpwid-GV1-NAME = Battery Charge Level

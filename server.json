@@ -12,8 +12,8 @@
         {
             "title": "A NodeServer to integrate Tesla Power Wall Controll system",
             "author": "Panda88CO",
-            "version": "0.3.4",
-            "date": "May 6,  2021",
+            "version": "0.3.5",
+            "date": "May 7,  2021",
             "source": "https://https://github.com/Panda88CO/udi-TeslaPW",
             "license": "Uses https://github.com/jrester/tesla_powerwall (MIT license). This code is also under MIT license "
         }

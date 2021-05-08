@@ -1,12 +1,2 @@
-http
-json
-enum
-typing
-urllib
-urllib3
-distutils
-datetime
-os
-sys
 tesla_powerwall
-requests>=2.22.0
+requests >=2.22.0

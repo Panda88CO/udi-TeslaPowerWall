@@ -1,2 +1,6 @@
 tesla_powerwall
-requests >=2.22.0
+requests_oauth2
+random
+bashlib
+string
+requests>=2.22.0

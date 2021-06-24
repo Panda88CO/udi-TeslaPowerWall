@@ -10,7 +10,7 @@ Also uses  code taken from: https://github.com/bismuthfoundation/TornadoWallet/b
 MIT license.
 Some info on teh clould API can be found at https://tesla-api.timdorr.com/
 
-# Installation
+## Installation
 To run node server user must first select data source - from Local Power Wall and/or Tesla Cloud.   Local is not working on polyglot cloud.  
  
 Configuration requires 2 steps first time:

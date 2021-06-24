@@ -22,7 +22,7 @@ class TeslaPWController(polyinterface.Controller):
 
     def __init__(self, polyglot):
         super(TeslaPWController, self).__init__(polyglot)
-        #LOGGER.info('_init_ Tesla Power Wall Controller')
+        LOGGER.info('_init_ Tesla Power Wall Controller')
         self.ISYforced = False
         self.name = 'Tesla PowerWall Info'
         self.id = 'teslapw'
@@ -40,19 +40,19 @@ class TeslaPWController(polyinterface.Controller):
         self.IPAddress = self.getCustomParam('LOCAL IP_ADDRESS - Leave ')
         if self.IPAddress is None:
             self.addNotice('Please Set IP address of Tesla Power Wall system (IP_ADDRESS) - E.g. 192.168.1.2') 
-            LOGGER.debug('IP address not set')
+            LOGGER.info('IP address not set')
             self.addCustomParam({'IP_ADDRESS': '192.168.1.100'})
 
         self.LocalUserEmail = self.getCustomParam('LOCAL USER EMAIL)')
         if self.LocalUserEmail is None:
             self.addNotice('Please Set Tesla Power Wall (local) login email (LOCAL_USER_EMAIL) - E.g. nobody@email.com')
-            LOGGER.debug('check_params: user email not specified')
+            LOGGER.info('check_params: local user email not specified')
             self.addCustomParam({'LOCAL_USER_EMAIL': 'nobody@email.com'})
 
         self.LocalUserPassword= self.getCustomParam('USER_PASSWORD')
         if self.LocalUserPassword is None:
             self.addNotice('Please Set Tesla Power Wall (local) password (USER_PASSWORD) - E.g. XXXXXXXX')
-            LOGGER.debug('check_params: user password not specified')
+            LOGGER.info('check_params: local user password not specified')
             self.addCustomParam({'LOCAL_USER_PASSWORD': 'XXXXXXXX'})
 
     def defineAccessInputParam(self):
@@ -65,13 +65,13 @@ class TeslaPWController(polyinterface.Controller):
             if self.access == None:
                 self.addNotice('Data Source type : LOCAL, CLOUD, or BOTH')
                 self.addNotice('Please input Access type ')
-                LOGGER.debug('check_params: access type not defined')
+                LOGGER.info('check_params: access type not defined')
                 self.addCustomParam({'ACCESS': 'LOCAL/CLOUD/BOTH'})
 
             self.logFileParam = self.getCustomParam('LOGFILE')
             if self.logFileParam == None:
                 self.addNotice('Daily Summary Logfile ENABLED/DISABLED ')
-                LOGGER.debug('LOGFILE input not defind - assume diabled')
+                LOGGER.info('LOGFILE input not defind - assume diabled')
                 self.addCustomParam({'LOGFILE': 'DISABLED'})      
             else:
                 param = str(self.logFileParam).upper()
@@ -88,13 +88,13 @@ class TeslaPWController(polyinterface.Controller):
         self.CloudUserEmail = self.getCustomParam('CLOUD USER EMAIL)')
         if self.CloudUserEmail is None:
             self.addNotice('Please Set Tesla Power Wall Cloud login email (CLOUD_USER_EMAIL) - E.g. nobody@email.com')
-            LOGGER.debug('check_params: user email not specified')
+            LOGGER.debug('check_params: cloud user email not specified')
             self.addCustomParam({'CLOUD_USER_EMAIL': 'nobody@email.com'})
 
         self.CloudUserPassword = self.getCustomParam('CLOUD USER_PASSWORD')
         if self.CloudUserPassword is None:
             self.addNotice('Please Set Tesla Power Wall Cloud password (_CLOUD_USER_PASSWORD) - E.g. XXXXXXXX')
-            LOGGER.debug('check_params: user password not specified')
+            LOGGER.debug('check_params: cloud user password not specified')
             self.addCustomParam({'CLOUD_USER_PASSWORD': 'XXXXXXXX'})
         self.addNotice('Please restart Node server after setting the parameters')
 
@@ -110,22 +110,22 @@ class TeslaPWController(polyinterface.Controller):
             self.logFileParam = self.getCustomParam('LOGFILE')
 
             if self.logFileParam == None: 
-                LOGGER.debug('LOGFILE type not retrieved - ENABLED, DISABLED' )
+                LOGGER.info('LOGFILE type not retrieved - ENABLED, DISABLED' )
                 self.defineAccessInputParam()
                 self.logFile = False
             else:
                 param = str(self.logFileParam).upper()
                 if param == 'ENABLED' or param == 'ENABLE':
                     self.logFile = True
-                    LOGGER.debug('LogFile enabled @ ./daailyData')
+                    LOGGER.info('LogFile enabled @ ./daailyData')
                 else:
                     self.logFile = False                    
-                    LOGGER.debug('LogFile disabled')
+                    LOGGER.info('LogFile disabled')
             
             
             self.access = self.getCustomParam('ACCESS') 
             if self.access == None:
-                LOGGER.debug('Access type not retrieved - LOCAL, CLOUD, BOTH' )
+                LOGGER.info('Access type not retrieved - LOCAL, CLOUD, BOTH' )
                 self.defineAccessInputParam()
                 self.localAccess = False
                 self.stop()
@@ -135,20 +135,20 @@ class TeslaPWController(polyinterface.Controller):
                 self.localAccess = True
                 self.IPAddress = self.getCustomParam('IP_ADDRESS')
                 if self.IPAddress == None:
-                    LOGGER.debug('No IPaddress specified:' )
+                    LOGGER.info('No IPaddress specified:' )
                     self.localAccess = False
                 else:
                     LOGGER.debug('IPaddress retrieved: ' + self.IPAddress)
 
                 self.localUserEmail = self.getCustomParam('LOCAL_USER_EMAIL')
                 if self.localUserEmail == None:
-                    LOGGER.debug('No Local USER_EMAIL retrieved:')
+                    LOGGER.info('No Local USER_EMAIL retrieved:')
                     self.localAccess = False
                 else:
-                    LOGGER.debug('Local USER_EMAIL retrieved: '+ self.localUserEmail)
+                    LOGGER.info('Local USER_EMAIL retrieved: '+ self.localUserEmail)
                 self.localUserPassword =self.getCustomParam('LOCAL_USER_PASSWORD')
                 if self.localUserPassword == None:
-                    LOGGER.debug('No USER_PASSWORD:')
+                    LOGGER.info('No USER_PASSWORD:')
                     self.LocalAccess = False
                 else:
                     LOGGER.debug('LOCAL USER_PASSWORD retrieved: XXXXXXXX')
@@ -159,13 +159,13 @@ class TeslaPWController(polyinterface.Controller):
                 self.cloudAccess= True
                 self.cloudUserEmail = self.getCustomParam('CLOUD_USER_EMAIL')
                 if self.cloudUserEmail == None:
-                    LOGGER.debug('No cloud USER_EMAIL retrieved:')
+                    LOGGER.info('No cloud USER_EMAIL retrieved:')
                     self.cloudAccess = False
                 else:
                     LOGGER.debug('Cloud USER_EMAIL retrieved: '+ self.cloudUserEmail)
                 self.cloudUserPassword =self.getCustomParam('CLOUD_USER_PASSWORD')
                 if self.cloudUserPassword == None:
-                    LOGGER.debug('No cloud USER_PASSWORD:')
+                    LOGGER.info('No cloud USER_PASSWORD:')
                     self.cloudAccess = False
                 else:
                     LOGGER.debug('CLOUD_USER_PASSWORD retrieved: XXXXXXXX')
@@ -176,13 +176,13 @@ class TeslaPWController(polyinterface.Controller):
                 self.cloudAccess = True
                 self.cloudUserEmail = self.getCustomParam('CLOUD_USER_EMAIL')
                 if self.cloudUserEmail == None:
-                    LOGGER.debug('No cloud USER_EMAIL retrieved:')
+                    LOGGER.info('No cloud USER_EMAIL retrieved:')
                     self.cloudAccess = False
                 else:
-                    LOGGER.debug('Cloud USER_EMAIL retrieved: '+ self.cloudUserEmail)
+                    LOGGER.info('Cloud USER_EMAIL retrieved: '+ self.cloudUserEmail)
                 self.cloudUserPassword =self.getCustomParam('CLOUD_USER_PASSWORD')
                 if self.cloudUserPassword == None:
-                    LOGGER.debug('No cloud USER_PASSWORD:')
+                    LOGGER.info('No cloud USER_PASSWORD:')
                     self.cloudAccess = False
                 else:
                     LOGGER.debug('CLOUD_USER_PASSWORD retrieved: XXXXXXXX')
@@ -195,13 +195,13 @@ class TeslaPWController(polyinterface.Controller):
         try:
     
             if self.access == 'BOTH':
-                LOGGER.debug('BOTH selected')
+                LOGGER.info('BOTH selected')
                 self.TPW = tesla_info(self.cloudUserEmail, self.cloudUserPassword, self.name, self.id , self.localUserEmail, self.localUserPassword, self.IPAddress )
             elif self.access == 'CLOUD':
-                LOGGER.debug('CLOUD selected')          
+                LOGGER.info('CLOUD selected')          
                 self.TPW = tesla_info(self.cloudUserEmail, self.cloudUserPassword, self.name, self.id ,)
             else:  # Local only 
-                LOGGER.debug('LOCAL selected')
+                LOGGER.info('LOCAL selected')
                 self.TPW = tesla_info(None,None, self.name, self.id , self.localUserEmail, self.localUserPassword, self.IPAddress )
             #self.TPW.createISYsetup()
             LOGGER.debug ('Install Profile')    
@@ -258,7 +258,7 @@ class TeslaPWController(polyinterface.Controller):
 
     
     def shortPoll(self):
-        LOGGER.debug('Tesla Power Wall Controller shortPoll')
+        LOGGER.info('Tesla Power Wall Controller shortPoll')
         self.heartbeat()
 
         if self.nodeDefineDone:
@@ -276,7 +276,7 @@ class TeslaPWController(polyinterface.Controller):
         
 
     def longPoll(self):
-        LOGGER.debug('Tesla Power Wall  Controller  belongPoll')
+        LOGGER.info('Tesla Power Wall  Controller longPoll')
         self.heartbeat()
         if self.nodeDefineDone:
             if self.TPW.pollSystemData('all'):

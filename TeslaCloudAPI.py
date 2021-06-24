@@ -129,8 +129,10 @@ class TeslaCloudAPI():
             dateNow = datetime.now()
             tokenExpires = datetime.fromtimestamp(self.tokeninfo['created_at'] + self.tokeninfo['expires_in']- 100)
             if dateNow > tokenExpires:
+                LOGGER.debug('Renewing token')
                 self.tokeninfo = self.__tesla_connect(self.email, self.password)
         else:
+            LOGGER.debug('Getting New Token')
             self.tokeninfo = self.__tesla_connect(self.email, self.password)
         return(self.tokeninfo)
 

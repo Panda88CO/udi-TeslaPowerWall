@@ -321,11 +321,11 @@ class tesla_info:
         
 
     def getISYSendCommands(self, nodeId):
-        LOGGER.debug('getISYSendCommands :' + str(nodeId))
+        #LOGGER.debug('getISYSendCommands :' + str(nodeId))
         self.ISYinfo.getISYSendCommands(nodeId)
     
     def getISYReceiveCommands(self, nodeId,):
-        LOGGER.debug('getISYReceiveCommands :' + str(nodeId))
+        #LOGGER.debug('getISYReceiveCommands :' + str(nodeId))
         self.ISYinfo.getISYReceiveCommands(nodeId)
 
     def supportedParamters (self, nodeId):
@@ -360,54 +360,54 @@ class tesla_info:
         return(self.ISYCritical[nodeId])
 
     def pollSystemData(self, level):
-        #try:
-        self.nowDay = date.today() 
-        if (self.lastDay.day != self.nowDay.day) or self.TEST: # we passed midnight
-            if not(PG_CLOUD_ONLY) and self.logFileEnabled:
-                self.storeDaysData( 'dailydata.txt', self.daysTotalSolar, self.daysTotalConsumption, self.daysTotalGeneraton, self.daysTotalBattery, self.daysTotalGridServices, self.daysTotalGenerator , self.lastDay)
-            self.yesterdayTotalSolar = self.daysTotalSolar
-            self.yesterdayTotalConsumption = self.daysTotalConsumption
-            self.yesterdayTotalGeneration  = self.daysTotalGeneraton
-            self.yesterdayTotalBattery =  self.daysTotalBattery 
-            self.yesterdayTotalGridServices = self.daysTotalGridServices
-            self.yesterdayTotalGenerator = self.daysTotalGenerator
-            if self.TPWlocalAccess:
-                self.metersDayStart = self.TPWlocal.get_meters()
-            self.lastDay = self.nowDay
+        try:
+            self.nowDay = date.today() 
+            if (self.lastDay.day != self.nowDay.day) or self.TEST: # we passed midnight
+                if not(PG_CLOUD_ONLY) and self.logFileEnabled:
+                    self.storeDaysData( 'dailydata.txt', self.daysTotalSolar, self.daysTotalConsumption, self.daysTotalGeneraton, self.daysTotalBattery, self.daysTotalGridServices, self.daysTotalGenerator , self.lastDay)
+                self.yesterdayTotalSolar = self.daysTotalSolar
+                self.yesterdayTotalConsumption = self.daysTotalConsumption
+                self.yesterdayTotalGeneration  = self.daysTotalGeneraton
+                self.yesterdayTotalBattery =  self.daysTotalBattery 
+                self.yesterdayTotalGridServices = self.daysTotalGridServices
+                self.yesterdayTotalGenerator = self.daysTotalGenerator
+                if self.TPWlocalAccess:
+                    self.metersDayStart = self.TPWlocal.get_meters()
+                self.lastDay = self.nowDay
 
 
-        if level == 'critical':
-            if not(self.TPWlocalAccess):
-                self.TPWcloud.teslaUpdateCloudData('critical')
-            else:
-                self.status = self.TPWlocal.get_sitemaster() 
-                self.meters = self.TPWlocal.get_meters()
-                if self.getTPW_ConnectedTesla():
+            if level == 'critical':
+                if not(self.TPWlocalAccess):
                     self.TPWcloud.teslaUpdateCloudData('critical')
-            return(True)
-
-        if level == 'all':
-            if self.TPWcloudAccess:
-                self.TPWcloud.teslaUpdateCloudData('all')
-                self.TPWcloud.teslaCalculateDaysTotals()
-
-            if self.TPWlocalAccess:
-                self.status = self.TPWlocal.get_sitemaster() 
-                self.meters = self.TPWlocal.get_meters()
-
-                self.daysTotalSolar =  (self.meters.solar.energy_exported - self.metersDayStart.solar.energy_exported)
-                self.daysTotalConsumption = (self.meters.load.energy_imported - self.metersDayStart.load.energy_imported)
-                self.daysTotalGeneraton = (self.meters.site.energy_exported - self.metersDayStart.site.energy_exported - 
-                                            (self.meters.site.energy_imported - self.metersDayStart.site.energy_imported))
-                self.daysTotalBattery =  (float(self.meters.battery.energy_exported - self.metersDayStart.battery.energy_exported - 
-                                            (self.meters.battery.energy_imported - self.metersDayStart.battery.energy_imported)))
-                if self.TPWcloudAccess:
-                    self.daysTotalGenerator = self.TPWcloud.teslaExtractDaysGeneratorUse()
-                    self.daysTotalGridServices = self.TPWcloud.teslaExtractDaysGridServicesUse()
                 else:
-                    self.daysTotalGridServices = 0.0 #Does not seem to exist
-                    self.daysTotalGenerator = 0.0 #needs to be updated - may not exist
-                LOGGER.debug('Local Access - total ')
+                    self.status = self.TPWlocal.get_sitemaster() 
+                    self.meters = self.TPWlocal.get_meters()
+                    if self.getTPW_ConnectedTesla():
+                        self.TPWcloud.teslaUpdateCloudData('critical')
+                return(True)
+
+            if level == 'all':
+                if self.TPWcloudAccess:
+                    self.TPWcloud.teslaUpdateCloudData('all')
+                    self.TPWcloud.teslaCalculateDaysTotals()
+
+                if self.TPWlocalAccess:
+                    self.status = self.TPWlocal.get_sitemaster() 
+                    self.meters = self.TPWlocal.get_meters()
+
+                    self.daysTotalSolar =  (self.meters.solar.energy_exported - self.metersDayStart.solar.energy_exported)
+                    self.daysTotalConsumption = (self.meters.load.energy_imported - self.metersDayStart.load.energy_imported)
+                    self.daysTotalGeneraton = (self.meters.site.energy_exported - self.metersDayStart.site.energy_exported - 
+                                                (self.meters.site.energy_imported - self.metersDayStart.site.energy_imported))
+                    self.daysTotalBattery =  (float(self.meters.battery.energy_exported - self.metersDayStart.battery.energy_exported - 
+                                                (self.meters.battery.energy_imported - self.metersDayStart.battery.energy_imported)))
+                    if self.TPWcloudAccess:
+                        self.daysTotalGenerator = self.TPWcloud.teslaExtractDaysGeneratorUse()
+                        self.daysTotalGridServices = self.TPWcloud.teslaExtractDaysGridServicesUse()
+                    else:
+                        self.daysTotalGridServices = 0.0 #Does not seem to exist
+                        self.daysTotalGenerator = 0.0 #needs to be updated - may not exist
+                    #LOGGER.debug('Local Access - total ')
                 
             else:
                 self.daysTotalSolar = self.TPWcloud.teslaExtractDaysSolar()
@@ -421,31 +421,13 @@ class tesla_info:
                 self.yesterdayTotalGeneration  = self.TPWcloud.teslaExtractYesterdayGeneraton()
                 self.yesterdayTotalBattery =  self.TPWcloud.teslaExtractYesterdayBattery() 
                 self.yesterdayTotalGridServices = self.TPWcloud.teslaExtractYesterdayGridServiceUse()
-                self.yesterdayTotalGenerator = self.TPWcloud.teslaExtractYesterdayGeneratorUse()
-            
-        return(True)
-        '''
+                self.yesterdayTotalGenerator = self.TPWcloud.teslaExtractYesterdayGeneratorUse()            
+            return(True)
+
         except:
             LOGGER.debug('problems extracting data from tesla power wall')
-            #if self.TPWlocal.is_authenticated():
-            #   LOGGER.debug('Connected to Power Wall but error occured')
-            #   return(False)
-            else:
-                try:
-                    self.TPWlocal.close()
-                    self.TPWlocal = Powerwall(self.IPaddress)
-                    self.TPWlocal.login(self.password, self.email)
-                    if self.TPWlocal.is_authenticated():
-                        LOGGER.debug('Reconnect to Tesla Power Wall Successful')
-                        return(True)
-                    else:
-                        LOGGER.debug('Reconnect to Tesla Power Wall Failed')
-                        return(False)
-                except:
-                    LOGGER.debug('Reconnect to Tesla Power Wall Failed')
-                    return(False)
-        '''
-           
+
+        
 
     def getISYvalue(self, ISYvar, node):
         #LOGGER.debug( 'getISYvalue')
@@ -528,27 +510,6 @@ class tesla_info:
         else:    
             LOGGER.debug('Error - unknown variable: ' + str(ISYvar)) 
 
-    '''
-    def setSendCommand(self, name, NodeId):
-        
-        LOGGER.debug('setSendCommand - Not implemented yet ')
-
-    def setAcceptCommand(self, name, nodeId, TeslaVariable, ButtonText):
-              
-        LOGGER.debug('setAcceptCommand - Not implemented yet ')
-    '''
-
-    '''
-    def setTeslaCredentials (self, IPaddress, password, email):
-        self.IPaddress = IPaddress
-        self.password = password
-        self.email = email
-
-    '''
-    '''
-        def getTPW_AvailableVars(self, nodeId):
-        return(ISYvariables)
-    '''
 
     def TPW_updateMeter(self):
         self.pollSystemData('all')

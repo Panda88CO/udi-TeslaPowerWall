@@ -8,7 +8,14 @@ from requests_oauth2 import OAuth2BearerToken
 import string
 import random
 
-import polyinterface
+PG_CLOUD_ONLY = False
+
+try:
+    import polyinterface
+except ImportError:
+    import pgc_interface as polyinterface
+    PG_CLOUD_ONLY = True
+
 LOGGER = polyinterface.LOGGER
 
 #import base64

@@ -1,13 +1,12 @@
 #!/usr/bin/env python3
 PG_CLOUD_ONLY = False
-'''
+
 try:
     import polyinterface
 except ImportError:
     import pgc_interface as polyinterface
 
     PG_CLOUD_ONLY = True
-'''
 
 #from os import truncate
 import sys
@@ -334,7 +333,7 @@ class TeslaPWController(polyinterface.Controller):
 if __name__ == "__main__":
     try:
         #LOGGER.info('Starting Tesla Power Wall Controller')
-        polyglot = polyinterface.Interface('Tesla Power Wall V2')
+        polyglot = polyinterface.Interface('Tesla Power Wall')
         polyglot.start()
         control = TeslaPWController(polyglot)
         control.runForever()

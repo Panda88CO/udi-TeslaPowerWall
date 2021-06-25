@@ -1,5 +1,4 @@
 tesla_powerwall
 requests_oauth2
-bashlib
 string
 requests>=2.22.0

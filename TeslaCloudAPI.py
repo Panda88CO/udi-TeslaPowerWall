@@ -31,11 +31,12 @@ class TeslaCloudAPI():
         self.TOU_MODES = ["economics", "balanced"]
         self.email = email
         self.password = password
+
         self.daysConsumption = {}
         self.tokeninfo = {}
         self.touScheduleList = []
         self.connectionEstablished = False
-
+        LOGGER.debug( 'TeslaCloud init user, pw:' + str(self.email)+ ', '+ str(self.password))
         self.products = {}
         self.site_id = ''
         #self.battery_id = ''
@@ -53,6 +54,7 @@ class TeslaCloudAPI():
             self.daysMeterSummary = self.teslaCalculateDaysTotals()
             self.touSchedule = self.teslaExtractTouScheduleList()
         else:
+            LOGGER.debug('Error getting cloud data')
             return(None)
         #LOGGER.debug(self.site_info)    
         if 'tou_settings' in self.site_info:

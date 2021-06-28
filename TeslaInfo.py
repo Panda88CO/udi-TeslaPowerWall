@@ -75,7 +75,7 @@ class tesla_info:
         self.TPWcloud = TeslaCloudAPI(self.cloudEmail, self.cloudPassword)
         if self.TPWcloudAccess:
             if not(self.TPWcloud.teslaCloudConnect(self.cloudEmail, self.cloudPassword )):         
-                LOGGER.debug('Error connecting to Tesla Could - check email and password')
+                LOGGER.debug('Error connecting to Tesla Cloud - check email and password')
                 self.TPWcloudAccess = False
             else:
                 self.TPWcloudAccess = True
@@ -249,7 +249,7 @@ class tesla_info:
 
         self.ISYinfo.addIsyVaraiable (self.controllerID, self.gridServiceActive, 'list', None,None, '0-1',None, None, 'Grid Services Active', { 0:'False', 1: 'True' }) 
         self.ISYinfo.addControllerDefStruct(self.controllerID, self.controllerName )
-        
+
         if self.TPWcloudAccess:
             self.ISYinfo.addISYnode(self.setupNodeID, self.setupNodeName, 'Electricity')
 

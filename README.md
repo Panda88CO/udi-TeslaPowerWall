@@ -21,7 +21,6 @@ Configuration requires 2 steps first time:
 ## Notes 
 Using cloud access user can set all parameters mobile app currently supports (except car charging limit).
 
-Generator support is not tested (I do not have one) and 
-I have not tested without solar connected.
+Generator support is not tested (I do not have one) and I have not tested without solar connected.
 
 An option to generate a daily log file is included - file must be down loaded separately from polisy/polyglot - CSV formatted data".  Disabled by default.

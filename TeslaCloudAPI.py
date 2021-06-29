@@ -139,7 +139,7 @@ class TeslaCloudAPI():
             tokenExpires = datetime.fromtimestamp(self.tokeninfo['created_at'] + self.tokeninfo['expires_in']- 100)
             if dateNow > tokenExpires:
                 LOGGER.debug('Renewing token')
-                self.tokeninfo = self.__tesla_connect(self.email, self.password)
+                self.tokeninfo = self.__tesla_refresh_token()
         else:
             LOGGER.debug('Getting New Token')
             self.tokeninfo = self.__tesla_connect(self.email, self.password)
@@ -551,6 +551,30 @@ class TeslaCloudAPI():
             return(0)
 
 
+    def __tesla_refresh_token(self):
+        data = {}
+        data['grant_type'] = 'refresh_token'
+        data['client_id'] = 'ownerapi'
+        data['refresh_token']=self.Rtoken
+        data['scope']='openid email offline_access'      
+        r = requests.post('https://auth.tesla.com/oauth2/v3/token', data=data)
+        S = json.loads(r.text)
+
+        data = {}
+        data['grant_type'] = 'urn:ietf:params:oauth:grant-type:jwt-bearer'
+        data['client_id']=self.CLIENT_ID
+        data['client_secret']=self.CLIENT_SECRET
+        with requests.Session() as s:
+            try:
+                s.auth = OAuth2BearerToken(S['access_token'])
+                r = s.post(self.TESLA_URL + '/oauth/token',data)
+                S = json.loads(r.text)
+            except:
+                pass
+		
+        time.sleep(1)
+        self.S = S
+        return S
 
 
     '''
@@ -589,6 +613,7 @@ class TeslaCloudAPI():
         data['redirect_uri'] = 'https://auth.tesla.com/void/callback'        
         r = requests.post('https://auth.tesla.com/oauth2/v3/token', data=data)
         S = json.loads(r.text)
+        self.Rtoken = S['refresh_token']
 
         data = {}
         data['grant_type'] = 'urn:ietf:params:oauth:grant-type:jwt-bearer'

@@ -11,10 +11,8 @@ except ImportError:
 #from os import truncate
 import sys
 from  TeslaInfo import tesla_info
-#import ISYprofile 
 from TeslaPWSetupNode import teslaPWSetupNode
 
-import polyinterface
 LOGGER = polyinterface.LOGGER
                
 class TeslaPWController(polyinterface.Controller):

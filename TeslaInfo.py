@@ -18,7 +18,6 @@ from tesla_powerwall import Powerwall, GridStatus, OperationMode
 from TeslaCloudAPI import TeslaCloudAPI
 from  ISYprofile import isyHandling
 
-import polyinterface
 LOGGER = polyinterface.LOGGER
 
 class tesla_info:

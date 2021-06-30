@@ -13,7 +13,6 @@ except ImportError:
 
 LOGGER = polyinterface.LOGGER
 
-
 class isyHandling:
     def __init__ (self):
         # Note all xxIDs must be lower case without special characters (ISY requirement)

@@ -5,7 +5,6 @@ try:
     import polyinterface
 except ImportError:
     import pgc_interface as polyinterface
-
     PG_CLOUD_ONLY = True
 
 #from os import truncate
@@ -13,7 +12,6 @@ import sys
 import TeslaInfo
 import ISYprofile
 
-import polyinterface
 LOGGER = polyinterface.LOGGER
                
 class teslaPWSetupNode(polyinterface.Node):

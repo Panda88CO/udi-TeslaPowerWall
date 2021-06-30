@@ -18,8 +18,6 @@ except ImportError:
 
 LOGGER = polyinterface.LOGGER
 
-#import base64
-# https://github.com/bismuthfoundation/TornadoWallet/blob/c4c902a2fe2d45ec399416baac4eefd39d596418/wallet/crystals/420_tesla/teslaapihandler.py#L219
 class TeslaCloudAPI():
 
     def __init__(self, email, password):

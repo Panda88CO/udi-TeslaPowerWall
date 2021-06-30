@@ -75,7 +75,7 @@ class tesla_info:
         self.TPWcloud = TeslaCloudAPI(self.cloudEmail, self.cloudPassword)
         if self.TPWcloudAccess:
             if not(self.TPWcloud.teslaCloudConnect(self.cloudEmail, self.cloudPassword )):         
-                LOGGER.debug('Error connecting to Tesla Could - check email and password')
+                LOGGER.debug('Error connecting to Tesla Cloud - check email and password')
                 self.TPWcloudAccess = False
             else:
                 self.TPWcloudAccess = True

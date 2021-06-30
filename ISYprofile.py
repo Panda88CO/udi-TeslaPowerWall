@@ -3,7 +3,14 @@ import requests
 import json
 import os 
 
-import polyinterface
+PG_CLOUD_ONLY = False
+
+try:
+    import polyinterface
+except ImportError:
+    import pgc_interface as polyinterface
+    PG_CLOUD_ONLY = True
+
 LOGGER = polyinterface.LOGGER
 
 

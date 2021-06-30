@@ -1,3 +1,2 @@
-tesla_powerwall
 requests_oauth2
 requests>=2.22.0

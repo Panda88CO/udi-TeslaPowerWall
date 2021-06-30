@@ -1,0 +1,2 @@
+requests_oauth2
+requests>=2.22.0

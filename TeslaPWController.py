@@ -169,20 +169,20 @@ class TeslaPWController(polyinterface.Controller):
                 if not(self.cloudAccess):
                     self.defineCloudInputParams()
         else:
-            if self.access.upper() == 'CLOUD':
-                self.cloudAccess = True
-                self.cloudUserEmail = self.getCustomParam('CLOUD_USER_EMAIL')
-                if self.cloudUserEmail == None:
-                    LOGGER.info('No cloud USER_EMAIL retrieved:')
-                    self.cloudAccess = False
-                else:
-                    LOGGER.info('Cloud USER_EMAIL retrieved: '+ self.cloudUserEmail)
-                self.cloudUserPassword =self.getCustomParam('CLOUD_USER_PASSWORD')
-                if self.cloudUserPassword == None:
-                    LOGGER.info('No cloud USER_PASSWORD:')
-                    self.cloudAccess = False
-                else:
-                    LOGGER.debug('CLOUD_USER_PASSWORD retrieved: XXXXXXXX')
+            self.access = 'CLOUD'
+            self.cloudAccess = True
+            self.cloudUserEmail = self.getCustomParam('CLOUD_USER_EMAIL')
+            if self.cloudUserEmail == None:
+                LOGGER.info('No cloud USER_EMAIL retrieved:')
+                self.cloudAccess = False
+            else:
+                LOGGER.info('Cloud USER_EMAIL retrieved: '+ self.cloudUserEmail)
+            self.cloudUserPassword =self.getCustomParam('CLOUD_USER_PASSWORD')
+            if self.cloudUserPassword == None:
+                LOGGER.info('No cloud USER_PASSWORD:')
+                self.cloudAccess = False
+            else:
+                LOGGER.debug('CLOUD_USER_PASSWORD retrieved: XXXXXXXX')
             if (self.cloudUserEmail == None) or (self.cloudUserPassword == None):
                 self.defineCloudInputParams()
         if not(self.cloudAccess) or not(self.localAccess):

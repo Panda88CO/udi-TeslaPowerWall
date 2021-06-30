@@ -172,6 +172,7 @@ class TeslaPWController(polyinterface.Controller):
             self.access = 'CLOUD'
             self.cloudAccess = True
             self.localAccess = False
+            self.logFile = False
             self.cloudUserEmail = self.getCustomParam('CLOUD_USER_EMAIL')
             if self.cloudUserEmail == None:
                 LOGGER.info('No cloud USER_EMAIL retrieved:')
@@ -205,7 +206,8 @@ class TeslaPWController(polyinterface.Controller):
             LOGGER.debug ('Install Profile')    
             self.TPW.pollSystemData('all')          
             self.poly.installprofile()
-            self.TPW.createLogFile(self.logFile)
+            if self.logFile:
+                self.TPW.createLogFile(self.logFile)
             self.ISYparams = self.TPW.supportedParamters(self.id)
             self.ISYcriticalParams = self.TPW.criticalParamters(self.id)
 

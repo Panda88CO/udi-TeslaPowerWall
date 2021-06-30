@@ -359,7 +359,7 @@ class tesla_info:
         return(self.ISYCritical[nodeId])
 
     def pollSystemData(self, level):
-        LOGGER.INFO('PollSystemData - ' + str(level))
+        LOGGER.info('PollSystemData - ' + str(level))
         try:
             self.nowDay = date.today() 
             if (self.lastDay.day != self.nowDay.day) or self.TEST: # we passed midnight

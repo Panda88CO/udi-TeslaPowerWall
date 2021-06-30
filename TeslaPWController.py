@@ -204,6 +204,7 @@ class TeslaPWController(polyinterface.Controller):
                 self.TPW = tesla_info(None,None, self.name, self.id , self.localUserEmail, self.localUserPassword, self.IPAddress )
             #self.TPW.createISYsetup()
             LOGGER.debug ('Install Profile')    
+
             self.TPW.pollSystemData('all')          
             self.poly.installprofile()
             if self.logFile:
@@ -232,7 +233,8 @@ class TeslaPWController(polyinterface.Controller):
             self.updateISYdrivers('all')
             self.reportDrivers()
             self.nodeDefineDone = True
-        except:
+        except Exception as e:
+            LOGGER.info('Exception start: '+ str(e))
             LOGGER.debug('did not connect to power wall')
 
             self.stop()

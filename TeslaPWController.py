@@ -176,13 +176,13 @@ class TeslaPWController(polyinterface.Controller):
             self.cloudUserEmail = self.getCustomParam('CLOUD_USER_EMAIL')
             if self.cloudUserEmail == None:
                 LOGGER.info('No cloud USER_EMAIL retrieved:')
-                self.cloudAccess = False
+                #self.cloudAccess = False
             else:
                 LOGGER.info('Cloud USER_EMAIL retrieved: '+ self.cloudUserEmail)
             self.cloudUserPassword =self.getCustomParam('CLOUD_USER_PASSWORD')
             if self.cloudUserPassword == None:
                 LOGGER.info('No cloud USER_PASSWORD:')
-                self.cloudAccess = False
+                #self.cloudAccess = False
             else:
                 LOGGER.debug('CLOUD_USER_PASSWORD retrieved: XXXXXXXX')
             if (self.cloudUserEmail == None) or (self.cloudUserPassword == None):

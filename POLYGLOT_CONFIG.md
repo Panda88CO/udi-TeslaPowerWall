@@ -1,9 +1,9 @@
 # udi-powerwall
 
 ## Installation
-To run node server user must first select data sources - from Local Power Wall (LOCAL) and/or Tesla Cloud(CLOUD).   Local will not work on polyglot cloud.  
+To run node server user must first select data sources - from Local Power Wall (LOCAL),  Tesla Cloud(CLOUD) or both (BOTH).   Local will not work on polyglot cloud.  
  
-Configuration requires 2 steps first time:
+Configuration requires 4 steps first time:
 1) First user needs to sepcifiy source of data (LOCAL/CLOUD/BOTH) 
 2) Restart node
 3) Next user will speficy the needed user IDs and passwords for the selected option  (and local Tesla power wall IP address if chosen).  

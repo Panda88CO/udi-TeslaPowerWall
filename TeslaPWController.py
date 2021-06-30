@@ -101,6 +101,7 @@ class TeslaPWController(polyinterface.Controller):
         self.access = ''
         #LOGGER.info('Start Tesla Power Wall Main New')
         self.localAccess= False # Assume no local access initially
+        self.cloudAccess= False # Assume no cloud access initially
         if not(PG_CLOUD_ONLY):
             self.localAccess = True # Assume local access initially
             self.cloudAccess = True # Assume cloud access initially
@@ -118,7 +119,6 @@ class TeslaPWController(polyinterface.Controller):
                 else:
                     self.logFile = False                    
                     LOGGER.info('LogFile disabled')
-            
             
             self.access = self.getCustomParam('ACCESS') 
             if self.access == None:

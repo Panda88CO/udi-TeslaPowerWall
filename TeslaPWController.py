@@ -186,7 +186,7 @@ class TeslaPWController(polyinterface.Controller):
                 LOGGER.debug('CLOUD_USER_PASSWORD retrieved: XXXXXXXX')
             if (self.cloudUserEmail == None) or (self.cloudUserPassword == None):
                 self.defineCloudInputParams()
-        if not(self.cloudAccess) or not(self.localAccess):
+        if not(self.cloudAccess) and not(self.localAccess):
                 self.stop()
 
         #LOGGER.info('Connecting to Tesla Power Wall')

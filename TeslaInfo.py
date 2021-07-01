@@ -379,6 +379,7 @@ class tesla_info:
 
             if level == 'critical':
                 if not(self.TPWlocalAccess):
+                    LOGGER.debug('pollSystemData - critical')
                     self.TPWcloud.teslaUpdateCloudData('critical')
                 else:
                     self.status = self.TPWlocal.get_sitemaster() 
@@ -389,6 +390,7 @@ class tesla_info:
 
             if level == 'all':
                 if self.TPWcloudAccess:
+                    LOGGER.debug('pollSystemData - all')
                     self.TPWcloud.teslaUpdateCloudData('all')
                     self.TPWcloud.teslaCalculateDaysTotals()
 
@@ -432,7 +434,7 @@ class tesla_info:
         
 
     def getISYvalue(self, ISYvar, node):
-        LOGGER.debug( 'getISYvalue' + str(node))
+        LOGGER.debug( 'getISYvalue - ' + str(node))
         if ISYvar in self.ISYmap[node]:
             self.teslaVarName = self.ISYmap[node][ISYvar]['systemVar']
             if self.teslaVarName == self.chargeLevel: 

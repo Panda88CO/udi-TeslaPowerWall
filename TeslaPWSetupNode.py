@@ -30,29 +30,31 @@ class teslaPWSetupNode(polyinterface.Node):
         self.drivers = []
         self.nodeDefineDone = False
         LOGGER.debug('Start Tesla Power Wall Setup Node')  
+
         self.ISYparams = self.TPW.supportedParamters(self.id)
+        LOGGER.debug ('Node = ISYparams :' + str(self.ISYparams))
+
         self.ISYcriticalParams = self.TPW.criticalParamters(self.id)
+        LOGGER.debug ('Node = ISYcriticalParams :' + str(self.ISYcriticalParams))
+    
+
         for key in self.ISYparams:
             info = self.ISYparams[key]
             LOGGER.debug(key )
             if info != {}:
                 value = self.TPW.getISYvalue(key, self.id)
-                self.drivers.append({'driver':key, 'value':value, 'uom':info['uom'] })
                 LOGGER.debug('SetupNode: driver' + str(key)+ ' value:' + str(value) + ' uom:' + str(info['uom']) )
+                self.drivers.append({'driver':key, 'value':value, 'uom':info['uom'] })
+
 
         #self.heartbeat()
 
 
     def start(self):                
         self.updateISYdrivers('all')
-        #self.reportDrivers()
-        self.discover()
+        self.reportDrivers()
         self.nodeDefineDone = True
 
-        #except:
-        #    LOGGER.error('Did not connect to power wall')
-        #    self.disconnectTPW()
-        #    self.stop()
 
         
 
@@ -99,9 +101,10 @@ class teslaPWSetupNode(polyinterface.Node):
            LOGGER.debug('Wrong parameter passed: ' + str(level))
         for key in params:
             info = params[key]
+
             if info != {}:
                 value = self.TPW.getISYvalue(key, self.id)
-                #LOGGER.debug('Update ISY drivers :' + str(key)+ ' ' + info['systemVar']+ ' value:' + str(value) )
+                LOGGER.debug('Update ISY drivers :' + str(key)+ ' ' + info['systemVar']+ ' value:' + str(value) )
                 self.setDriver(key, value, report = True, force = False)          
 
     '''

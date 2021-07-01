@@ -356,7 +356,7 @@ class tesla_info:
             LOGGER.debug('No critical Params fpr  Node Id: ' + str(nodeId))
             temp = None
         return(temp)
-        return(self.ISYCritical[nodeId])
+        #return(self.ISYCritical[nodeId])
 
     def pollSystemData(self, level):
         LOGGER.info('PollSystemData - ' + str(level))
@@ -431,7 +431,7 @@ class tesla_info:
         
 
     def getISYvalue(self, ISYvar, node):
-        #LOGGER.debug( 'getISYvalue')
+        LOGGER.debug( 'getISYvalue')
         if ISYvar in self.ISYmap[node]:
             self.teslaVarName = self.ISYmap[node][ISYvar]['systemVar']
             if self.teslaVarName == self.chargeLevel: 

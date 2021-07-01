@@ -91,10 +91,11 @@ class isyHandling:
 
     def getISYnodeList(self):
         #LOGGER.debug('Node List contains: ')
-        #LOGGER.debug( self.nodeList)
+        LOGGER.debug( self.nodeList)
         return(self.nodeList)
 
     def getISYNodeName(self, nodeId):
+        LOGGER.debug('getISYNodeName:  '+ nodeId +' '+self.sData[nodeId]['ISYnode']['nlsName'] )
         return(self.sData[nodeId]['ISYnode']['nlsName'])
 
     def addISYcommandSend(self, nodeId,  sendCmd):

@@ -45,7 +45,7 @@ class teslaPWSetupNode(polyinterface.Node):
 
     def start(self):                
         self.updateISYdrivers('all')
-        self.reportDrivers()
+        #self.reportDrivers()
         self.discover()
         self.nodeDefineDone = True
 

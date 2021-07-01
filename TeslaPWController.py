@@ -206,7 +206,8 @@ class TeslaPWController(polyinterface.Controller):
             LOGGER.debug ('Install Profile')    
 
             self.TPW.pollSystemData('all')          
-            self.poly.installprofile()
+            if not(PG_CLOUD_ONLY):
+                self.poly.installprofile()
             if self.logFile:
                 self.TPW.createLogFile(self.logFile)
             self.ISYparams = self.TPW.supportedParamters(self.id)
@@ -219,7 +220,10 @@ class TeslaPWController(polyinterface.Controller):
                     value = self.TPW.getISYvalue(key, self.id)
                     LOGGER.debug('driver' + str(key)+ ' value:' + str(value) + ' uom:' + str(info['uom']) )
                     self.drivers.append({'driver':key, 'value':value, 'uom':info['uom'] })
-            
+                    
+            if PG_CLOUD_ONLY:
+                self.poly.installprofile()            
+
             LOGGER.info('Creating Setup Node')
             nodeList = self.TPW.getNodeIdList()
             LOGGER.debug("controller start" + str(nodeList))

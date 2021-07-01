@@ -40,7 +40,7 @@ class teslaPWSetupNode(polyinterface.Node):
                 self.drivers.append({'driver':key, 'value':value, 'uom':info['uom'] })
                 LOGGER.debug('SetupNode: driver' + str(key)+ ' value:' + str(value) + ' uom:' + str(info['uom']) )
 
-        self.heartbeat()
+        #self.heartbeat()
 
 
     def start(self):                
@@ -73,7 +73,7 @@ class teslaPWSetupNode(polyinterface.Node):
     def shortPoll(self):
         LOGGER.debug('Tesla Power Wall Controller shortPoll')
         if self.nodeDefineDone:
-            self.heartbeat()
+            #self.heartbeat()
             self.updateISYdrivers('critical')
         else:
            LOGGER.debug('waiting for system/nodes to get created')

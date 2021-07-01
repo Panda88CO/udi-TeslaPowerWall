@@ -125,7 +125,8 @@ class TeslaCloudAPI():
                             self.site_id ='/'+ str(products['response'][index]['energy_site_id'] )
                             self.products = products['response'][index]
                 return(True)
-            except:
+            except Exception as e:
+                LOGGER.debug('Exception teslaCloudConnect: ' + str(e))
                 return(False)
         else:
             return(True)
@@ -158,7 +159,8 @@ class TeslaCloudAPI():
                 r = s.get(self.TESLA_URL + self.API + "/products")
                 products = r.json()
                 return(products)        
-            except:
+            except Exception as e:
+                LOGGER.info('Exception teslaGetProduct: '+ str(e))
                 LOGGER.debug('Error getting product info')
                 return(None)
 
@@ -183,7 +185,8 @@ class TeslaCloudAPI():
                         return(False)
                         #site="wrong mode supplied" + str(mode)
                     #LOGGER.debug(site)        
-                except:
+                except Exception as e:
+                    LOGGER.debug('Exception teslaSetOperationMode: ' + str(e))
                     LOGGER.debug('Error setting operation mode')
                     return(False)
         else:
@@ -215,7 +218,8 @@ class TeslaCloudAPI():
                         #LOGGER.debug('Unknown mode: '+mode)
                         return(None)
                     return(site['response'])
-                except:
+                except Exception as e:
+                    LOGGER.debug('Exception teslaGetSiteInfo: ' + str(e))
                     LOGGER.debug('Error getting data' + str(mode))
                     LOGGER.debug('Trying to reconnect')
                     self.tokeninfo = self.__tesla_connect(self.email, self.password)
@@ -242,7 +246,8 @@ class TeslaCloudAPI():
                         return (True)
                     else:
                         return(False)
-                except:
+                except Exception as e:
+                    LOGGER.debug('Exception teslaSetStormMode: ' + str(e))
                     LOGGER.debug('Error setting storm mode')
                     return(False)
         else:
@@ -277,7 +282,8 @@ class TeslaCloudAPI():
                         return(False)
                         #site="Backup Percent out of range 0-100:" + str(backupPercent)
                         #LOGGER.debug(site)   
-                except:
+                except  Exception as e:
+                    LOGGER.debug('Exception teslaSetBackoffLEvel: ' + str(e))
                     LOGGER.debug('Error setting bacup percent')
                     return(False)
         else:
@@ -316,9 +322,10 @@ class TeslaCloudAPI():
                 self.touScheduleList.append(temp)
                 indexFound = True
             return(indexFound)
-        except:
-            LOGGER.debug('Error updating schedule')
-            return(False)
+        except  Exception as e:
+                LOGGER.debug('Exception teslaUpdateTouScheduleLite: ' + str(e))
+                LOGGER.debug('Error updating schedule')
+                return(False)
 
     def teslaSetTouSchedule(self, peakMode, weekdayWeekend, startEnd, time_s):
         if self.teslaUpdateTouScheduleList( peakMode, weekdayWeekend, startEnd, time_s):
@@ -356,7 +363,8 @@ class TeslaCloudAPI():
             if not(indexFound): 
                 LOGGER.debug('No schedule appears to be set')            
                 return(-1)
-        except:
+        except  Exception as e:
+            LOGGER.debug('Exception teslaExtractTouTime ' + str(e))
             LOGGER.error('No schedule idenfied')
             return(-1)
 
@@ -386,7 +394,8 @@ class TeslaCloudAPI():
                         return (True)
                     else:
                         return(False)
-                except:
+                except Exception as e:
+                    LOGGER.debug('Exception teslaSetTimeOfUse: ' + str(e))
                     LOGGER.debug('Error setting time of use parameters')
                     return(False)
         else:
@@ -488,7 +497,8 @@ class TeslaCloudAPI():
                                 ,'yesterday_battery_power': yBatteryPwr ,'yesterday_grid_services_power': yGridServicesPwr, 'yesterday_generator_power' : YGeneratorPwr, }
         
             return(True)
-        except:
+        except Exception as e:
+            LOGGER.debug('Exception teslaCalculateDaysTotal: ' + str(e))
             LOGGER.error(' Error obtaining time data')
 
         
@@ -567,7 +577,8 @@ class TeslaCloudAPI():
                 s.auth = OAuth2BearerToken(S['access_token'])
                 r = s.post(self.TESLA_URL + '/oauth/token',data)
                 S = json.loads(r.text)
-            except:
+            except  Exception as e:
+                LOGGER.debug('Exception __tesla_refersh_token: ' + str(e))
                 pass
 		
         time.sleep(1)
@@ -622,7 +633,8 @@ class TeslaCloudAPI():
                 s.auth = OAuth2BearerToken(S['access_token'])
                 r = s.post(self.TESLA_URL + '/oauth/token',data)
                 S = json.loads(r.text)
-            except:
+            except  Exception as e:
+                LOGGER.debug('Exception __tesla_connect: ' + str(e))
                 pass
 		
         time.sleep(1)

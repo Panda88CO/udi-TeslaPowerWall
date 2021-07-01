@@ -211,7 +211,8 @@ class TeslaPWController(polyinterface.Controller):
                 self.TPW.createLogFile(self.logFile)
             self.ISYparams = self.TPW.supportedParamters(self.id)
             self.ISYcriticalParams = self.TPW.criticalParamters(self.id)
-
+            LOGGER.debug('Controller start params: ' + str(self.ISYparams))
+            LOGGER.debug('Controller start critical params: ' + str(self.ISYcriticalParams))
             for key in self.ISYparams:
                 info = self.ISYparams[key]
                 if info != {}:
@@ -221,7 +222,7 @@ class TeslaPWController(polyinterface.Controller):
             
             LOGGER.info('Creating Setup Node')
             nodeList = self.TPW.getNodeIdList()
-            LOGGER.debug(nodeList)
+            LOGGER.debug("controller start" + str(nodeList))
             for node in nodeList:
                 LOGGER.debug(node)
                 name = self.TPW.getNodeName(node)
@@ -234,7 +235,7 @@ class TeslaPWController(polyinterface.Controller):
             self.reportDrivers()
             self.nodeDefineDone = True
         except Exception as e:
-            LOGGER.info('Exception start: '+ str(e))
+            LOGGER.info('Exception Controller start: '+ str(e))
             LOGGER.debug('did not connect to power wall')
 
             self.stop()

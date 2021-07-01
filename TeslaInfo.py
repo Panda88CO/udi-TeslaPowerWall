@@ -315,7 +315,8 @@ class tesla_info:
             dataFile = open('./dailyData/'+filename, 'a')
             dataFile.write(str(dayInfo)+ ','+str(solar)+','+str(consumption)+','+str(generation)+','+str(battery)+','+str(gridUse)+','+str(generator)+'\n')
             dataFile.close()
-        except:         
+        except Exception as e:
+            LOGGER.info('Exception storeDaysData: '+  str(e))         
             LOGGER.debug ('Failed to add data to '+str(filename))
         
 
@@ -431,7 +432,7 @@ class tesla_info:
         
 
     def getISYvalue(self, ISYvar, node):
-        LOGGER.debug( 'getISYvalue')
+        LOGGER.debug( 'getISYvalue' + str(node))
         if ISYvar in self.ISYmap[node]:
             self.teslaVarName = self.ISYmap[node][ISYvar]['systemVar']
             if self.teslaVarName == self.chargeLevel: 

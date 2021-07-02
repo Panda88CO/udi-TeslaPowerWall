@@ -44,7 +44,10 @@ class teslaPWSetupNode(polyinterface.Node):
             if info != {}:
                 value = self.TPW.getISYvalue(key, self.id)
                 LOGGER.debug('SetupNode: driver' + str(key)+ ' value:' + str(value) + ' uom:' + str(info['uom']) )
-                self.drivers.append({'driver':key, 'value':value, 'uom':info['uom'] })
+                if PG_CLOUD_ONLY:
+                    self.drivers[key]= {'value':value, 'uom':info['uom']}
+                else:
+                    self.drivers.append({'driver':key, 'value':value, 'uom':info['uom'] })
 
 
         #self.heartbeat()

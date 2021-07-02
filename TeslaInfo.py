@@ -72,10 +72,12 @@ class tesla_info:
                 generator  = self.TPWlocal._api.get('generators')
                 if not(generator['generators']):
                     self.generatorInstalled = False 
+                    LOGGER.debug('No generator installed')
 
                 solar = self.TPWlocal.get_solars()
                 if solar:
                     self.solarInstalled = True
+                    LOGGER.debug('Solar detected')
 
         LOGGER.debug('TPWcloudAccess :' + str(self.TPWcloudAccess))
         self.TPWcloud = TeslaCloudAPI(self.cloudEmail, self.cloudPassword)
@@ -105,6 +107,8 @@ class tesla_info:
                 return(False)
             else:
                 self.LocalConnection=True
+                self.TPWlocalAccess = True
+                LOGGER.info('Local Power Wall connection established')
                 return(True)
         except Exception as e:
             LOGGER.debug('No connection to local power wall - keep trying to login - '+str(e) )

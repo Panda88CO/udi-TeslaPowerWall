@@ -105,7 +105,7 @@ class teslaPWSetupNode(polyinterface.Node):
             if info != {}:
                 value = self.TPW.getISYvalue(key, self.id)
                 LOGGER.debug('Update ISY drivers :' + str(key)+ ' ' + info['systemVar']+ ' value:' + str(value) )
-                self.setDriver(key, value, report = True, force = False)          
+                self.setDriver(key, value, report = True, force = True)          
 
     '''
     def query(self, command=None):

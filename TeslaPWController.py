@@ -288,7 +288,7 @@ class TeslaPWController(polyinterface.Controller):
         if self.nodeDefineDone:
             if self.TPW.pollSystemData('all'):
                 self.updateISYdrivers('all')
-            #self.reportDrivers() 
+            self.reportDrivers() 
         else:
             LOGGER.debug('waiting for system/nodes to get created')
         for node in self.nodes:
@@ -313,7 +313,7 @@ class TeslaPWController(polyinterface.Controller):
             if info != {}:
                 value = self.TPW.getISYvalue(key, self.id)
                 LOGGER.debug('Update ISY drivers :' + str(key)+ ' ' + info['systemVar']+ ' value:' + str(value) )
-                self.setDriver(key, value, report = True, force = False)          
+                self.setDriver(key, value, report = True, force = True)          
 
     '''
     def query(self, command=None):

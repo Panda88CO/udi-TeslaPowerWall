@@ -93,8 +93,8 @@ class tesla_info:
 
     def localLogin(self, IPaddress):
         try:
-            if self.LocalConnection==False:
-                self.TPWlocal.logout()
+            #if self.LocalConnection==False:
+            #    self.TPWlocal.logout()
             self.TPWlocal = Powerwall(self.IPAddress)
             self.TPWlocal.login(self.localPassword, self.localEmail)
             if not(self.TPWlocal.is_authenticated()):            
@@ -107,7 +107,7 @@ class tesla_info:
                 self.LocalConnection=True
                 return(True)
         except Exception as e:
-            LOGGER.debug('NO connection to local power wall - keep trying to login - '+str(e) )
+            LOGGER.debug('No connection to local power wall - keep trying to login - '+str(e) )
             self.TPWlocal.logout()
             self.TPWlocalAccess = False
     

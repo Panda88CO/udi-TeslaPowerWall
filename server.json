@@ -9,6 +9,8 @@
     "notice": "Uses API from https://github.com/jrester/tesla_powerwall - not official Tesla API. Also uses code taken from: https://github.com/bismuthfoundation/TornadoWallet/blob/c4c902a2fe2d45ec399416baac4eefd39d596418/wallet/crystals/420_tesla/teslaapihandler.py#L219 for OAUTH on cloud access.  User can select data from Local power wall and/or Tesla Cloud.  Local data access is not working on polyglot cloud.  Generator is not tested (I do not have one) and I have not tested without solar connected. Configuration requires sepcification of source of data (LOCAL/CLOUD/BOTH) as well as id and password for both (local IP address if chosen) - 2 step process.  User can set all parameters apop currently supports (except car charging). An option to generate a daily log file is included - must be downloaded separately from polisy/poliglot - CSV formatted data",
     "shortPoll": "60",
     "longPoll": "180",
+    "testMode": true,
+    "profile_version": "0.6.13",
     "credits": [
         {
             "title": "A NodeServer to integrate Tesla Power Wall Controll system",

@@ -438,29 +438,34 @@ class tesla_info:
 
                 if self.TPWlocalAccess:
                     if not(self.LocalConnection):
+                        LOGGER.debug('No local connection - tying to re-login')
+                        if self.TPWlocal:
+                            self.TPWlocal.logout()
+                            time.sleep(1)
                         if self.localLogin(self.IPAddress):
                             self.LocalConnection=True
-                            self.status = self.TPWlocal.get_sitemaster() 
-                            self.meters = self.TPWlocal.get_meters()
+                    if self.LocalConnection:
+                        self.status = self.TPWlocal.get_sitemaster() 
+                        self.meters = self.TPWlocal.get_meters()
 
-                            self.daysTotalSolar =  (self.meters.solar.energy_exported - self.metersDayStart.solar.energy_exported)
-                            self.daysTotalConsumption = (self.meters.load.energy_imported - self.metersDayStart.load.energy_imported)
-                            self.daysTotalGeneraton = (self.meters.site.energy_exported - self.metersDayStart.site.energy_exported - 
-                                                        (self.meters.site.energy_imported - self.metersDayStart.site.energy_imported))
-                            self.daysTotalBattery =  (float(self.meters.battery.energy_exported - self.metersDayStart.battery.energy_exported - 
-                                                        (self.meters.battery.energy_imported - self.metersDayStart.battery.energy_imported)))
-                            if self.TPWcloudAccess:
-                                self.daysTotalGenerator = self.TPWcloud.teslaExtractDaysGeneratorUse()
-                                self.daysTotalGridServices = self.TPWcloud.teslaExtractDaysGridServicesUse()
-                            else:
-                                self.daysTotalGridServices = 0.0 #Does not seem to exist
-                                self.daysTotalGenerator = 0.0 #needs to be updated - may not exist
-                            #LOGGER.debug('Local Access - total ')
-                            return(True)
+                        self.daysTotalSolar =  (self.meters.solar.energy_exported - self.metersDayStart.solar.energy_exported)
+                        self.daysTotalConsumption = (self.meters.load.energy_imported - self.metersDayStart.load.energy_imported)
+                        self.daysTotalGeneraton = (self.meters.site.energy_exported - self.metersDayStart.site.energy_exported - 
+                                                    (self.meters.site.energy_imported - self.metersDayStart.site.energy_imported))
+                        self.daysTotalBattery =  (float(self.meters.battery.energy_exported - self.metersDayStart.battery.energy_exported - 
+                                                    (self.meters.battery.energy_imported - self.metersDayStart.battery.energy_imported)))
+                        if self.TPWcloudAccess:
+                            self.daysTotalGenerator = self.TPWcloud.teslaExtractDaysGeneratorUse()
+                            self.daysTotalGridServices = self.TPWcloud.teslaExtractDaysGridServicesUse()
                         else:
-                            LOGGER.debug('No connection to Local Tesla Power Wall')
-                            self.LocalConnection=False
-                            return(False)
+                            self.daysTotalGridServices = 0.0 #Does not seem to exist
+                            self.daysTotalGenerator = 0.0 #needs to be updated - may not exist
+                        #LOGGER.debug('Local Access - total ')
+                        return(True)
+                    else:
+                        LOGGER.debug('No connection to Local Tesla Power Wall')
+                        self.LocalConnection=False
+                        return(False)
             else:
                 self.daysTotalSolar = self.TPWcloud.teslaExtractDaysSolar()
                 self.daysTotalConsumption = self.TPWcloud.teslaExtractDaysConsumption()

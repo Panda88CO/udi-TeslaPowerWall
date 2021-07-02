@@ -308,8 +308,10 @@ class TeslaPWController(polyinterface.Controller):
         #LOGGER.debug(self.ISYparams)
         if level == 'all':
             params = self.ISYparams
+            LOGGER.debug ('all: ' + str(params) )
         elif level == 'critical':
             params = self.ISYcriticalParams
+            LOGGER.debug ('Critial: ' + str(params) )
         else:
             LOGGER.debug('Wrong parameter passed: ' + str(level))
         #LOGGER.debug(params)

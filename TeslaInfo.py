@@ -384,11 +384,15 @@ class tesla_info:
 
 
     def criticalParamters (self, nodeId):
+        temp = []
         if nodeId in self.ISYCritical:
-            temp = self.ISYCritical[nodeId]
+            if self.ISYCritical[nodeId]:
+                for key in self.ISYCritical[nodeId]:
+                    temp.append(self.ISYinfo.varToISY(nodeId, key))
+            else:
+                LOGGER.debug('No critical Params fpr  Node Id: ' + str(nodeId))
         else:
             LOGGER.debug('No critical Params fpr  Node Id: ' + str(nodeId))
-            temp = None
         return(temp)
         #return(self.ISYCritical[nodeId])
     

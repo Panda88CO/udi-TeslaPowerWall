@@ -349,7 +349,7 @@ class tesla_info:
             dataFile.write(str(dayInfo)+ ','+str(solar)+','+str(consumption)+','+str(generation)+','+str(battery)+','+str(gridUse)+','+str(generator)+'\n')
             dataFile.close()
         except Exception as e:
-            LOGGER.info('Exception storeDaysData: '+  str(e))         
+            LOGGER.debug('Exception storeDaysData: '+  str(e))         
             LOGGER.debug ('Failed to add data to '+str(filename))
         
 
@@ -398,7 +398,7 @@ class tesla_info:
     
 
     def pollSystemData(self, level):
-        LOGGER.info('PollSystemData - ' + str(level))
+        LOGGER.debug('PollSystemData - ' + str(level))
 
         try:
             self.nowDay = date.today() 
@@ -486,7 +486,7 @@ class tesla_info:
             return(True)
 
         except Exception as e:
-            LOGGER.info('Exception PollSystemData: '+  str(e))
+            LOGGER.debug('Exception PollSystemData: '+  str(e))
             LOGGER.debug('problems extracting data from tesla power wall')
 
         

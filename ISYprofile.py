@@ -91,11 +91,11 @@ class isyHandling:
 
     def getISYnodeList(self):
         #LOGGER.debug('Node List contains: ')
-        LOGGER.debug( self.nodeList)
+        #LOGGER.debug( self.nodeList)
         return(self.nodeList)
 
     def getISYNodeName(self, nodeId):
-        LOGGER.debug('getISYNodeName:  '+ nodeId +' '+self.sData[nodeId]['ISYnode']['nlsName'] )
+        #LOGGER.debug('getISYNodeName:  '+ nodeId +' '+self.sData[nodeId]['ISYnode']['nlsName'] )
         return(self.sData[nodeId]['ISYnode']['nlsName'])
 
     def addISYcommandSend(self, nodeId,  sendCmd):
@@ -386,7 +386,7 @@ class isyHandling:
         
         except Exception as e:
             LOGGER.debug('Exception createSetupFiles: '+ str(e))
-            LOGGER.debug('something went wrong in creating setup files')
+            LOGGER.info('Something went wrong in creating setup files')
             status = False
             nodeFile.close()
             editorFile.close()

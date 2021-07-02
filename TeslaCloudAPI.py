@@ -34,7 +34,7 @@ class TeslaCloudAPI():
         self.tokeninfo = {}
         self.touScheduleList = []
         self.connectionEstablished = False
-        LOGGER.debug( 'TeslaCloud init user, pw:' + str(self.email)+ ', '+ str(self.password))
+        LOGGER.debug( 'TeslaCloud init user, pw:' + str(self.email)+ ', password')
         self.products = {}
         self.site_id = ''
         #self.battery_id = ''
@@ -52,7 +52,7 @@ class TeslaCloudAPI():
             self.daysMeterSummary = self.teslaCalculateDaysTotals()
             self.touSchedule = self.teslaExtractTouScheduleList()
         else:
-            LOGGER.debug('Error getting cloud data')
+            LOGGER.error('Error getting cloud data')
             return(None)
         #LOGGER.debug(self.site_info)    
         if 'tou_settings' in self.site_info:
@@ -137,10 +137,10 @@ class TeslaCloudAPI():
             dateNow = datetime.now()
             tokenExpires = datetime.fromtimestamp(self.tokeninfo['created_at'] + self.tokeninfo['expires_in']- 100)
             if dateNow > tokenExpires:
-                LOGGER.debug('Renewing token')
+                LOGGER.info('Renewing token')
                 self.tokeninfo = self.__tesla_refresh_token()
         else:
-            LOGGER.debug('Getting New Token')
+            LOGGER.info('Getting New Token')
             self.tokeninfo = self.__tesla_connect(self.email, self.password)
         return(self.tokeninfo)
 
@@ -160,8 +160,8 @@ class TeslaCloudAPI():
                 products = r.json()
                 return(products)        
             except Exception as e:
-                LOGGER.info('Exception teslaGetProduct: '+ str(e))
-                LOGGER.debug('Error getting product info')
+                LOGGER.debug('Exception teslaGetProduct: '+ str(e))
+                LOGGER.info('Error getting product info')
                 return(None)
 
 
@@ -187,7 +187,7 @@ class TeslaCloudAPI():
                     #LOGGER.debug(site)        
                 except Exception as e:
                     LOGGER.debug('Exception teslaSetOperationMode: ' + str(e))
-                    LOGGER.debug('Error setting operation mode')
+                    LOGGER.error('Error setting operation mode')
                     return(False)
         else:
             return(False)
@@ -220,7 +220,7 @@ class TeslaCloudAPI():
                     return(site['response'])
                 except Exception as e:
                     LOGGER.debug('Exception teslaGetSiteInfo: ' + str(e))
-                    LOGGER.debug('Error getting data' + str(mode))
+                    LOGGER.error('Error getting data' + str(mode))
                     LOGGER.debug('Trying to reconnect')
                     self.tokeninfo = self.__tesla_connect(self.email, self.password)
                     return(None)
@@ -248,7 +248,7 @@ class TeslaCloudAPI():
                         return(False)
                 except Exception as e:
                     LOGGER.debug('Exception teslaSetStormMode: ' + str(e))
-                    LOGGER.debug('Error setting storm mode')
+                    LOGGER.error('Error setting storm mode')
                     return(False)
         else:
             return(False)
@@ -284,7 +284,7 @@ class TeslaCloudAPI():
                         #LOGGER.debug(site)   
                 except  Exception as e:
                     LOGGER.debug('Exception teslaSetBackoffLEvel: ' + str(e))
-                    LOGGER.debug('Error setting bacup percent')
+                    LOGGER.error('Error setting bacup percent')
                     return(False)
         else:
             return(False)
@@ -324,7 +324,7 @@ class TeslaCloudAPI():
             return(indexFound)
         except  Exception as e:
                 LOGGER.debug('Exception teslaUpdateTouScheduleLite: ' + str(e))
-                LOGGER.debug('Error updating schedule')
+                LOGGER.error('Error updating schedule')
                 return(False)
 
     def teslaSetTouSchedule(self, peakMode, weekdayWeekend, startEnd, time_s):
@@ -396,7 +396,7 @@ class TeslaCloudAPI():
                         return(False)
                 except Exception as e:
                     LOGGER.debug('Exception teslaSetTimeOfUse: ' + str(e))
-                    LOGGER.debug('Error setting time of use parameters')
+                    LOGGER.error('Error setting time of use parameters')
                     return(False)
         else:
             return(False)

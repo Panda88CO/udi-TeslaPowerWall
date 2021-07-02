@@ -19,7 +19,7 @@ class teslaPWSetupNode(polyinterface.Node):
     def __init__(self, controller, primary, address, name):
         super().__init__(controller, primary, address, name)
 
-        LOGGER.debug('_init_ Tesla Power Wall Controller')
+        LOGGER.info('_init_ Tesla Power Wall setup NOde')
         self.ISYforced = False
         self.TPW = self.parent.TPW
         self.address = address 
@@ -32,15 +32,15 @@ class teslaPWSetupNode(polyinterface.Node):
         LOGGER.debug('Start Tesla Power Wall Setup Node')  
 
         self.ISYparams = self.TPW.supportedParamters(self.id)
-        LOGGER.debug ('Node = ISYparams :' + str(self.ISYparams))
+        #LOGGER.debug ('Node = ISYparams :' + str(self.ISYparams))
 
         self.ISYcriticalParams = self.TPW.criticalParamters(self.id)
-        LOGGER.debug ('Node = ISYcriticalParams :' + str(self.ISYcriticalParams))
+        #LOGGER.debug ('Node = ISYcriticalParams :' + str(self.ISYcriticalParams))
     
 
         for key in self.ISYparams:
             info = self.ISYparams[key]
-            LOGGER.debug(key )
+            #LOGGER.debug(key )
             if info != {}:
                 value = self.TPW.getISYvalue(key, self.id)
                 LOGGER.debug('SetupNode: driver' + str(key)+ ' value:' + str(value) + ' uom:' + str(info['uom']) )
@@ -77,23 +77,23 @@ class teslaPWSetupNode(polyinterface.Node):
     
     def shortPoll(self):
         #No need to poll data - done by Controller
-        LOGGER.debug('Tesla Power Wall Controller shortPoll')
+        LOGGER.debug('Tesla Power Wall setupNode shortPoll')
         if self.nodeDefineDone:
             #self.heartbeat()
             self.updateISYdrivers('critical')
         else:
-           LOGGER.debug('waiting for system/nodes to get created')
+           LOGGER.info('waiting for system/nodes to get created')
 
                 
 
     def longPoll(self):
         #No need to poll data - done by Controller
-        LOGGER.debug('Tesla Power Wall  Controller longPoll - heat beat')
+        LOGGER.debug('Tesla Power Wall  sentupNode longPoll')
         if self.nodeDefineDone:
            self.updateISYdrivers('all')
            self.reportDrivers() 
         else:
-           LOGGER.debug('waiting for system/nodes to get created')
+           LOGGER.info('waiting for system/nodes to get created')
 
     def updateISYdrivers(self, level):
         LOGGER.debug('Node updateISYdrivers')

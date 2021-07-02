@@ -233,7 +233,7 @@ class TeslaPWController(polyinterface.Controller):
             nodeList = self.TPW.getNodeIdList()
             LOGGER.debug("controller start" + str(nodeList))
             for node in nodeList:
-                LOGGER.debug(node)
+                #LOGGER.debug(node)
                 name = self.TPW.getNodeName(node)
                 self.addNode(teslaPWSetupNode(self, self.address, node, name))
             
@@ -244,8 +244,8 @@ class TeslaPWController(polyinterface.Controller):
             self.reportDrivers()
             self.nodeDefineDone = True
         except Exception as e:
-            LOGGER.info('Exception Controller start: '+ str(e))
-            LOGGER.debug('did not connect to power wall')
+            LOGGER.debug('Exception Controller start: '+ str(e))
+            LOGGER.info('Did not connect to power wall')
 
             self.stop()
 
@@ -277,12 +277,12 @@ class TeslaPWController(polyinterface.Controller):
             if self.TPW.pollSystemData('critical'):
                 self.updateISYdrivers('critical')
             else:
-                LOGGER.debug ('Problem polling data from Tesla system')
+                LOGGER.info ('Problem polling data from Tesla system')
         else:
-            LOGGER.debug('waiting for system/nodes to get created')
+            LOGGER.info('Waiting for system/nodes to get created')
         #LOGGER.debug('Nodes : ' + self.nodes)
         for node in self.nodes:
-            LOGGER.debug('Node : ' + node)
+            #LOGGER.debug('Node : ' + node)
             if node != self.address and node != 'controller':
                 self.nodes[node].shortPoll()
         
@@ -295,34 +295,34 @@ class TeslaPWController(polyinterface.Controller):
                 self.updateISYdrivers('all')
             self.reportDrivers() 
         else:
-            LOGGER.debug('waiting for system/nodes to get created')
+            LOGGER.info('Waiting for system/nodes to get created')
         for node in self.nodes:
-            LOGGER.debug('Node : ' + node)
+            #LOGGER.debug('Node : ' + node)
             if node != self.address and node != 'controller':
                 self.nodes[node].longPoll()
         
     def updateISYdrivers(self, level):
-        LOGGER.debug('System updateISYdrivers')
+        LOGGER.debug('System updateISYdrivers - ' + str(level))
         params = []
         #LOGGER.debug(self.id)
         #LOGGER.debug(self.ISYparams)
         if level == 'all':
             params = self.ISYparams
-            LOGGER.debug ('all: ' + str(params) )
+            #LOGGER.debug ('all: ' + str(params) )
             if params:
                 for key in params:
                     info = params[key]
                     if info != {}:
                         value = self.TPW.getISYvalue(key, self.id)
-                        LOGGER.debug('Update ISY drivers :' + str(key)+ ' ' + info['systemVar']+ ' value:' + str(value) )
+                        #LOGGER.debug('Update ISY drivers :' + str(key)+ ' ' + info['systemVar']+ ' value:' + str(value) )
                         self.setDriver(key, value, report = True, force = True)         
         elif level == 'critical':
             params = self.ISYcriticalParams
-            LOGGER.debug ('Critial: ' + str(params) )
+            #LOGGER.debug ('Critial: ' + str(params) )
             if params:
                 for key in params:
                     value = self.TPW.getISYvalue(key, self.id)
-                    LOGGER.debug('Update ISY drivers :' + str(key)+ '  value: ' + str(value) )
+                    #LOGGER.debug('Update ISY drivers :' + str(key)+ '  value: ' + str(value) )
                     self.setDriver(key, value, report = True, force = True)       
         else:
             LOGGER.debug('Wrong parameter passed: ' + str(level))
@@ -342,7 +342,7 @@ class TeslaPWController(polyinterface.Controller):
 
 
     def ISYupdate (self, command):
-        LOGGER.info('ISY-update called')
+        LOGGER.debug('ISY-update called')
         if self.TPW.pollSystemData('all'):
             self.updateISYdrivers('all')
             self.reportDrivers()

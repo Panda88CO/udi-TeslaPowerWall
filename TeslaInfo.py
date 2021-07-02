@@ -23,6 +23,7 @@ LOGGER = polyinterface.LOGGER
 class tesla_info:
     def __init__ (self, cloudEmail, cloudPassword, ISYname, ISY_Id, localEmail=None, localPassword=None, IPaddress=None):
         self.TEST = False
+        self.LocalConnection = False
         
         LOGGER.debug('class tesla_info - init')
         self.localPassword = localPassword
@@ -55,12 +56,18 @@ class tesla_info:
 
         if self.TPWlocalAccess:
             LOGGER.debug('Local access enabled')
-            self.TPWlocal = Powerwall(IPaddress)
-            self.TPWlocal.login(self.localPassword, self.localEmail)
-            if not(self.TPWlocal.is_authenticated()):            
-                LOGGER.error('Error Logging into Tesla Power Wall') 
-                self.TPWlocalAccess = False 
-            else:
+            if self.localLogin(IPaddress):
+                '''
+                self.TPWlocal = Powerwall(IPaddress)
+                self.TPWlocal.login(self.localPassword, self.localEmail)
+                if not(self.TPWlocal.is_authenticated()):            
+                    LOGGER.error('Error Logging into Tesla Power Wall') 
+                    self.LocalConnection = False
+                    self.TPWlocalAccess = False 
+                else:
+                    self.LocalConnection=True
+                '''
+
                 self.metersDayStart = self.TPWlocal.get_meters()
                 generator  = self.TPWlocal._api.get('generators')
                 if not(generator['generators']):
@@ -82,6 +89,28 @@ class tesla_info:
         self.initializeData()
         self.createISYsetup()
         self.pollSystemData('all')
+
+
+    def localLogin(self, IPaddress):
+        try:
+            if self.LocalConnection==False:
+                self.TPWlocal.logout()
+            self.TPWlocal = Powerwall(self.IPAddress)
+            self.TPWlocal.login(self.localPassword, self.localEmail)
+            if not(self.TPWlocal.is_authenticated()):            
+                LOGGER.error('Error Logging into Tesla Power Wall') 
+                self.LocalConnection = False
+                self.TPWlocalAccess = False 
+                self.TPWlocal.logout()
+                return(False)
+            else:
+                self.LocalConnection=True
+                return(True)
+        except Exception as e:
+            LOGGER.debug('NO connection to local power wall - keep trying to login - '+str(e) )
+            self.TPWlocal.logout()
+            self.TPWlocalAccess = False
+    
     
     def initializeData(self):
         LOGGER.info('Initializing variables and structures')
@@ -358,9 +387,11 @@ class tesla_info:
             temp = None
         return(temp)
         #return(self.ISYCritical[nodeId])
+    
 
     def pollSystemData(self, level):
         LOGGER.info('PollSystemData - ' + str(level))
+
         try:
             self.nowDay = date.today() 
             if (self.lastDay.day != self.nowDay.day) or self.TEST: # we passed midnight
@@ -382,11 +413,18 @@ class tesla_info:
                     LOGGER.debug('pollSystemData - critical')
                     self.TPWcloud.teslaUpdateCloudData('critical')
                 else:
-                    self.status = self.TPWlocal.get_sitemaster() 
-                    self.meters = self.TPWlocal.get_meters()
-                    if self.getTPW_ConnectedTesla():
-                        self.TPWcloud.teslaUpdateCloudData('critical')
-                return(True)
+                    if not(self.LocalConnection):
+                        if self.localLogin(self.IPAddress):
+                            self.LocalConnection=True
+                            self.status = self.TPWlocal.get_sitemaster() 
+                            self.meters = self.TPWlocal.get_meters()
+                            if self.getTPW_ConnectedTesla():
+                                self.TPWcloud.teslaUpdateCloudData('critical')
+                            return(True)
+                        else:
+                            LOGGER.debug('No connection to Local Tesla Power Wall')
+                            self.LocalConnection=False
+                            return(False)
 
             if level == 'all':
                 if self.TPWcloudAccess:
@@ -395,23 +433,30 @@ class tesla_info:
                     self.TPWcloud.teslaCalculateDaysTotals()
 
                 if self.TPWlocalAccess:
-                    self.status = self.TPWlocal.get_sitemaster() 
-                    self.meters = self.TPWlocal.get_meters()
+                    if not(self.LocalConnection):
+                        if self.localLogin(self.IPAddress):
+                            self.LocalConnection=True
+                            self.status = self.TPWlocal.get_sitemaster() 
+                            self.meters = self.TPWlocal.get_meters()
 
-                    self.daysTotalSolar =  (self.meters.solar.energy_exported - self.metersDayStart.solar.energy_exported)
-                    self.daysTotalConsumption = (self.meters.load.energy_imported - self.metersDayStart.load.energy_imported)
-                    self.daysTotalGeneraton = (self.meters.site.energy_exported - self.metersDayStart.site.energy_exported - 
-                                                (self.meters.site.energy_imported - self.metersDayStart.site.energy_imported))
-                    self.daysTotalBattery =  (float(self.meters.battery.energy_exported - self.metersDayStart.battery.energy_exported - 
-                                                (self.meters.battery.energy_imported - self.metersDayStart.battery.energy_imported)))
-                    if self.TPWcloudAccess:
-                        self.daysTotalGenerator = self.TPWcloud.teslaExtractDaysGeneratorUse()
-                        self.daysTotalGridServices = self.TPWcloud.teslaExtractDaysGridServicesUse()
-                    else:
-                        self.daysTotalGridServices = 0.0 #Does not seem to exist
-                        self.daysTotalGenerator = 0.0 #needs to be updated - may not exist
-                    #LOGGER.debug('Local Access - total ')
-                
+                            self.daysTotalSolar =  (self.meters.solar.energy_exported - self.metersDayStart.solar.energy_exported)
+                            self.daysTotalConsumption = (self.meters.load.energy_imported - self.metersDayStart.load.energy_imported)
+                            self.daysTotalGeneraton = (self.meters.site.energy_exported - self.metersDayStart.site.energy_exported - 
+                                                        (self.meters.site.energy_imported - self.metersDayStart.site.energy_imported))
+                            self.daysTotalBattery =  (float(self.meters.battery.energy_exported - self.metersDayStart.battery.energy_exported - 
+                                                        (self.meters.battery.energy_imported - self.metersDayStart.battery.energy_imported)))
+                            if self.TPWcloudAccess:
+                                self.daysTotalGenerator = self.TPWcloud.teslaExtractDaysGeneratorUse()
+                                self.daysTotalGridServices = self.TPWcloud.teslaExtractDaysGridServicesUse()
+                            else:
+                                self.daysTotalGridServices = 0.0 #Does not seem to exist
+                                self.daysTotalGenerator = 0.0 #needs to be updated - may not exist
+                            #LOGGER.debug('Local Access - total ')
+                            return(True)
+                        else:
+                            LOGGER.debug('No connection to Local Tesla Power Wall')
+                            self.LocalConnection=False
+                            return(False)
             else:
                 self.daysTotalSolar = self.TPWcloud.teslaExtractDaysSolar()
                 self.daysTotalConsumption = self.TPWcloud.teslaExtractDaysConsumption()

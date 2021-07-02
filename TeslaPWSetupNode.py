@@ -73,6 +73,7 @@ class teslaPWSetupNode(polyinterface.Node):
 
     
     def shortPoll(self):
+        #No need to poll data - done by Controller
         LOGGER.debug('Tesla Power Wall Controller shortPoll')
         if self.nodeDefineDone:
             #self.heartbeat()
@@ -83,6 +84,7 @@ class teslaPWSetupNode(polyinterface.Node):
                 
 
     def longPoll(self):
+        #No need to poll data - done by Controller
         LOGGER.debug('Tesla Power Wall  Controller longPoll - heat beat')
         if self.nodeDefineDone:
            self.updateISYdrivers('all')
@@ -96,7 +98,7 @@ class teslaPWSetupNode(polyinterface.Node):
         if level == 'all':
             params = self.ISYparams
         elif level == 'critical':
-            params = self.ISYparams
+            params = self.ISYcriticalParams
         else:
            LOGGER.debug('Wrong parameter passed: ' + str(level))
         for key in params:

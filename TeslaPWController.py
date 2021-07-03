@@ -27,8 +27,7 @@ class TeslaPWController(polyinterface.Controller):
         self.hb = 0
         if not(PG_CLOUD_ONLY):
             self.drivers = []
-        else:
-
+  
         self.nodeDefineDone = False
         self.TPW = None
 

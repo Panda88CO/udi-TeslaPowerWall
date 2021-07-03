@@ -218,13 +218,14 @@ class TeslaPWController(polyinterface.Controller):
             LOGGER.debug('Controller start critical params: ' + str(self.ISYcriticalParams))
         
             if not(PG_CLOUD_ONLY):
-                for key in self.ISYparams:
-                    info = self.ISYparams[key]
-                    if info != {}:
-                        value = self.TPW.getISYvalue(key, self.id)
-                        LOGGER.debug('driver: ' + str(key)+ ' value:' + str(value) + ' uom:' + str(info['uom']) )
+            for key in self.ISYparams:
+                info = self.ISYparams[key]
+                if info != {}:
+                    value = self.TPW.getISYvalue(key, self.id)
+                    LOGGER.debug('driver: ' + str(key)+ ' value:' + str(value) + ' uom:' + str(info['uom']) )
+                    if not(PG_CLOUD_ONLY):
                         self.drivers.append({'driver ':key, 'value':value, 'uom':info['uom'] })
-                    
+                
             #if PG_CLOUD_ONLY:
             #    self.poly.installprofile()            
 

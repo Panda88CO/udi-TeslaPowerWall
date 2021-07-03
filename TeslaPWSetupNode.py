@@ -29,7 +29,7 @@ class teslaPWSetupNode(polyinterface.Node):
 
         if not(PG_CLOUD_ONLY):
              self.drivers = []
-             
+
         self.nodeDefineDone = False
         LOGGER.debug('Start Tesla Power Wall Setup Node')  
 
@@ -55,7 +55,7 @@ class teslaPWSetupNode(polyinterface.Node):
 
     def start(self):                
         self.updateISYdrivers('all')
-        self.reportDrivers()
+        #self.reportDrivers()
         self.nodeDefineDone = True
 
 
@@ -91,7 +91,7 @@ class teslaPWSetupNode(polyinterface.Node):
         LOGGER.debug('Tesla Power Wall  sentupNode longPoll')
         if self.nodeDefineDone:
            self.updateISYdrivers('all')
-           self.reportDrivers() 
+           #self.reportDrivers() 
         else:
            LOGGER.info('waiting for system/nodes to get created')
 
@@ -136,7 +136,7 @@ class teslaPWSetupNode(polyinterface.Node):
         self.TPW.setTPW_stormMode(value)
         ISYvar = self.TPW.getStormModeISYVar(self.id)
         self.setDriver(ISYvar, value, report = True,force = True)
-        self.reportDrivers() 
+        #self.reportDrivers() 
         
     def setOperatingMode(self, command):
         LOGGER.debug('setOperatingMode')
@@ -144,7 +144,7 @@ class teslaPWSetupNode(polyinterface.Node):
         self.TPW.setTPW_operationMode(value)
         ISYvar = self.TPW.getOperatingModeISYVar(self.id)
         self.setDriver(ISYvar, value, report = True,force = True)
-        self.reportDrivers() 
+        #self.reportDrivers() 
     
     def setBackupPercent(self, command):
         LOGGER.debug('setBackupPercent')
@@ -152,7 +152,7 @@ class teslaPWSetupNode(polyinterface.Node):
         self.TPW.setTPW_backoffLevel(value)
         ISYvar = self.TPW.getBackupPercentISYVar(self.id)
         self.setDriver(ISYvar, value, report = True,force = True)
-        self.reportDrivers() 
+        #self.reportDrivers() 
 
     def setTOUmode(self, command):
         LOGGER.debug('setTOUmode')
@@ -160,7 +160,7 @@ class teslaPWSetupNode(polyinterface.Node):
         self.TPW.setTPW_touMode(value)
         ISYvar = self.TPW.getTOUmodeISYVar(self.id)
         self.setDriver(ISYvar, value, report = True,force = True)
-        self.reportDrivers() 
+        #self.reportDrivers() 
 
     def setWeekendOffpeakStart(self, command):
         LOGGER.debug('setWeekendOffpeakStart')
@@ -168,7 +168,7 @@ class teslaPWSetupNode(polyinterface.Node):
         self.TPW.setTPW_updateTouSchedule('off_peak', 'weekend', 'start', value)
         ISYvar = self.TPW.getTouWeekendOffpeakStartISYVar(self.id)
         self.setDriver(ISYvar, value, report = True,force = True)
-        self.reportDrivers() 
+        #self.reportDrivers() 
 
     def setWeekendOffpeakEnd(self, command):
         LOGGER.debug('setWeekendOffpeakEnd')
@@ -176,7 +176,7 @@ class teslaPWSetupNode(polyinterface.Node):
         self.TPW.setTPW_updateTouSchedule('off_peak', 'weekend', 'end', value)
         ISYvar = self.TPW.getTouWeekendOffpeakEndISYVar(self.id)
         self.setDriver(ISYvar, value, report = True,force = True)
-        self.reportDrivers() 
+        #self.reportDrivers() 
 
     def setWeekendPeakStart(self, command):
         LOGGER.debug('setWeekendPeakStart')
@@ -184,7 +184,7 @@ class teslaPWSetupNode(polyinterface.Node):
         self.TPW.setTPW_updateTouSchedule('peak', 'weekend', 'start', value)
         ISYvar = self.TPW.getTouWeekendPeakStartISYVar(self.id)
         self.setDriver(ISYvar, value, report = True,force = True)
-        self.reportDrivers()       
+        #self.reportDrivers()       
 
     def setWeekendPeakEnd(self, command):
         LOGGER.debug('setWeekendPeakEnd')
@@ -192,7 +192,7 @@ class teslaPWSetupNode(polyinterface.Node):
         self.TPW.setTPW_updateTouSchedule('peak', 'weekend', 'end', value)
         ISYvar = self.TPW.getTouWeekendPeakEndISYVar(self.id)
         self.setDriver(ISYvar, value, report = True,force = True)
-        self.reportDrivers()    
+        #self.reportDrivers()    
 
     def setWeekOffpeakStart(self, command):
         LOGGER.debug('setWeekOffpeakStart')
@@ -200,7 +200,7 @@ class teslaPWSetupNode(polyinterface.Node):
         self.TPW.setTPW_updateTouSchedule('off_peak', 'week', 'start', value)
         ISYvar = self.TPW.getTouWeekOffpeakStartISYVar(self.id)
         self.setDriver(ISYvar, value, report = True,force = True)
-        self.reportDrivers() 
+        #self.reportDrivers() 
 
     def setWeekOffpeakEnd(self, command):
         LOGGER.debug('setWeekOffpeakEnd')
@@ -208,7 +208,7 @@ class teslaPWSetupNode(polyinterface.Node):
         self.TPW.setTPW_updateTouSchedule('off_peak', 'week', 'end', value)
         ISYvar = self.TPW.getTouWeekOffpeakEndISYVar(self.id)
         self.setDriver(ISYvar, value, report = True,force = True)
-        self.reportDrivers() 
+        #self.reportDrivers() 
 
     def setWeekPeakStart(self, command):
         LOGGER.debug('setWeekPeakStart')
@@ -216,7 +216,7 @@ class teslaPWSetupNode(polyinterface.Node):
         self.TPW.setTPW_updateTouSchedule('peak', 'week', 'start', value)
         ISYvar = self.TPW.getTouWeekPeakStartISYVar(self.id)
         self.setDriver(ISYvar, value, report = True,force = True)
-        self.reportDrivers()   
+        #self.reportDrivers()   
 
     def setWeekPeakEnd(self, command):
         LOGGER.debug('setWeekPeakEnd')
@@ -224,14 +224,14 @@ class teslaPWSetupNode(polyinterface.Node):
         self.TPW.setTPW_updateTouSchedule('peak', 'week', 'end', value)
         ISYvar = self.TPW.getTouWeekPeakEndISYVar(self.id)
         self.setDriver(ISYvar, value, report = True,force = True)
-        self.reportDrivers() 
+        #self.reportDrivers() 
 
 
     def ISYupdate (self, command):
         LOGGER.debug('ISY-update called')
         if self.TPW.pollSystemData('all'):
             self.updateISYdrivers('all')
-            self.reportDrivers()
+            #self.reportDrivers()
  
 
     commands = { 'UPDATE': ISYupdate

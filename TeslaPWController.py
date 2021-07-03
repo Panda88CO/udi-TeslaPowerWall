@@ -239,7 +239,7 @@ class TeslaPWController(polyinterface.Controller):
             
             self.TPW.pollSystemData('all')
             self.updateISYdrivers('all')
-            self.reportDrivers()
+            #self.reportDrivers()
             self.nodeDefineDone = True
         except Exception as e:
             LOGGER.debug('Exception Controller start: '+ str(e))
@@ -291,7 +291,7 @@ class TeslaPWController(polyinterface.Controller):
         if self.nodeDefineDone:
             if self.TPW.pollSystemData('all'):
                 self.updateISYdrivers('all')
-            self.reportDrivers() 
+            #self.reportDrivers() 
         else:
             LOGGER.info('Waiting for system/nodes to get created')
         for node in self.nodes:
@@ -343,7 +343,7 @@ class TeslaPWController(polyinterface.Controller):
         LOGGER.debug('ISY-update called')
         if self.TPW.pollSystemData('all'):
             self.updateISYdrivers('all')
-            self.reportDrivers()
+            #self.reportDrivers()
  
 
     commands = { 'UPDATE': ISYupdate}

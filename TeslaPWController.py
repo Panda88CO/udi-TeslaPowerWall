@@ -92,7 +92,7 @@ class TeslaPWController(polyinterface.Controller):
             LOGGER.debug('check_params: cloud user email not specified')
             self.addCustomParam({'CLOUD_USER_EMAIL': 'nobody@email.com'})
 
-        self.CloudUserPassword = self.getCustomParam('CLOUD USER_PASSWORD')
+        self.CloudUserPassword = self.getCustomParam('CLOUD USER PASSWORD')
         if self.CloudUserPassword is None:
             self.addNotice('Please Set Tesla Power Wall Cloud password (_CLOUD_USER_PASSWORD) - E.g. XXXXXXXX')
             LOGGER.debug('check_params: cloud user password not specified')
@@ -217,7 +217,7 @@ class TeslaPWController(polyinterface.Controller):
             LOGGER.debug('Controller start params: ' + str(self.ISYparams))
             LOGGER.debug('Controller start critical params: ' + str(self.ISYcriticalParams))
         
-            if not(PG_CLOUD_ONLY):
+            
             for key in self.ISYparams:
                 info = self.ISYparams[key]
                 if info != {}:

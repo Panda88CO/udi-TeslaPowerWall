@@ -249,18 +249,18 @@ class teslaPWSetupNode(polyinterface.Node):
                 }
 
     if PG_CLOUD_ONLY:
-        drivers= [{'drivers': 'GV1', 'value':0, 'uom':51}
-                 ,{'drivers': 'GV2', 'value':0, 'uom':25}
-                 ,{'drivers': 'GV3', 'value':0, 'uom':25}
-                 ,{'drivers': 'GV4', 'value':0, 'uom':25}
-                 ,{'drivers': 'GV5', 'value':0, 'uom':58}
-                 ,{'drivers': 'GV6', 'value':0, 'uom':58}
-                 ,{'drivers': 'GV7', 'value':0, 'uom':58}
-                 ,{'drivers': 'GV8', 'value':0, 'uom':58}
-                 ,{'drivers': 'GV9', 'value':0, 'uom':58}
-                 ,{'drivers': 'GV10', 'value':0, 'uom':58}
-                 ,{'drivers': 'GV11', 'value':0, 'uom':58}
-                 ,{'drivers': 'GV12', 'value':0, 'uom':58}
+        drivers= [{'driver': 'GV1', 'value':0, 'uom':51}
+                 ,{'driver': 'GV2', 'value':0, 'uom':25}
+                 ,{'driver': 'GV3', 'value':0, 'uom':25}
+                 ,{'driver': 'GV4', 'value':0, 'uom':25}
+                 ,{'driver': 'GV5', 'value':0, 'uom':58}
+                 ,{'driver': 'GV6', 'value':0, 'uom':58}
+                 ,{'driver': 'GV7', 'value':0, 'uom':58}
+                 ,{'driver': 'GV8', 'value':0, 'uom':58}
+                 ,{'driver': 'GV9', 'value':0, 'uom':58}
+                 ,{'driver': 'GV10', 'value':0, 'uom':58}
+                 ,{'driver': 'GV11', 'value':0, 'uom':58}
+                 ,{'driver': 'GV12', 'value':0, 'uom':58}
 
         ] 
 

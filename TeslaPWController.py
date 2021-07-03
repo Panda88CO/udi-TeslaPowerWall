@@ -351,26 +351,26 @@ class TeslaPWController(polyinterface.Controller):
     commands = { 'UPDATE': ISYupdate}
 
     if PG_CLOUD_ONLY:
-        drivers= [{'drivers': 'GV1', 'value':0, 'uom':30}
-                 ,{'drivers': 'GV2', 'value':0, 'uom':30}
-                 ,{'drivers': 'GV3', 'value':0, 'uom':30}
-                 ,{'drivers': 'GV4', 'value':0, 'uom':30}
-                 ,{'drivers': 'GV5', 'value':0, 'uom':30}
-                 ,{'drivers': 'GV6', 'value':0, 'uom':30}
-                 ,{'drivers': 'GV7', 'value':0, 'uom':30}
-                 ,{'drivers': 'GV8', 'value':0, 'uom':30}
-                 ,{'drivers': 'GV9', 'value':0, 'uom':30}
-                 ,{'drivers': 'GV10', 'value':0, 'uom':30}
-                 ,{'drivers': 'GV11', 'value':0, 'uom':30}
-                 ,{'drivers': 'GV12', 'value':0, 'uom':30}
-                 ,{'drivers': 'GV13', 'value':0, 'uom':30}
-                 ,{'drivers': 'GV14', 'value':0, 'uom':30}
-                 ,{'drivers': 'GV15', 'value':0, 'uom':51}
-                 ,{'drivers': 'GV16', 'value':0, 'uom':30}
-                 ,{'drivers': 'GV17', 'value':0, 'uom':30}   
-                 ,{'drivers': 'GV18', 'value':0, 'uom':25}
-                 ,{'drivers': 'GV19', 'value':0, 'uom':25}
-                 ,{'drivers': 'GV20', 'value':0, 'uom':25}
+        drivers= [{'driver': 'GV1', 'value':0, 'uom':30}
+                 ,{'driver': 'GV2', 'value':0, 'uom':30}
+                 ,{'driver': 'GV3', 'value':0, 'uom':30}
+                 ,{'driver': 'GV4', 'value':0, 'uom':30}
+                 ,{'driver': 'GV5', 'value':0, 'uom':30}
+                 ,{'driver': 'GV6', 'value':0, 'uom':30}
+                 ,{'driver': 'GV7', 'value':0, 'uom':30}
+                 ,{'driver': 'GV8', 'value':0, 'uom':30}
+                 ,{'driver': 'GV9', 'value':0, 'uom':30}
+                 ,{'driver': 'GV10', 'value':0, 'uom':30}
+                 ,{'driver': 'GV11', 'value':0, 'uom':30}
+                 ,{'driver': 'GV12', 'value':0, 'uom':30}
+                 ,{'driver': 'GV13', 'value':0, 'uom':30}
+                 ,{'driver': 'GV14', 'value':0, 'uom':30}
+                 ,{'driver': 'GV15', 'value':0, 'uom':51}
+                 ,{'driver': 'GV16', 'value':0, 'uom':30}
+                 ,{'driver': 'GV17', 'value':0, 'uom':30}   
+                 ,{'driver': 'GV18', 'value':0, 'uom':25}
+                 ,{'driver': 'GV19', 'value':0, 'uom':25}
+                 ,{'driver': 'GV20', 'value':0, 'uom':25}
         ] 
 
 if __name__ == "__main__":

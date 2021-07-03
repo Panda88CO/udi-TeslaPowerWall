@@ -27,7 +27,9 @@ class teslaPWSetupNode(polyinterface.Node):
         self.name = name
         self.hb = 0
 
-        self.drivers = []
+        if not(PG_CLOUD_ONLY):
+             self.drivers = []
+             
         self.nodeDefineDone = False
         LOGGER.debug('Start Tesla Power Wall Setup Node')  
 

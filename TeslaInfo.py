@@ -240,7 +240,7 @@ class tesla_info:
         self.ISYinfo.addISYcommandSend(self.controllerID, 'DOF')
         self.ISYinfo.addISYcommandReceive(self.controllerID, 'UPDATE', 'Update System Data', None)
 
-        if self.solarInstalled: # only add if solar exist - cannot test if this works as intented, and I cannot remove solar (I have solar)
+        if self.solarInstalled or PG_CLOUD_ONLY: # only add if solar exist - cannot test if this works as intented, and I cannot remove solar (I have solar)
             self.ISYinfo.addIsyVaraiable (self.controllerID, self.solarSupply, 'KW', 0, 20, None, None, 2, 'Current Solar Supply', None ) 
             self.ISYinfo.addIsyVaraiable (self.controllerID, self.daysSolar, 'KW', - 100, 100, None, None, 2, 'Solar Power Today', None ) 
             self.ISYinfo.addIsyVaraiable (self.controllerID,self.yesterdaySolar,  'KW', -100, 100, None, None, 2, 'Solar Power Yesterday', None )
@@ -265,7 +265,7 @@ class tesla_info:
         self.ISYinfo.addIsyVaraiable(self.controllerID, self.chargeLevel, 'percent', 0, 100, None, None, 2, 'Battery Charge Level', None )
 
 
-        if self.generatorInstalled or (self.TPWcloudAccess and not(self.TPWlocalAccess)): #I have no generator so I cannot test this if it 
+        if self.generatorInstalled and (self.TPWcloudAccess and not(self.TPWlocalAccess)) or PG_CLOUD_ONLY: #I have no generator so I cannot test this if it 
             self.ISYinfo.addIsyVaraiable (self.controllerID, self.daysGenerator, 'KW', -100, 100, None, None, 2, 'Generator Power Today', None ) 
             self.ISYinfo.addIsyVaraiable (self.controllerID, self.yesterdayGenerator, 'KW', -100, 100, None, None, 2, 'Generator Power Yesterday', None ) 
         

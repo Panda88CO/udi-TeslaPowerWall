@@ -216,14 +216,13 @@ class TeslaPWController(polyinterface.Controller):
             self.ISYcriticalParams = self.TPW.criticalParamters(self.id)
             LOGGER.debug('Controller start params: ' + str(self.ISYparams))
             LOGGER.debug('Controller start critical params: ' + str(self.ISYcriticalParams))
-            for key in self.ISYparams:
-                info = self.ISYparams[key]
-                if info != {}:
-                    value = self.TPW.getISYvalue(key, self.id)
-                    LOGGER.debug('driver: ' + str(key)+ ' value:' + str(value) + ' uom:' + str(info['uom']) )
-                    if PG_CLOUD_ONLY:
-                        self.drivers[key] = { 'value':value, 'uom':info['uom'] }
-                    else:
+        
+            if not(PG_CLOUD_ONLY):
+                for key in self.ISYparams:
+                    info = self.ISYparams[key]
+                    if info != {}:
+                        value = self.TPW.getISYvalue(key, self.id)
+                        LOGGER.debug('driver: ' + str(key)+ ' value:' + str(value) + ' uom:' + str(info['uom']) )
                         self.drivers.append({'driver ':key, 'value':value, 'uom':info['uom'] })
                     
             #if PG_CLOUD_ONLY:
@@ -350,7 +349,9 @@ class TeslaPWController(polyinterface.Controller):
 
     commands = { 'UPDATE': ISYupdate}
 
-  
+    if PG_CLOUD_ONLY:
+        drivers= [] # need to add 
+
 if __name__ == "__main__":
     try:
         #LOGGER.info('Starting Tesla Power Wall Controller')

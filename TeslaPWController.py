@@ -313,7 +313,7 @@ class TeslaPWController(polyinterface.Controller):
                     if info != {}:
                         value = self.TPW.getISYvalue(key, self.id)
                         LOGGER.debug('Update ISY drivers :' + str(key)+ ' ' + info['systemVar']+ ' value:' + str(value) )
-                        self.setDriver(key, value) 
+                        self.setDriver(str(key), value) 
                         #self.setDriver(key, value, report = True, force = True) 
 
                         LOGGER.debug('Update ISY drivers :' + str(key)+ ' ' + info['systemVar']+ ' value:' + str(value) )
@@ -327,7 +327,7 @@ class TeslaPWController(polyinterface.Controller):
                     LOGGER.debug('Update ISY drivers :' + str(key)+ '  value: ' + str(value) )
                     #self.setDriver(key, value, report = True, force = True)       
 
-                    self.setDriver(key, value)       
+                    self.setDriver(str(key), value)       
                     LOGGER.debug('Update ISY drivers :' + str(key)+ '  value: ' + str(value) )
  
         else:

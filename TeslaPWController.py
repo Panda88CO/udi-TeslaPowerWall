@@ -306,7 +306,7 @@ class TeslaPWController(polyinterface.Controller):
         #LOGGER.debug(self.ISYparams)
         if level == 'all':
             params = self.ISYparams
-            #LOGGER.debug ('all: ' + str(params) )
+            LOGGER.debug ('all: ' + str(params) )
             if params:
                 for key in params:
                     info = params[key]

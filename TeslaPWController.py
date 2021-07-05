@@ -206,8 +206,7 @@ class TeslaPWController(polyinterface.Controller):
             LOGGER.debug ('Install Profile')    
 
             self.TPW.pollSystemData('all')          
-            if not(PG_CLOUD_ONLY):
-                self.poly.installprofile()
+            self.poly.installprofile()
             if self.logFile:
                 self.TPW.createLogFile(self.logFile)
             self.ISYparams = self.TPW.supportedParamters(self.id)

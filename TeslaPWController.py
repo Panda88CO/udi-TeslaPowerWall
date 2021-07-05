@@ -218,7 +218,7 @@ class TeslaPWController(polyinterface.Controller):
                     value = self.TPW.getISYvalue(key, self.id)
                     LOGGER.debug('driver: ' + str(key)+ ' value:' + str(value) + ' uom:' + str(info['uom']) )
                     if not(PG_CLOUD_ONLY):
-                        self.drivers.append({'driver ':key, 'value':value, 'uom':info['uom'] })
+                        self.drivers.append({'driver':key, 'value':value, 'uom':info['uom'] })
                 
             #if PG_CLOUD_ONLY:
             #    self.poly.installprofile()            

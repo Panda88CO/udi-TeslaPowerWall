@@ -265,7 +265,7 @@ class tesla_info:
         self.ISYinfo.addIsyVaraiable(self.controllerID, self.chargeLevel, 'percent', 0, 100, None, None, 2, 'Battery Charge Level', None )
 
 
-        if self.generatorInstalled and (self.TPWcloudAccess and not(self.TPWlocalAccess)) and not(PG_CLOUD_ONLY): #I have no generator so I cannot test this if it 
+        if self.generatorInstalled and (self.TPWcloudAccess and not(self.TPWlocalAccess)) or (PG_CLOUD_ONLY): #I have no generator so I cannot test this if it 
             self.ISYinfo.addIsyVaraiable (self.controllerID, self.daysGenerator, 'KW', -100, 100, None, None, 2, 'Generator Power Today', None ) 
             self.ISYinfo.addIsyVaraiable (self.controllerID, self.yesterdayGenerator, 'KW', -100, 100, None, None, 2, 'Generator Power Yesterday', None ) 
         

@@ -31,8 +31,6 @@ class TeslaPWController(polyinterface.Controller):
         self.nodeDefineDone = False
         self.TPW = None
 
-
-
     def defineLocalInputParams(self):
         LOGGER.debug('defineLocalInputParams')
         self.addNotice('Input IP address, email and password used to log in to local power wall - 192.168.x.x')  
@@ -213,7 +211,6 @@ class TeslaPWController(polyinterface.Controller):
             self.ISYcriticalParams = self.TPW.criticalParamters(self.id)
             LOGGER.debug('Controller start params: ' + str(self.ISYparams))
             LOGGER.debug('Controller start critical params: ' + str(self.ISYcriticalParams))
-        
             
             for key in self.ISYparams:
                 info = self.ISYparams[key]
@@ -246,10 +243,6 @@ class TeslaPWController(polyinterface.Controller):
 
             self.stop()
 
-
-        
-
-
     def stop(self):
         self.removeNoticesAll()
         if self.TPW:
@@ -264,8 +257,7 @@ class TeslaPWController(polyinterface.Controller):
         else:
             self.reportCmd('DOF',2)
             self.hb = 0
-
-    
+ 
     def shortPoll(self):
         LOGGER.info('Tesla Power Wall Controller shortPoll')
         self.heartbeat()
@@ -314,9 +306,7 @@ class TeslaPWController(polyinterface.Controller):
                         LOGGER.debug('Update ISY drivers :' + str(key)+ ' ' + info['systemVar']+ ' value:' + str(value) )
                         self.setDriver(str(key), value) 
                         #self.setDriver(key, value, report = True, force = True) 
-
                         LOGGER.debug('Update ISY drivers :' + str(key)+ ' ' + info['systemVar']+ ' value:' + str(value) )
-
         elif level == 'critical':
             params = self.ISYcriticalParams
             #LOGGER.debug ('Critial: ' + str(params) )
@@ -325,10 +315,8 @@ class TeslaPWController(polyinterface.Controller):
                     value = self.TPW.getISYvalue(key, self.id)
                     LOGGER.debug('Update ISY drivers :' + str(key)+ '  value: ' + str(value) )
                     #self.setDriver(key, value, report = True, force = True)       
-
                     self.setDriver(str(key), value)       
                     LOGGER.debug('Update ISY drivers :' + str(key)+ '  value: ' + str(value) )
- 
         else:
             LOGGER.debug('Wrong parameter passed: ' + str(level))
         #LOGGER.debug(params)
@@ -344,15 +332,12 @@ class TeslaPWController(polyinterface.Controller):
         #LOGGER.debug('discover zones')
         self.nodeDefineDone = True
 
-
-
     def ISYupdate (self, command):
         LOGGER.debug('ISY-update called')
         if self.TPW.pollSystemData('all'):
             self.updateISYdrivers('all')
             #self.reportDrivers()
  
-
     commands = { 'UPDATE': ISYupdate}
 
     if PG_CLOUD_ONLY:

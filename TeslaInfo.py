@@ -24,7 +24,7 @@ class tesla_info:
     def __init__ (self, cloudEmail, cloudPassword, ISYname, ISY_Id, localEmail=None, localPassword=None, IPaddress=None):
         self.TEST = False
         self.LocalConnection = False
-        
+        self.logFileEnabled = False
         LOGGER.debug('class tesla_info - init')
         self.localPassword = localPassword
         self.localEmail = localEmail

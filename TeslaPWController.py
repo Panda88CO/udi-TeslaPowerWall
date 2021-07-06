@@ -57,6 +57,7 @@ class TeslaPWController(polyinterface.Controller):
         if PG_CLOUD_ONLY:
             self.addCustomParam({'ACCESS':'CLOUD'})
             self.addCustomParam({'LOGFILE':'DISABLED'})
+            self.logFile = False
         else:
             self.access = self.getCustomParam('ACCESS')
             if self.access == None:
@@ -69,7 +70,8 @@ class TeslaPWController(polyinterface.Controller):
             if self.logFileParam == None:
                 self.addNotice('Daily Summary Logfile ENABLED/DISABLED ')
                 LOGGER.info('LOGFILE input not defind - assume diabled')
-                self.addCustomParam({'LOGFILE': 'DISABLED'})      
+                self.addCustomParam({'LOGFILE': 'DISABLED'})    
+                self.logFile = False  
             else:
                 param = str(self.logFileParam).upper()
                 if param == 'ENABLED' or param == 'ENABLE':
@@ -236,6 +238,7 @@ class TeslaPWController(polyinterface.Controller):
             self.TPW.pollSystemData('all')
             self.updateISYdrivers('all')
             #self.reportDrivers()
+            self.TPW.logFileEnabled(self.logFile)
             self.nodeDefineDone = True
         except Exception as e:
             LOGGER.debug('Exception Controller start: '+ str(e))
@@ -265,6 +268,7 @@ class TeslaPWController(polyinterface.Controller):
         if self.nodeDefineDone:
             if self.TPW.pollSystemData('critical'):
                 self.updateISYdrivers('critical')
+                self.reportDrivers()
             else:
                 LOGGER.info ('Problem polling data from Tesla system')
         else:
@@ -282,7 +286,9 @@ class TeslaPWController(polyinterface.Controller):
         if self.nodeDefineDone:
             if self.TPW.pollSystemData('all'):
                 self.updateISYdrivers('all')
-            #self.reportDrivers() 
+                self.reportDrivers() 
+            else:
+                LOGGER.info ('Problem polling data from Tesla system')
         else:
             LOGGER.info('Waiting for system/nodes to get created')
         for node in self.nodes:

@@ -12,12 +12,16 @@ Some info on the clould API can be found at https://tesla-api.timdorr.com/
 
 ## Installation
 To run node server user must first select data source - from Local Power Wall and/or Tesla Cloud.   Local is not working on polyglot cloud.  
- 
-Configuration requires 2 steps first time:
+### Polisy/Polyglot (local) 
+Configuration requires 4 steps first time:
 #### 1) First user needs to sepcifiy source of data (LOCAL/CLOUD/BOTH) 
 #### 2) Restart node
 #### 3) Next user will speficy the needed user IDs and passwords for the selected option  (and local Tesla power wall IP address if chosen).  
 #### 4) Resrtart
+
+### Polyglot Cloud
+Configuration requires user to enter CLOUD_USER_EMAIL and CLOUD_USER_PASSWORD keywords under confuguration, and the restart 
+
 ## Notes 
 Using cloud access user can set all parameters mobile app currently supports (except car charging limit).
 

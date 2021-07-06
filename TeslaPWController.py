@@ -306,7 +306,7 @@ class TeslaPWController(polyinterface.Controller):
                         LOGGER.debug('Update ISY drivers :' + str(key)+ ' ' + info['systemVar']+ ' value:' + str(value) )
                         #self.setDriver(str(key), value) 
                         self.setDriver(key, value, report = True, force = True) 
-                        LOGGER.debug('Update ISY drivers :' + str(key)+ ' ' + info['systemVar']+ ' value:' + str(value) )
+                        #LOGGER.debug('Update ISY drivers :' + str(key)+ ' ' + info['systemVar']+ ' value:' + str(value) )
         elif level == 'critical':
             params = self.ISYcriticalParams
             #LOGGER.debug ('Critial: ' + str(params) )
@@ -316,7 +316,7 @@ class TeslaPWController(polyinterface.Controller):
                     LOGGER.debug('Update ISY drivers :' + str(key)+ '  value: ' + str(value) )
                     self.setDriver(key, value, report = True, force = True)       
                     #self.setDriver(str(key), value)       
-                    LOGGER.debug('Update ISY drivers :' + str(key)+ '  value: ' + str(value) )
+                    #LOGGER.debug('Update ISY drivers :' + str(key)+ '  value: ' + str(value) )
         else:
             LOGGER.debug('Wrong parameter passed: ' + str(level))
         #LOGGER.debug(params)

@@ -238,7 +238,7 @@ class TeslaPWController(polyinterface.Controller):
             self.TPW.pollSystemData('all')
             self.updateISYdrivers('all')
             #self.reportDrivers()
-            self.TPW.logFileEnabled(self.logFile)
+            self.TPW.createLogFile(self.logFile)
             self.nodeDefineDone = True
         except Exception as e:
             LOGGER.debug('Exception Controller start: '+ str(e))

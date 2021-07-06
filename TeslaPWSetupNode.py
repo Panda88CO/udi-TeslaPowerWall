@@ -45,7 +45,7 @@ class teslaPWSetupNode(polyinterface.Node):
             #LOGGER.debug(key )
             if info != {}:
                 value = self.TPW.getISYvalue(key, self.id)
-                LOGGER.debug('SetupNode: driver' + str(key)+ ' value:' + str(value) + ' uom:' + str(info['uom']) )
+                #LOGGER.debug('SetupNode: driver' + str(key)+ ' value:' + str(value) + ' uom:' + str(info['uom']) )
                 if not(PG_CLOUD_ONLY):
                     self.drivers.append({'driver':key, 'value':value, 'uom':info['uom'] })
 
@@ -105,14 +105,14 @@ class teslaPWSetupNode(polyinterface.Node):
                     info = params[key]
                     if info != {}:
                         value = self.TPW.getISYvalue(key, self.id)
-                        LOGGER.debug('Update ISY drivers :' + str(key)+ ' ' + info['systemVar']+ ' value:' + str(value) )
+                        #LOGGER.debug('Update ISY drivers :' + str(key)+ ' ' + info['systemVar']+ ' value:' + str(value) )
                         self.setDriver(key, value, report = True, force = True)      
         elif level == 'critical':
             params = self.ISYcriticalParams
             if params:
                 for key in params:
                     value = self.TPW.getISYvalue(key, self.id)
-                    LOGGER.debug('Update ISY drivers :' + str(key)+ ' value: ' + str(value) )
+                    #LOGGER.debug('Update ISY drivers :' + str(key)+ ' value: ' + str(value) )
                     self.setDriver(key, value, report = True, force = True)        
 
         else:

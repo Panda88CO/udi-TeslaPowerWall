@@ -492,7 +492,7 @@ class tesla_info:
         
 
     def getISYvalue(self, ISYvar, node):
-        LOGGER.debug( 'getISYvalue - ' + str(node))
+        #LOGGER.debug( 'getISYvalue - ' + str(node))
         if ISYvar in self.ISYmap[node]:
             self.teslaVarName = self.ISYmap[node][ISYvar]['systemVar']
             if self.teslaVarName == self.chargeLevel: 

@@ -1,5 +1,5 @@
 {
-    "name": "TeslaPowerWall",
+    "name": "TeslaPWControl",
     "docs": "https://github.com/Panda88CO/udi-TeslaPowerWall",
     "type": "python3",
     "executable": "TeslaPWController.py",
@@ -10,12 +10,12 @@
     "shortPoll": "60",
     "longPoll": "180",
     "testMode": false,
-    "profile_version": "0.6.23",
+    "profile_version": "0.6.24",
     "credits": [
         {
             "title": "A NodeServer to integrate Tesla Power Wall Controll system",
             "author": "Panda88CO",
-            "version": "0.6.23",
+            "version": "0.6.24",
             "date": "July 4,  2021",
             "source": "https://github.com/Panda88CO/udi-TeslaPowerWall",
             "license": "https://github.com/Panda88CO/udi-TeslaPowerWall/blob/main/license"

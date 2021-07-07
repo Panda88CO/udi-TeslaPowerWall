@@ -117,7 +117,7 @@ class TeslaPWController(polyinterface.Controller):
                 param = str(self.logFileParam).upper()
                 if param == 'ENABLED' or param == 'ENABLE':
                     self.logFile = True
-                    LOGGER.info('LogFile enabled @ ./daailyData')
+                    LOGGER.info('LogFile enabled @ ./dailyData')
                 else:
                     self.logFile = False                    
                     LOGGER.info('LogFile disabled')
@@ -211,14 +211,14 @@ class TeslaPWController(polyinterface.Controller):
                 self.TPW.createLogFile(self.logFile)
             self.ISYparams = self.TPW.supportedParamters(self.id)
             self.ISYcriticalParams = self.TPW.criticalParamters(self.id)
-            LOGGER.debug('Controller start params: ' + str(self.ISYparams))
-            LOGGER.debug('Controller start critical params: ' + str(self.ISYcriticalParams))
+            #LOGGER.debug('Controller start params: ' + str(self.ISYparams))
+            #LOGGER.debug('Controller start critical params: ' + str(self.ISYcriticalParams))
             
             for key in self.ISYparams:
                 info = self.ISYparams[key]
                 if info != {}:
                     value = self.TPW.getISYvalue(key, self.id)
-                    LOGGER.debug('driver: ' + str(key)+ ' value:' + str(value) + ' uom:' + str(info['uom']) )
+                    #LOGGER.debug('driver: ' + str(key)+ ' value:' + str(value) + ' uom:' + str(info['uom']) )
                     if not(PG_CLOUD_ONLY):
                         self.drivers.append({'driver':key, 'value':value, 'uom':info['uom'] })
                 

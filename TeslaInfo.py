@@ -418,7 +418,7 @@ class tesla_info:
 
             if level == 'critical':
                 if not(self.TPWlocalAccess):
-                    LOGGER.debug('pollSystemData - critical')
+                    #LOGGER.debug('pollSystemData - critical')
                     self.TPWcloud.teslaUpdateCloudData('critical')
                 else:
                     if not(self.LocalConnection):
@@ -436,7 +436,7 @@ class tesla_info:
 
             if level == 'all':
                 if self.TPWcloudAccess:
-                    LOGGER.debug('pollSystemData - all')
+                    #LOGGER.debug('pollSystemData - all')
                     self.TPWcloud.teslaUpdateCloudData('all')
                     self.TPWcloud.teslaCalculateDaysTotals()
 

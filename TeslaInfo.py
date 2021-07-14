@@ -79,9 +79,9 @@ class tesla_info:
                     self.solarInstalled = True
                     LOGGER.debug('Solar detected')
 
-        LOGGER.debug('TPWcloudAccess :' + str(self.TPWcloudAccess))
-        self.TPWcloud = TeslaCloudAPI(self.cloudEmail, self.cloudPassword)
         if self.TPWcloudAccess:
+            LOGGER.debug('TPWcloudAccess :' + str(self.TPWcloudAccess))
+            self.TPWcloud = TeslaCloudAPI(self.cloudEmail, self.cloudPassword)
             if not(self.TPWcloud.teslaCloudConnect(self.cloudEmail, self.cloudPassword )):         
                 LOGGER.debug('Error connecting to Tesla Cloud - check email and password')
                 self.TPWcloudAccess = False

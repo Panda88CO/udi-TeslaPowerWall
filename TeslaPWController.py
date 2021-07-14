@@ -191,6 +191,17 @@ class TeslaPWController(polyinterface.Controller):
                 self.stop()
 
         #LOGGER.info('Connecting to Tesla Power Wall')
+        # Ensure cloud will not be accesses even if keywords are defined
+        if not(self.cloudAccess):
+            self.cloudUserEmail = None
+            self.cloudUserPassword = None
+
+        # Ensure local will not be accesses even if keywords are defined
+        if not(self.localAccess):
+            self.LocalUserEmail= None
+            self.LocalUserPassword = None
+            self.IPAddress = None
+
         try:
     
             if self.access == 'BOTH':

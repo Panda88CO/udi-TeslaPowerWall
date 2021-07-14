@@ -625,8 +625,11 @@ class TeslaCloudAPI():
         r = requests.post('https://auth.tesla.com/oauth2/v3/token', data=data)
         S = json.loads(r.text)
         LOGGER.debug('Oauth 3: ' + str(S))
-        self.Rtoken = S['refresh_token']
-        LOGGER.debug('Oauth 3a: Rtoken' + str(self.Rtoken) )
+        if 'refresh_token' in S:
+            self.Rtoken = S['refresh_token']
+        else:
+            self.Rtoken = None
+            LOGGER.debug('Oauth 3a: No Rtoken' )
         data = {}
         data['grant_type'] = 'urn:ietf:params:oauth:grant-type:jwt-bearer'
         data['client_id']=self.CLIENT_ID

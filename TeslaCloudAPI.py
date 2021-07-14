@@ -606,16 +606,16 @@ class TeslaCloudAPI():
         data['login_hint']=email
 
         r = requests.get('https://auth.tesla.com/oauth2/v3/authorize', data)
-        LOGGER.debug('Oauth 11: ' + r.text)
+        LOGGER.debug('Oauth 11: ' + str(r.cookies))
         cookies = r.cookies
         data = self.html_parse(data,r.text)
         data['identity'] = email
         data['credential'] = pwd
 
         r = requests.post('https://auth.tesla.com/oauth2/v3/authorize', data=data, cookies=cookies, allow_redirects=False)
-        LOGGER.debug('Oauth 2: ' +r.text)
-        code = self.myparse2(r.text,'code=')
 
+        code = self.myparse2(r.text,'code=')
+        LOGGER.debug('Oauth 2: ' +str(code))
         data = {}
         data['grant_type'] = 'authorization_code'
         data['client_id'] = 'ownerapi'
@@ -624,7 +624,7 @@ class TeslaCloudAPI():
         data['redirect_uri'] = 'https://auth.tesla.com/void/callback'        
         r = requests.post('https://auth.tesla.com/oauth2/v3/token', data=data)
         S = json.loads(r.text)
-        LOGGER.debug('Oauth 3: ' + r.text)
+        LOGGER.debug('Oauth 3: ' + str(S))
         self.Rtoken = S['refresh_token']
         LOGGER.debug('Oauth 3a: Rtoken' + str(self.Rtoken) )
         data = {}
@@ -636,7 +636,7 @@ class TeslaCloudAPI():
                 s.auth = OAuth2BearerToken(S['access_token'])
                 r = s.post(self.TESLA_URL + '/oauth/token',data)
                 S = json.loads(r.text)
-                LOGGER.debug('Oauth 4: ' + r.text)
+                LOGGER.debug('Oauth 4: ' + str(S))
             except  Exception as e:
                 LOGGER.debug('Exception __tesla_connect: ' + str(e))
                 pass

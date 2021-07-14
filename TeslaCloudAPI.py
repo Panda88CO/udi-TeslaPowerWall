@@ -606,7 +606,7 @@ class TeslaCloudAPI():
         data['login_hint']=email
 
         r = requests.get('https://auth.tesla.com/oauth2/v3/authorize', data)
-        LOGGER.debug('Oauth 11: ' + str(r.cookies))
+        LOGGER.debug('Oauth 1: ' + str(r.cookies))
         cookies = r.cookies
         data = self.html_parse(data,r.text)
         data['identity'] = email

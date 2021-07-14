@@ -40,15 +40,15 @@ class TeslaPWController(polyinterface.Controller):
             LOGGER.info('IP address not set')
             self.addCustomParam({'IP_ADDRESS': '192.168.1.100'})
 
-        self.LocalUserEmail = self.getCustomParam('LOCAL USER EMAIL)')
+        self.LocalUserEmail = self.getCustomParam('LOCAL_USER_EMAIL)')
         if self.LocalUserEmail is None:
             self.addNotice('Please Set Tesla Power Wall (local) login email (LOCAL_USER_EMAIL) - E.g. nobody@email.com')
             LOGGER.info('check_params: local user email not specified')
             self.addCustomParam({'LOCAL_USER_EMAIL': 'nobody@email.com'})
 
-        self.LocalUserPassword= self.getCustomParam('USER_PASSWORD')
+        self.LocalUserPassword= self.getCustomParam('LOCAL_USER_PASSWORD')
         if self.LocalUserPassword is None:
-            self.addNotice('Please Set Tesla Power Wall (local) password (USER_PASSWORD) - E.g. XXXXXXXX')
+            self.addNotice('Please Set Tesla Power Wall (local) password (LOCAL_USER_PASSWORD) - E.g. XXXXXXXX')
             LOGGER.info('check_params: local user password not specified')
             self.addCustomParam({'LOCAL_USER_PASSWORD': 'XXXXXXXX'})
 
@@ -84,15 +84,15 @@ class TeslaPWController(polyinterface.Controller):
     def defineCloudInputParams(self):
         LOGGER.debug('defineCloudInputParams')        
         self.addNotice('Input email and password used to log in to Tesla power wall website (www.tesla.com)')
-        self.CloudUserEmail = self.getCustomParam('CLOUD USER EMAIL)')
+        self.CloudUserEmail = self.getCustomParam('CLOUD_USER_EMAIL)')
         if self.CloudUserEmail is None:
             self.addNotice('Please Set Tesla Power Wall Cloud login email (CLOUD_USER_EMAIL) - E.g. nobody@email.com')
             LOGGER.debug('check_params: cloud user email not specified')
             self.addCustomParam({'CLOUD_USER_EMAIL': 'nobody@email.com'})
 
-        self.CloudUserPassword = self.getCustomParam('CLOUD USER PASSWORD')
+        self.CloudUserPassword = self.getCustomParam('CLOUD_USER_PASSWORD')
         if self.CloudUserPassword is None:
-            self.addNotice('Please Set Tesla Power Wall Cloud password (_CLOUD_USER_PASSWORD) - E.g. XXXXXXXX')
+            self.addNotice('Please Set Tesla Power Wall Cloud password (CLOUD_USER_PASSWORD) - E.g. XXXXXXXX')
             LOGGER.debug('check_params: cloud user password not specified')
             self.addCustomParam({'CLOUD_USER_PASSWORD': 'XXXXXXXX'})
         self.addNotice('Please restart Node server after setting the parameters')
@@ -141,16 +141,16 @@ class TeslaPWController(polyinterface.Controller):
 
                 self.localUserEmail = self.getCustomParam('LOCAL_USER_EMAIL')
                 if self.localUserEmail == None:
-                    LOGGER.info('No Local USER_EMAIL retrieved:')
+                    LOGGER.info('No LOCAL_USER_EMAIL retrieved:')
                     self.localAccess = False
                 else:
-                    LOGGER.info('Local USER_EMAIL retrieved: '+ self.localUserEmail)
+                    LOGGER.info('OCAL_USER_EMAIL retrieved: '+ self.localUserEmail)
                 self.localUserPassword =self.getCustomParam('LOCAL_USER_PASSWORD')
                 if self.localUserPassword == None:
-                    LOGGER.info('No USER_PASSWORD:')
+                    LOGGER.info('No LOCAL_USER_PASSWORD:')
                     self.LocalAccess = False
                 else:
-                    LOGGER.debug('LOCAL USER_PASSWORD retrieved: XXXXXXXX')
+                    LOGGER.debug('LOCAL_USER_PASSWORD retrieved: XXXXXXXX')
                 
                 if not(self.localAccess):
                     self.defineLocalInputParams()                              
@@ -158,13 +158,13 @@ class TeslaPWController(polyinterface.Controller):
                 self.cloudAccess= True
                 self.cloudUserEmail = self.getCustomParam('CLOUD_USER_EMAIL')
                 if self.cloudUserEmail == None:
-                    LOGGER.info('No cloud USER_EMAIL retrieved:')
+                    LOGGER.info('No CLOUD_USER_EMAIL retrieved:')
                     self.cloudAccess = False
                 else:
-                    LOGGER.debug('Cloud USER_EMAIL retrieved: '+ self.cloudUserEmail)
+                    LOGGER.debug('CLOUD_USER_EMAIL retrieved: '+ self.cloudUserEmail)
                 self.cloudUserPassword =self.getCustomParam('CLOUD_USER_PASSWORD')
                 if self.cloudUserPassword == None:
-                    LOGGER.info('No cloud USER_PASSWORD:')
+                    LOGGER.info('No CLOUD_USER_PASSWORD:')
                     self.cloudAccess = False
                 else:
                     LOGGER.debug('CLOUD_USER_PASSWORD retrieved: XXXXXXXX')

@@ -57,16 +57,7 @@ class tesla_info:
         if self.TPWlocalAccess:
             LOGGER.debug('Local access enabled')
             if self.localLogin(IPaddress):
-                '''
-                self.TPWlocal = Powerwall(IPaddress)
-                self.TPWlocal.login(self.localPassword, self.localEmail)
-                if not(self.TPWlocal.is_authenticated()):            
-                    LOGGER.error('Error Logging into Tesla Power Wall') 
-                    self.LocalConnection = False
-                    self.TPWlocalAccess = False 
-                else:
-                    self.LocalConnection=True
-                '''
+
 
                 self.metersDayStart = self.TPWlocal.get_meters()
                 generator  = self.TPWlocal._api.get('generators')

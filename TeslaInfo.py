@@ -6,7 +6,6 @@ try:
     import polyinterface
 except ImportError:
     import pgc_interface as polyinterface
-
     PG_CLOUD_ONLY = True
 
 import requests
@@ -36,12 +35,12 @@ class tesla_info:
 
         self.OPERATING_MODES = ["backup", "self_consumption", "autonomous"]
 
-        if self.cloudEmail == None or self.cloudPassword == None:
+        if self.cloudEmail == None or self.cloudEmail == '' or  self.cloudPassword == None or self.cloudPassword == '' :
             self.TPWcloudAccess = False
         else:
             self.TPWcloudAccess=True
 
-        if self.IPAddress == None:
+        if self.IPAddress == None or  self.IPAddress = '' :
             self.TPWlocalAccess = False
         else:
             self.TPWlocalAccess= True
@@ -59,8 +58,7 @@ class tesla_info:
         if self.TPWlocalAccess:
             LOGGER.debug('Local access enabled')
             if self.localLogin(IPaddress):
-
-
+                
                 self.metersDayStart = self.TPWlocal.get_meters()
                 generator  = self.TPWlocal._api.get('generators')
                 if not(generator['generators']):
@@ -411,10 +409,12 @@ class tesla_info:
 
             if level == 'critical':
                 if self.TPWcloudAccess:
-                    #LOGGER.debug('pollSystemData - critical')
+                    LOGGER.debug('pollSystemData - CLOUD - critical')
                     self.TPWcloud.teslaUpdateCloudData('critical')
                 if self.TPWlocalAccess:
+                    LOGGER.debug('pollSystemData - local - local connection = ' + str(self.LocalConnection))
                     if not(self.LocalConnection):
+
                         if self.localLogin(self.IPAddress):
                             self.LocalConnection=True
                             self.status = self.TPWlocal.get_sitemaster() 

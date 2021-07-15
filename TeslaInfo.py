@@ -34,6 +34,8 @@ class tesla_info:
         self.controllerID = ISY_Id
         self.controllerName = ISYname
 
+        self.OPERATING_MODES = ["backup", "self_consumption", "autonomous"]
+
         if self.cloudEmail == None or self.cloudPassword == None:
             self.TPWcloudAccess = False
         else:
@@ -161,7 +163,7 @@ class tesla_info:
 
         self.ISYoperationEnum = self.operationCloudEnum
 
-        ModeList = self.TPWcloud.supportedTouModes()
+        ModeList = self.OPERATING_MODES
         self.touCloudEnum = {}
         self.ISYtouEnum = {}
         for i in range(0,len(ModeList)):

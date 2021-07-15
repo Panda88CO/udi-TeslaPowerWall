@@ -414,7 +414,6 @@ class tesla_info:
                 if self.TPWlocalAccess:
                     LOGGER.debug('pollSystemData - local - local connection = ' + str(self.LocalConnection))
                     if not(self.LocalConnection):
-
                         if self.localLogin(self.IPAddress):
                             self.LocalConnection=True
                             self.status = self.TPWlocal.get_sitemaster() 
@@ -426,6 +425,7 @@ class tesla_info:
                             LOGGER.debug('No connection to Local Tesla Power Wall')
                             self.LocalConnection=False
                             return(False)
+                LOGGER.debug('Exit poll SystemData Local')
 
             if level == 'all':
                 if self.TPWcloudAccess:

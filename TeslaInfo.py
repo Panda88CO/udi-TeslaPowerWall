@@ -419,8 +419,8 @@ class tesla_info:
                             self.LocalConnection=True
                             self.status = self.TPWlocal.get_sitemaster() 
                             self.meters = self.TPWlocal.get_meters()
-                            if self.getTPW_ConnectedTesla():
-                                self.TPWcloud.teslaUpdateCloudData('critical')
+                            #if self.getTPW_ConnectedTesla() and self.TPWcloudAccess:
+                            #    self.TPWcloud.teslaUpdateCloudData('critical')
                             return(True)
                         else:
                             LOGGER.debug('No connection to Local Tesla Power Wall')

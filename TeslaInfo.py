@@ -410,10 +410,10 @@ class tesla_info:
 
 
             if level == 'critical':
-                if not(self.TPWlocalAccess):
+                if self.TPWcloudAccess:
                     #LOGGER.debug('pollSystemData - critical')
                     self.TPWcloud.teslaUpdateCloudData('critical')
-                else:
+                if self.TPWlocalAccess:
                     if not(self.LocalConnection):
                         if self.localLogin(self.IPAddress):
                             self.LocalConnection=True

@@ -428,11 +428,6 @@ class tesla_info:
                 LOGGER.debug('Exit poll SystemData Local')
 
             if level == 'all':
-                if self.TPWcloudAccess:
-                    #LOGGER.debug('pollSystemData - all')
-                    self.TPWcloud.teslaUpdateCloudData('all')
-                    self.TPWcloud.teslaCalculateDaysTotals()
-
                 if self.TPWlocalAccess:
                     if not(self.LocalConnection):
                         LOGGER.debug('No local connection - tying to re-login')
@@ -463,19 +458,24 @@ class tesla_info:
                         LOGGER.debug('No connection to Local Tesla Power Wall')
                         self.LocalConnection=False
                         return(False)
-            else:
-                self.daysTotalSolar = self.TPWcloud.teslaExtractDaysSolar()
-                self.daysTotalConsumption = self.TPWcloud.teslaExtractDaysConsumption()
-                self.daysTotalGeneraton = self.TPWcloud.teslaExtractDaysGeneration()
-                self.daysTotalBattery = self.TPWcloud.teslaExtractDaysBattery()
-                self.daysTotalGenerator = self.TPWcloud.teslaExtractDaysGeneratorUse()
-                self.daysTotalGridServices = self.TPWcloud.teslaExtractDaysGridServicesUse()
-                self.yesterdayTotalSolar = self.TPWcloud.teslaExtractYesteraySolar()
-                self.yesterdayTotalConsumption = self.TPWcloud.teslaExtractYesterdayConsumption()
-                self.yesterdayTotalGeneration  = self.TPWcloud.teslaExtractYesterdayGeneraton()
-                self.yesterdayTotalBattery =  self.TPWcloud.teslaExtractYesterdayBattery() 
-                self.yesterdayTotalGridServices = self.TPWcloud.teslaExtractYesterdayGridServiceUse()
-                self.yesterdayTotalGenerator = self.TPWcloud.teslaExtractYesterdayGeneratorUse()            
+
+                if self.TPWcloudAccess:
+                    #LOGGER.debug('pollSystemData - all')
+                    self.TPWcloud.teslaUpdateCloudData('all')
+                    self.TPWcloud.teslaCalculateDaysTotals()
+                    self.daysTotalSolar = self.TPWcloud.teslaExtractDaysSolar()
+                    self.daysTotalConsumption = self.TPWcloud.teslaExtractDaysConsumption()
+                    self.daysTotalGeneraton = self.TPWcloud.teslaExtractDaysGeneration()
+                    self.daysTotalBattery = self.TPWcloud.teslaExtractDaysBattery()
+                    self.daysTotalGenerator = self.TPWcloud.teslaExtractDaysGeneratorUse()
+                    self.daysTotalGridServices = self.TPWcloud.teslaExtractDaysGridServicesUse()
+                    self.yesterdayTotalSolar = self.TPWcloud.teslaExtractYesteraySolar()
+                    self.yesterdayTotalConsumption = self.TPWcloud.teslaExtractYesterdayConsumption()
+                    self.yesterdayTotalGeneration  = self.TPWcloud.teslaExtractYesterdayGeneraton()
+                    self.yesterdayTotalBattery =  self.TPWcloud.teslaExtractYesterdayBattery() 
+                    self.yesterdayTotalGridServices = self.TPWcloud.teslaExtractYesterdayGridServiceUse()
+                    self.yesterdayTotalGenerator = self.TPWcloud.teslaExtractYesterdayGeneratorUse()            
+
             return(True)
 
         except Exception as e:

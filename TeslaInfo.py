@@ -40,7 +40,7 @@ class tesla_info:
         else:
             self.TPWcloudAccess=True
 
-        if self.IPAddress == None or  self.IPAddress = '' :
+        if self.IPAddress == None or  self.IPAddress == '' :
             self.TPWlocalAccess = False
         else:
             self.TPWlocalAccess= True

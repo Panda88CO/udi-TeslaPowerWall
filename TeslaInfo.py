@@ -425,7 +425,7 @@ class tesla_info:
                             LOGGER.debug('No connection to Local Tesla Power Wall')
                             self.LocalConnection=False
                             return(False)
-                LOGGER.debug('Exit poll SystemData Local')
+                #LOGGER.debug('Exit poll SystemData Local')
 
             if level == 'all':
                 if self.TPWlocalAccess:

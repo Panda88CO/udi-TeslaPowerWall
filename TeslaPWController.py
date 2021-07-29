@@ -31,10 +31,232 @@ class TeslaPWController(polyinterface.Controller):
         self.nodeDefineDone = False
         self.TPW = None
 
+    def start(self):
+        self.removeNoticesAll()
+        self.addNotice('Check CONFIG to make sure all relevant paraeters are set')
+        self.ISYparams = self.saveCustomParams()
+        LOGGER.debug(self.ISYparams)
+        self.addCustomParam({'ACCESS':'CLOUD'})
+        self.addCustomParam({'LOGFILE':'DISABLED'})
+        self.ISYparams = self.saveCustomParams()
+        LOGGER.debug(self.ISYparams)
+        
+        self.captcha = ''
+
+
+
+        self.addCustomParam({'CAPTCHA': self.captcha})
+        self.logFile = self.getCustomParam('LOGFILE')
+        self.access = self.getCustomParam('ACCESS') 
+
+        self.localUserEmail = self.getCustomParam('LOCAL_USER_EMAIL')
+        self.localUserPassword =self.getCustomParam('LOCAL_USER_PASSWORD')
+        self.IPAddress = self.getCustomParam('IP_ADDRESS')
+
+        self.captchaMethod = self.getCustomParams('CAPTCHA_METHOD')
+        self.captchaAPIkey = self.getCustomParams('CAPTCHA_APIKEY')
+
+        self.cloudUserEmail = self.getCustomParam('CLOUD_USER_EMAIL')
+        self.cloudUserPassword =self.getCustomParam('CLOUD_USER_PASSWORD')
+
+ 
+        if PG_CLOUD_ONLY:
+
+            self.cloudAccess = True
+            self.localAccess = False
+            self.logFile = False
+            self.access = 'CLOUD'
+            self.addCustomParam({'ACCESS':'CLOUD'})
+            self.addCustomParam({'LOGFILE':'DISABLED'})
+            if self.cloudUserEmail == None:
+                self.addCustomParam({'CLOUD_USER_EMAIL': 'me@myemail.com'})
+            if self.cloudUserPassword == None:
+                self.addCustomParam({'CLOUD_USER_PASSWORD': 'XXXXXXXX'})
+            if self.captchaMethod == None:
+                self.addCustomParam({'CAPTCHA_METHOD': 'EMAIL/AUTO'})
+            if self.captchaAPIkey == None:
+                self.addCustomParam({'CAPTCHA_APIKEY': 'api key to enable AUTO captcha solver'})
+            if self.captcha != '' and self.captcha != None:
+                self.addCustomParam({'CAPTCHA': 'captcha received in email'})
+        elif self.access == None:
+            self.addCustomParam({'ACCESS': 'LOCAL, CLOUD, BOTH'})
+
+
+
+
+    def start1(self):
+        self.removeNoticesAll()
+        self.access = ''
+        #LOGGER.info('Start Tesla Power Wall Main New')
+        self.localAccess= False # Assume no local access initially
+        self.cloudAccess= False # Assume no cloud access initially
+        if not(PG_CLOUD_ONLY):
+            self.localAccess = True # Assume local access initially
+            self.cloudAccess = True # Assume cloud access initially
+            self.logFileParam = self.getCustomParam('LOGFILE')
+
+            if self.logFileParam == None: 
+                LOGGER.info('LOGFILE type not retrieved - ENABLED, DISABLED' )
+                self.defineAccessInputParam()
+                self.logFile = False
+            else:
+                param = str(self.logFileParam).upper()
+                if param == 'ENABLED' or param == 'ENABLE':
+                    self.logFile = True
+                    LOGGER.info('LogFile enabled @ ./dailyData')
+                else:
+                    self.logFile = False                    
+                    LOGGER.info('LogFile disabled')
+            
+            self.access = self.getCustomParam('ACCESS') 
+            if self.access == None:
+                LOGGER.info('Access type not retrieved - LOCAL, CLOUD, BOTH' )
+                self.defineAccessInputParam()
+                self.localAccess = False
+                self.stop()
+            
+            LOGGER.debug(self.access)
+            if self.access.upper() == 'LOCAL' or self.access.upper() == 'BOTH':
+                self.localAccess = True
+                self.IPAddress = self.getCustomParam('IP_ADDRESS')
+                if self.IPAddress == None:
+                    LOGGER.info('No IPaddress specified:' )
+                    self.localAccess = False
+                else:
+                    LOGGER.debug('IPaddress retrieved: ' + self.IPAddress)
+
+                self.localUserEmail = self.getCustomParam('LOCAL_USER_EMAIL')
+                if self.localUserEmail == None:
+                    LOGGER.info('No LOCAL_USER_EMAIL retrieved:')
+                    self.localAccess = False
+                else:
+                    LOGGER.info('OCAL_USER_EMAIL retrieved: '+ self.localUserEmail)
+                self.localUserPassword =self.getCustomParam('LOCAL_USER_PASSWORD')
+                if self.localUserPassword == None:
+                    LOGGER.info('No LOCAL_USER_PASSWORD:')
+                    self.LocalAccess = False
+                else:
+                    LOGGER.debug('LOCAL_USER_PASSWORD retrieved: XXXXXXXX')
+                
+                if not(self.localAccess):
+                    self.defineLocalInputParams()                              
+            if self.access.upper() == 'CLOUD' or self.access.upper() == 'BOTH':
+                self.cloudAccess= True
+                self.captchaMethod = self.getCustomParams('CAPTCHA_METHOD')
+                if self.captchaMethod == None:
+                    self.addNotice('Please select captcha sover method - email or automatic (requires Key)')
+                    LOGGER.debug('check_params: cloud user password not specified')
+                    self.addCustomParam({'CLOUD_USER_PASSWORD': 'XXXXXXXX'})
+                self.cloudUserEmail = self.getCustomParam('CLOUD_USER_EMAIL')
+                if self.cloudUserEmail == None:
+                    LOGGER.info('No CLOUD_USER_EMAIL retrieved:')
+                    self.cloudAccess = False
+                else:
+                    LOGGER.debug('CLOUD_USER_EMAIL retrieved: '+ self.cloudUserEmail)
+                self.cloudUserPassword =self.getCustomParam('CLOUD_USER_PASSWORD')
+                if self.cloudUserPassword == None:
+                    LOGGER.info('No CLOUD_USER_PASSWORD:')
+                    self.cloudAccess = False
+                else:
+                    LOGGER.debug('CLOUD_USER_PASSWORD retrieved: XXXXXXXX')
+                if not(self.cloudAccess):
+                    self.defineCloudInputParams()
+        else:
+            self.access = 'CLOUD'
+            self.cloudAccess = True
+            self.localAccess = False
+            self.logFile = False
+            self.cloudUserEmail = self.getCustomParam('CLOUD_USER_EMAIL')
+            if self.cloudUserEmail == None:
+                LOGGER.info('No cloud USER_EMAIL retrieved:')
+                self.addCustomParam({'CLOUD_USER_EMAIL': 'nobody@email.com'})
+            else:
+                LOGGER.info('Cloud USER_EMAIL retrieved: '+ self.cloudUserEmail)
+            self.cloudUserPassword =self.getCustomParam('CLOUD_USER_PASSWORD')
+            if self.cloudUserPassword == None:
+                LOGGER.info('No cloud USER_PASSWORD:')
+                self.addCustomParam({'CLOUD_USER_PASSWORD': 'XXXXXXXX'})
+            else:
+                LOGGER.debug('CLOUD_USER_PASSWORD retrieved: XXXXXXXX')
+        if not(self.cloudAccess) and not(self.localAccess):
+                self.stop()
+
+        #LOGGER.info('Connecting to Tesla Power Wall')
+        # Ensure cloud will not be accessed even if keywords are defined
+        if not(self.cloudAccess):
+            self.cloudUserEmail = None
+            self.cloudUserPassword = None
+
+        # Ensure local will not be accesses even if keywords are defined
+        if not(self.localAccess):
+            self.LocalUserEmail= None
+            self.LocalUserPassword = None
+            self.IPAddress = None
+
+        try:
+    
+            if self.access == 'BOTH':
+                LOGGER.info('BOTH selected')
+                #self.addCustomParam({'CAPTCHA': ''})
+                #self.addNotice("Check cloud email for Captcha image - then input captcha string")
+
+                self.TPW = tesla_info(self.cloudUserEmail, self.cloudUserPassword, self.name, self.id , self.localUserEmail, self.localUserPassword, self.IPAddress )
+            elif self.access == 'CLOUD':
+                LOGGER.info('CLOUD selected')          
+                self.TPW = tesla_info(self.cloudUserEmail, self.cloudUserPassword, self.name, self.id ,)
+            else:  # Local only 
+                LOGGER.info('LOCAL selected')
+                self.TPW = tesla_info(None,None, self.name, self.id , self.localUserEmail, self.localUserPassword, self.IPAddress )
+            #self.TPW.createISYsetup()
+            LOGGER.debug ('Install Profile')    
+
+            self.TPW.pollSystemData('all')          
+            self.poly.installprofile()
+            if self.logFile:
+                self.TPW.createLogFile(self.logFile)
+            self.ISYparams = self.TPW.supportedParamters(self.id)
+            self.ISYcriticalParams = self.TPW.criticalParamters(self.id)
+            #LOGGER.debug('Controller start params: ' + str(self.ISYparams))
+            #LOGGER.debug('Controller start critical params: ' + str(self.ISYcriticalParams))
+            
+            for key in self.ISYparams:
+                info = self.ISYparams[key]
+                if info != {}:
+                    value = self.TPW.getISYvalue(key, self.id)
+                    #LOGGER.debug('driver: ' + str(key)+ ' value:' + str(value) + ' uom:' + str(info['uom']) )
+                    if not(PG_CLOUD_ONLY):
+                        self.drivers.append({'driver':key, 'value':value, 'uom':info['uom'] })
+                
+            #if PG_CLOUD_ONLY:
+            #    self.poly.installprofile()            
+
+            LOGGER.info('Creating Setup Node')
+            nodeList = self.TPW.getNodeIdList()
+            LOGGER.debug("controller start" + str(nodeList))
+            for node in nodeList:
+                #LOGGER.debug(node)
+                name = self.TPW.getNodeName(node)
+                self.addNode(teslaPWSetupNode(self, self.address, node, name))
+            
+            #self.heartbeat()
+            
+            self.TPW.pollSystemData('all')
+            self.updateISYdrivers('all')
+            #self.reportDrivers()
+            self.TPW.createLogFile(self.logFile)
+            self.nodeDefineDone = True
+        except Exception as e:
+            LOGGER.debug('Exception Controller start: '+ str(e))
+            LOGGER.info('Did not connect to power wall')
+
+            self.stop()
+
+
+
     def defineLocalInputParams(self):
         LOGGER.debug('defineLocalInputParams')
         self.addNotice('Input IP address, email and password used to log in to local power wall - 192.168.x.x')  
-        self.IPAddress = self.getCustomParam('LOCAL IP_ADDRESS - Leave ')
+        self.IPAddress = self.getCustomParam('IP_ADDRESS')
         if self.IPAddress is None:
             self.addNotice('Please Set IP address of Tesla Power Wall system (IP_ADDRESS) - E.g. 192.168.1.2') 
             LOGGER.info('IP address not set')
@@ -97,165 +319,6 @@ class TeslaPWController(polyinterface.Controller):
             self.addCustomParam({'CLOUD_USER_PASSWORD': 'XXXXXXXX'})
         self.addNotice('Please restart Node server after setting the parameters')
 
-
-    def start(self):
-        self.removeNoticesAll()
-        self.access = ''
-        #LOGGER.info('Start Tesla Power Wall Main New')
-        self.localAccess= False # Assume no local access initially
-        self.cloudAccess= False # Assume no cloud access initially
-        if not(PG_CLOUD_ONLY):
-            self.localAccess = True # Assume local access initially
-            self.cloudAccess = True # Assume cloud access initially
-            self.logFileParam = self.getCustomParam('LOGFILE')
-
-            if self.logFileParam == None: 
-                LOGGER.info('LOGFILE type not retrieved - ENABLED, DISABLED' )
-                self.defineAccessInputParam()
-                self.logFile = False
-            else:
-                param = str(self.logFileParam).upper()
-                if param == 'ENABLED' or param == 'ENABLE':
-                    self.logFile = True
-                    LOGGER.info('LogFile enabled @ ./dailyData')
-                else:
-                    self.logFile = False                    
-                    LOGGER.info('LogFile disabled')
-            
-            self.access = self.getCustomParam('ACCESS') 
-            if self.access == None:
-                LOGGER.info('Access type not retrieved - LOCAL, CLOUD, BOTH' )
-                self.defineAccessInputParam()
-                self.localAccess = False
-                self.stop()
-            
-            LOGGER.debug(self.access)
-            if self.access.upper() == 'LOCAL' or self.access.upper() == 'BOTH':
-                self.localAccess = True
-                self.IPAddress = self.getCustomParam('IP_ADDRESS')
-                if self.IPAddress == None:
-                    LOGGER.info('No IPaddress specified:' )
-                    self.localAccess = False
-                else:
-                    LOGGER.debug('IPaddress retrieved: ' + self.IPAddress)
-
-                self.localUserEmail = self.getCustomParam('LOCAL_USER_EMAIL')
-                if self.localUserEmail == None:
-                    LOGGER.info('No LOCAL_USER_EMAIL retrieved:')
-                    self.localAccess = False
-                else:
-                    LOGGER.info('OCAL_USER_EMAIL retrieved: '+ self.localUserEmail)
-                self.localUserPassword =self.getCustomParam('LOCAL_USER_PASSWORD')
-                if self.localUserPassword == None:
-                    LOGGER.info('No LOCAL_USER_PASSWORD:')
-                    self.LocalAccess = False
-                else:
-                    LOGGER.debug('LOCAL_USER_PASSWORD retrieved: XXXXXXXX')
-                
-                if not(self.localAccess):
-                    self.defineLocalInputParams()                              
-            if self.access.upper() == 'CLOUD' or self.access.upper() == 'BOTH':
-                self.cloudAccess= True
-                self.cloudUserEmail = self.getCustomParam('CLOUD_USER_EMAIL')
-                if self.cloudUserEmail == None:
-                    LOGGER.info('No CLOUD_USER_EMAIL retrieved:')
-                    self.cloudAccess = False
-                else:
-                    LOGGER.debug('CLOUD_USER_EMAIL retrieved: '+ self.cloudUserEmail)
-                self.cloudUserPassword =self.getCustomParam('CLOUD_USER_PASSWORD')
-                if self.cloudUserPassword == None:
-                    LOGGER.info('No CLOUD_USER_PASSWORD:')
-                    self.cloudAccess = False
-                else:
-                    LOGGER.debug('CLOUD_USER_PASSWORD retrieved: XXXXXXXX')
-                if not(self.cloudAccess):
-                    self.defineCloudInputParams()
-        else:
-            self.access = 'CLOUD'
-            self.cloudAccess = True
-            self.localAccess = False
-            self.logFile = False
-            self.cloudUserEmail = self.getCustomParam('CLOUD_USER_EMAIL')
-            if self.cloudUserEmail == None:
-                LOGGER.info('No cloud USER_EMAIL retrieved:')
-                self.addCustomParam({'CLOUD_USER_EMAIL': 'nobody@email.com'})
-            else:
-                LOGGER.info('Cloud USER_EMAIL retrieved: '+ self.cloudUserEmail)
-            self.cloudUserPassword =self.getCustomParam('CLOUD_USER_PASSWORD')
-            if self.cloudUserPassword == None:
-                LOGGER.info('No cloud USER_PASSWORD:')
-                self.addCustomParam({'CLOUD_USER_PASSWORD': 'XXXXXXXX'})
-            else:
-                LOGGER.debug('CLOUD_USER_PASSWORD retrieved: XXXXXXXX')
-        if not(self.cloudAccess) and not(self.localAccess):
-                self.stop()
-
-        #LOGGER.info('Connecting to Tesla Power Wall')
-        # Ensure cloud will not be accesses even if keywords are defined
-        if not(self.cloudAccess):
-            self.cloudUserEmail = None
-            self.cloudUserPassword = None
-
-        # Ensure local will not be accesses even if keywords are defined
-        if not(self.localAccess):
-            self.LocalUserEmail= None
-            self.LocalUserPassword = None
-            self.IPAddress = None
-
-        try:
-    
-            if self.access == 'BOTH':
-                LOGGER.info('BOTH selected')
-                self.TPW = tesla_info(self.cloudUserEmail, self.cloudUserPassword, self.name, self.id , self.localUserEmail, self.localUserPassword, self.IPAddress )
-            elif self.access == 'CLOUD':
-                LOGGER.info('CLOUD selected')          
-                self.TPW = tesla_info(self.cloudUserEmail, self.cloudUserPassword, self.name, self.id ,)
-            else:  # Local only 
-                LOGGER.info('LOCAL selected')
-                self.TPW = tesla_info(None,None, self.name, self.id , self.localUserEmail, self.localUserPassword, self.IPAddress )
-            #self.TPW.createISYsetup()
-            LOGGER.debug ('Install Profile')    
-
-            self.TPW.pollSystemData('all')          
-            self.poly.installprofile()
-            if self.logFile:
-                self.TPW.createLogFile(self.logFile)
-            self.ISYparams = self.TPW.supportedParamters(self.id)
-            self.ISYcriticalParams = self.TPW.criticalParamters(self.id)
-            #LOGGER.debug('Controller start params: ' + str(self.ISYparams))
-            #LOGGER.debug('Controller start critical params: ' + str(self.ISYcriticalParams))
-            
-            for key in self.ISYparams:
-                info = self.ISYparams[key]
-                if info != {}:
-                    value = self.TPW.getISYvalue(key, self.id)
-                    #LOGGER.debug('driver: ' + str(key)+ ' value:' + str(value) + ' uom:' + str(info['uom']) )
-                    if not(PG_CLOUD_ONLY):
-                        self.drivers.append({'driver':key, 'value':value, 'uom':info['uom'] })
-                
-            #if PG_CLOUD_ONLY:
-            #    self.poly.installprofile()            
-
-            LOGGER.info('Creating Setup Node')
-            nodeList = self.TPW.getNodeIdList()
-            LOGGER.debug("controller start" + str(nodeList))
-            for node in nodeList:
-                #LOGGER.debug(node)
-                name = self.TPW.getNodeName(node)
-                self.addNode(teslaPWSetupNode(self, self.address, node, name))
-            
-            #self.heartbeat()
-            
-            self.TPW.pollSystemData('all')
-            self.updateISYdrivers('all')
-            #self.reportDrivers()
-            self.TPW.createLogFile(self.logFile)
-            self.nodeDefineDone = True
-        except Exception as e:
-            LOGGER.debug('Exception Controller start: '+ str(e))
-            LOGGER.info('Did not connect to power wall')
-
-            self.stop()
 
     def stop(self):
         self.removeNoticesAll()

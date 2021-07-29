@@ -1,3 +1,10 @@
 tesla_powerwall
 requests_oauth2
+time
+svglib
+reportlab
+base64
+smtplib
+ssl
+email
 requests>=2.22.0

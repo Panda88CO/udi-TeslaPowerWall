@@ -5,9 +5,7 @@ from datetime import datetime
 import requests
 
 from requests_oauth2 import OAuth2BearerToken
-#import string
-#import random
-#import captcha
+
 from TPWauth import TPWauth
 
 PG_CLOUD_ONLY = False
@@ -21,7 +19,6 @@ except ImportError:
 LOGGER = polyinterface.LOGGER
 
 class TeslaCloudAPI():
-
     def __init__(self, email, password, captchaMethod):
         self.TESLA_URL = "https://owner-api.teslamotors.com"
         self.captchaAPIkey = ''
@@ -46,6 +43,7 @@ class TeslaCloudAPI():
         self.site_id = ''
         #self.battery_id = ''
         self.teslaAuth = TPWauth(self.email, self.password, self.captchaMethod)
+
 
     def teslaCloudConnect(self, captchacode, captchaAPIkey ):
         self.tokeninfo = self.teslaAuth.tesla_connect(captchacode, captchaAPIkey)
@@ -114,13 +112,98 @@ class TeslaCloudAPI():
                 self.site_status = temp
 
 
+
+
+
+
+
+
+
+
+
+
+    '''
+
+    def teslaConnect(self, captchacode, captchaAPIkey ):
+        self.tokeninfo = self.teslaAuth.tesla_connect(captchacode, captchaAPIkey)
+
+        if self.teslaCloudConnect(self.email, self.password): 
+            self.connectionEstablished = True
+            LOGGER.debug('site_status')
+            self.site_status = self.teslaGetSiteInfo('site_status')
+            LOGGER.debug('site_live')
+            self.site_live = self.teslaGetSiteInfo('site_live')
+            LOGGER.debug('site_info')
+            self.site_info = self.teslaGetSiteInfo('site_info')
+            LOGGER.debug('site_history_day')
+            self.site_history = self.teslaGetSiteInfo('site_history_day')
+            
+            self.daysMeterSummary = self.teslaCalculateDaysTotals()
+            self.touSchedule = self.teslaExtractTouScheduleList()
+        else:
+            LOGGER.error('Error getting cloud data')
+            return(None)
+        #LOGGER.debug(self.site_info)    
+        if 'tou_settings' in self.site_info:
+            if 'optimization_strategy' in self.site_info['tou_settings']:
+                self.touMode = self.site_info['tou_settings']['optimization_strategy']
+            else:
+                self.touMode = None
+            if 'schedule' in self.site_info['tou_settings']:
+                self.touScheduleList =self.site_info['tou_settings']['schedule']
+            else:
+                self.touScheduleList = []
+        else:
+            self.touMode = None
+            self.touScheduleList = []
+            LOGGER.debug('Tou mode not set')
+        #self.battery_status = self.teslaGetBatteryInfo('bat_status') - not used any more 
+        #self.battery_info = self.teslaGetBatteryInfo('bat_info') - not used anymore 
+
+    def teslaUpdateCloudData(self, mode):
+        if mode == 'critical':
+            temp =self.teslaGetSiteInfo('site_live')
+            if temp != None:
+                self.site_live = temp
+        elif mode == 'all':
+            temp= self.teslaGetSiteInfo('site_live')
+            if temp != None:
+                self.site_live = temp
+                
+            temp = self.teslaGetSiteInfo('site_info')
+            if temp != None:
+                self.site_info = temp
+            
+            temp = self.teslaGetSiteInfo('site_history_day')            
+            if temp != None:
+                self.site_history = temp
+        else:
+            temp= self.teslaGetSiteInfo('site_live')
+            if temp != None:
+                self.site_live = temp
+                
+            temp = self.teslaGetSiteInfo('site_info')
+            if temp != None:
+                self.site_info = temp
+            
+            temp = self.teslaGetSiteInfo('site_history_day')            
+            if temp != None:
+                self.site_history = temp
+
+            temp = self.teslaGetSiteInfo('site_status')
+            if temp != None:
+                self.site_status = temp
+    '''
+
     def supportedOperatingModes(self):
         return( self.OPERATING_MODES )
 
     def supportedTouModes(self):
         return(self.TOU_MODES)
 
-    def teslaCloudInfo(self):
+    def teslaCloudConnect(self, email, password):
+        self.email = email
+        self.password = password
         if self.site_id == '':
             try:
                 products = self.teslaGetProduct()
@@ -171,7 +254,6 @@ class TeslaCloudAPI():
                 return(None)
 
 
-
     def teslaSetOperationMode(self, mode):
         #if self.connectionEstablished:
         S = self.__teslaConnect()
@@ -195,6 +277,8 @@ class TeslaCloudAPI():
                 LOGGER.debug('Exception teslaSetOperationMode: ' + str(e))
                 LOGGER.error('Error setting operation mode')
                 return(False)
+
+
 
     def teslaExtractOperationMode(site_info):
         return(site_info['default_real_mode'])
@@ -228,10 +312,8 @@ class TeslaCloudAPI():
                 self.tokeninfo = self.__tesla_connect(self.email, self.password)
                 return(None)
 
-        
     def teslaGetSolar(self):
         return(self.products['components']['solar'])
-
 
     def teslaSetStormMode(self, EnableBool):
         #if self.connectionEstablished:
@@ -252,7 +334,6 @@ class TeslaCloudAPI():
                 LOGGER.debug('Exception teslaSetStormMode: ' + str(e))
                 LOGGER.error('Error setting storm mode')
                 return(False)
-
 
     
     def teslaExtractStormMode(self):
@@ -287,7 +368,6 @@ class TeslaCloudAPI():
                 LOGGER.debug('Exception teslaSetBackoffLEvel: ' + str(e))
                 LOGGER.error('Error setting bacup percent')
                 return(False)
-
 
 
     def teslaExtractBackupPercent(self):
@@ -496,7 +576,7 @@ class TeslaCloudAPI():
         
             return(True)
         except Exception as e:
-            LOGGER.error('Exception teslaCalculateDaysTotal: ' + str(e))
+            LOGGER.debug('Exception teslaCalculateDaysTotal: ' + str(e))
             LOGGER.error(' Error obtaining time data')
 
         
@@ -555,3 +635,4 @@ class TeslaCloudAPI():
             return(1)
         else:
             return(0)
+ 

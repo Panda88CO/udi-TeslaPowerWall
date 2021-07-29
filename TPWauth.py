@@ -18,17 +18,17 @@ except ImportError:
 LOGGER = polyinterface.LOGGER  
     
 class TPWauth:
-    def __init__(self, email, password):
+    def __init__(self, email, password, captchaMethod):
         self.code_verifier = ''.join(random.choices(string.ascii_letters+string.digits, k=86))   
         self.code_challenge = hashlib.sha256(self.code_verifier.encode('utf-8')).hexdigest()
         self.email = email
         self.password = password
-        self.captchaAPIKEY = captcha_APIKEY
+        self.captchaAPIKEY = ''
         self.state_str = 'ThisIsATest' 
         self.cookies = None
         self.data = {}
-        self.captchaMethod = 'AUTO'
-        #self.captchaMethod = 'EMAIL'
+        self.captchaMethod = captchaMethod
+        
         '''
         headers = {
         'User-Agent': 'PowerwallDarwinManager',

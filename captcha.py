@@ -11,6 +11,12 @@ from email.mime.base import MIMEBase
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 
+try:
+    import polyinterface
+except ImportError:
+    import pgc_interface as polyinterface
+    PG_CLOUD_ONLY = True  
+
 # You will need pip install svglib
 
 # It goes to say this work takes effort so please use my referral to support my work

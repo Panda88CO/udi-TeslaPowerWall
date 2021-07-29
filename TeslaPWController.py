@@ -43,7 +43,7 @@ class TeslaPWController(polyinterface.Controller):
         self.captcha = ''
 
 
-        self.removeCustomeParam('CAPTCHA')
+        self.removeCustomParam('CAPTCHA')
         self.addCustomParam({'CAPTCHA': self.captcha})
 
         self.logFile = self.getCustomParam('LOGFILE')

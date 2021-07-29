@@ -34,18 +34,18 @@ class TeslaPWController(polyinterface.Controller):
     def start(self):
         self.removeNoticesAll()
         self.addNotice('Check CONFIG to make sure all relevant paraeters are set')
-        self.ISYparams = self.saveCustomParams()
+        self.custom = self.poly.config['customParams']
+        self.ISYparams = self.custom
         LOGGER.debug(self.ISYparams)
-        self.addCustomParam({'ACCESS':'CLOUD'})
-        self.addCustomParam({'LOGFILE':'DISABLED'})
-        self.ISYparams = self.saveCustomParams()
-        LOGGER.debug(self.ISYparams)
+        #self.ISYparams = self.saveCustomParams()
+        #LOGGER.debug(self.ISYparams)
         
         self.captcha = ''
 
 
-
+        self.removeCustomeParam('CAPTCHA')
         self.addCustomParam({'CAPTCHA': self.captcha})
+
         self.logFile = self.getCustomParam('LOGFILE')
         self.access = self.getCustomParam('ACCESS') 
 

@@ -111,7 +111,7 @@ class TPWauth:
             else:
                 captchaFile = captcha.getCaptcha(self.headers, self.cookies)
                 captchaCode = captcha.solveCaptcha(captchaFile, self.captchaAPIKEY)
-                data['captcha'] =  captchaCode  
+                self.data['captcha'] =  captchaCode  
                 r = requests.post('https://auth.tesla.com/oauth2/v3/authorize', data=self.data, cookies=self.cookies, headers=self.headers, allow_redirects=False)
 
         while r.status_code != 302 and count < 5:

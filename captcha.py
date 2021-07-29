@@ -16,6 +16,7 @@ try:
 except ImportError:
     import pgc_interface as polyinterface
     PG_CLOUD_ONLY = True  
+LOGGER = polyinterface.LOGGER
 
 # You will need pip install svglib
 

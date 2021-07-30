@@ -78,7 +78,7 @@ class TeslaPWController(polyinterface.Controller):
             #determine access method
             while self.access != 'LOCAL' and self.access != 'CLOUD' and self.access != 'BOTH':
                 LOGGER.info('Waiting for ACCESS to be set - current value:' + self.access)           
-                time.
+                time.sleep(10)
                 self.access = self.getCustomParam('ACCESS') 
             #handle local info 
             if self.access == 'LOCAL' or self.access == 'BOTH':

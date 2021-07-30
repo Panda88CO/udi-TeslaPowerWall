@@ -48,7 +48,7 @@ class TeslaCloudAPI():
         self.teslaAuth = TPWauth(self.email, self.password, self.captchaMethod)
 
     def teslaCloudConnect(self, captchacode, captchaAPIkey ):
-        self.tokeninfo = self.teslaAuth.tesla_connect(captchacode, captchaAPIkey)
+        self.tokeninfo = self.teslaAuth.tesla_connect(captchacode, self.captchaMethod, captchaAPIkey)
         return(self.tokeninfo)
 
     def teslaRetrieveCloudData(self):

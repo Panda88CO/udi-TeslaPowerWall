@@ -10,6 +10,7 @@ except ImportError:
 
 #from os import truncate
 import sys
+from datetime import time 
 from  TeslaInfo import tesla_info
 from TeslaPWSetupNode import teslaPWSetupNode
 
@@ -36,7 +37,8 @@ class TeslaPWController(polyinterface.Controller):
         self.addNotice('Check CONFIG to make sure all relevant paraeters are set')
         #self.customParams = self.poly.config['customParams']
         #LOGGER.debug(self.customParams)
-
+        self.cloudAccess = False
+        self.localAccess = False
         
         self.captcha = ''
         if self.getCustomParam('CAPTCHA'):
@@ -53,10 +55,13 @@ class TeslaPWController(polyinterface.Controller):
         self.cloudUserEmail = self.getCustomParam('CLOUD_USER_EMAIL')
         self.cloudUserPassword =self.getCustomParam('CLOUD_USER_PASSWORD')
 
- 
+        if self.captchaMethod == None:
+            self.addCustomParam({'CAPTCHA_METHOD': 'EMAIL/AUTO'})
+        if self.logFileParam == None: 
+            self.addCustomParam({'LOGFILE': 'DISABLED'})
+
         if PG_CLOUD_ONLY:
             self.cloudAccess = True
-            self.localAccess = False
             self.logFile = False
             self.access = 'CLOUD'
             self.addCustomParam({'ACCESS':'CLOUD'})
@@ -65,33 +70,106 @@ class TeslaPWController(polyinterface.Controller):
                 self.addCustomParam({'CLOUD_USER_EMAIL': 'me@myTeslaCloudemail.com'})
             if self.cloudUserPassword == None:
                 self.addCustomParam({'CLOUD_USER_PASSWORD': 'XXXXXXXX'})
-            if self.captchaMethod == None:
-                self.addCustomParam({'CAPTCHA_METHOD': 'EMAIL/AUTO'})
             if self.captchaAPIkey == None:
                 self.addCustomParam({'CAPTCHA_APIKEY': 'api key to enable AUTO captcha solver'})
             if self.captcha != '' and self.captcha != None:
                 self.addCustomParam({'CAPTCHA': 'captcha received in email'})
         else:
-            if self.access == None:
-                self.addCustomParam({'ACCESS': 'LOCAL, CLOUD, BOTH'})
-            if self.cloudUserEmail == None:
-                self.addCustomParam({'CLOUD_USER_EMAIL': 'me@TeslaCloud.com'})
-            if self.cloudUserPassword == None:
-                self.addCustomParam({'CLOUD_USER_PASSWORD': 'XXXXXXXX'})
-            if self.captchaMethod == None:
-                self.addCustomParam({'CAPTCHA_METHOD': 'EMAIL/AUTO'})
+            #determine access method
+            while self.access != 'LOCAL' and self.access != 'CLOUD' and self.access != 'BOTH':
+                LOGGER.info('Waiting for ACCESS to be set - current value:' + self.access)           
+                time.sleep(10)
+                self.access = self.getCustomParam('ACCESS') 
+            #handle local info 
+            if self.access == 'LOCAL' or self.access == 'BOTH':
+                self.localAccess = True
+                while self.localUserEmail == None or self.localUserPassword == None or self.IPAddress == None:
+                    if self.localUserEmail == None:
+                        self.addCustomParam({'LOCAL_USER_EMAIL': 'me@localPowerwall.com'})
+                    if self.localUserPassword == None:
+                        self.addCustomParam({'LOCAL_USER_PASSWORD': 'XXXXXXXX'})
+                    if self.IPAddress == None:
+                        self.addCustomParam({'IP_ADDRESS': '192.168.1.200'})  
+            if self.access == 'CLOUD' or self.access == 'BOTH':
+                self.cloudAccess= True
+                while self.localUserEmail == None or self.localUserPassword == None or self.IPAddress == None:
+                    if self.cloudUserEmail == None:
+                        self.addCustomParam({'CLOUD_USER_EMAIL': 'me@TeslaCloud.com'})
+                    if self.cloudUserPassword == None:
+                        self.addCustomParam({'CLOUD_USER_PASSWORD': 'XXXXXXXX'})    
+
+        while self.captchaMethod != 'EMAIL' and self.captchaMethod != 'AUTO':
+            LOGGER.info('Waiting for CAPTCHA method to be set - current value:' + self.captchaMethod)           
+            time.sleep(10)
+            self.access = self.getCustomParam('CAPTCHA_METHOD') 
+        if self.captchaMethod == 'AUTO':
             if self.captchaAPIkey == None:
                 self.addCustomParam({'CAPTCHA_APIKEY': 'api key to enable AUTO captcha solver'})
-            if self.captcha != '' and self.captcha != None:
-                self.addCustomParam({'CAPTCHA': 'captcha received in email'})
-            if self.localUserEmail == None:
-                self.addCustomParam({'LOCAL_USER_EMAIL': 'me@localPowerwall.com'})
-            if self.localUserPassword == None:
-                self.addCustomParam({'LOCAL_USER_PASSWORD': 'XXXXXXXX'})
-            if self.IPAddress == None:
-                self.addCustomParam({'IP_ADDRESS': '192.168.1.200'})
+            else:
+                self.captcha = ''
+                if self.getCustomParam('CAPTCHA'):
+                    self.removeCustomParam('CAPTCHA')
+                self.addCustomParam({'CAPTCHA': self.captcha})
+
+        try:
+            self.TPW = tesla_info(self.name, self.id , self.access)
+            if self.localAccess:
+                self.TPW.loginLocal(self.localUserEmail, self.localUserPassword, self.IPAddress)
+            if self.cloudAccess and self.captchaMethod == 'AUTO':
+                self.TPW.loginCloud(self.cloudUserEmail, self.cloudUserPassword, self.captchaMethod, self.captchaAPIkey)
+            else:
+                self.TPW.loginCloud(self.cloudUserEmail, self.cloudUserPassword, self.captchaMethod, self.captchaAPIkey)
+                self.captcha = self.getCustomParam('CAPTCHA')
+                while self.captcha == '':
+                    LOGGER.info('Input CAPTA value from received email ')
+                    time.sleep(10)
+                    self.captcha = self.getCustomParam('CAPTCHA')
+                self.TPW.teslaCloudConnect(self.captcha)
+            self.TPW.teslaInitializeData()
+            self.TPW.pollSystemData('all')          
+            self.poly.installprofile()
+            if self.logFile:
+                self.TPW.createLogFile(self.logFile)
+            self.ISYparams = self.TPW.supportedParamters(self.id)
+            self.ISYcriticalParams = self.TPW.criticalParamters(self.id)
+            #LOGGER.debug('Controller start params: ' + str(self.ISYparams))
+            #LOGGER.debug('Controller start critical params: ' + str(self.ISYcriticalParams))
+            
+            for key in self.ISYparams:
+                info = self.ISYparams[key]
+                if info != {}:
+                    value = self.TPW.getISYvalue(key, self.id)
+                    #LOGGER.debug('driver: ' + str(key)+ ' value:' + str(value) + ' uom:' + str(info['uom']) )
+                    if not(PG_CLOUD_ONLY):
+                        self.drivers.append({'driver':key, 'value':value, 'uom':info['uom'] })
+                
+            #if PG_CLOUD_ONLY:
+            #    self.poly.installprofile()            
+
+            LOGGER.info('Creating Setup Node')
+            nodeList = self.TPW.getNodeIdList()
+            LOGGER.debug("controller start" + str(nodeList))
+            for node in nodeList:
+                #LOGGER.debug(node)
+                name = self.TPW.getNodeName(node)
+                self.addNode(teslaPWSetupNode(self, self.address, node, name))
+            
+            #self.heartbeat()
+            
+            self.TPW.pollSystemData('all')
+            self.updateISYdrivers('all')
+            #self.reportDrivers()
+            self.TPW.createLogFile(self.logFile)
+            self.nodeDefineDone = True
+        except Exception as e:
+            LOGGER.debug('Exception Controller start: '+ str(e))
+            LOGGER.info('Did not connect to power wall')
+
+            self.stop()
 
 
+
+    '''
     def start1(self):
         self.removeNoticesAll()
         self.access = ''
@@ -258,7 +336,7 @@ class TeslaPWController(polyinterface.Controller):
             LOGGER.info('Did not connect to power wall')
 
             self.stop()
-
+    '''
 
 
     def defineLocalInputParams(self):

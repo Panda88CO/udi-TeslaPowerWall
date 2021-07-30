@@ -57,7 +57,7 @@ class TeslaPWController(polyinterface.Controller):
 
         if self.captchaMethod == None:
             self.addCustomParam({'CAPTCHA_METHOD': 'EMAIL/AUTO'})
-        if self.logFileParam == None: 
+        if self.logFile == None: 
             self.addCustomParam({'LOGFILE': 'DISABLED'})
 
         if PG_CLOUD_ONLY:

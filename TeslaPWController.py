@@ -98,18 +98,18 @@ class TeslaPWController(polyinterface.Controller):
                     if self.cloudUserPassword == None:
                         self.addCustomParam({'CLOUD_USER_PASSWORD': 'XXXXXXXX'})    
 
-        while self.captchaMethod != 'EMAIL' and self.captchaMethod != 'AUTO':
-            LOGGER.info('Waiting for CAPTCHA method to be set - current value:' + self.captchaMethod)           
-            time.sleep(10)
-            self.access = self.getCustomParam('CAPTCHA_METHOD') 
-        if self.captchaMethod == 'AUTO':
-            if self.captchaAPIkey == None:
-                self.addCustomParam({'CAPTCHA_APIKEY': 'api key to enable AUTO captcha solver'})
-            else:
-                self.captcha = ''
-                if self.getCustomParam('CAPTCHA'):
-                    self.removeCustomParam('CAPTCHA')
-                self.addCustomParam({'CAPTCHA': self.captcha})
+                while self.captchaMethod != 'EMAIL' and self.captchaMethod != 'AUTO':
+                    LOGGER.info('Waiting for CAPTCHA method to be set - current value:' + self.captchaMethod)           
+                    time.sleep(10)
+                    self.access = self.getCustomParam('CAPTCHA_METHOD') 
+                if self.captchaMethod == 'AUTO':
+                    if self.captchaAPIkey == None:
+                        self.addCustomParam({'CAPTCHA_APIKEY': 'api key to enable AUTO captcha solver'})
+                    else:
+                        self.captcha = ''
+                        if self.getCustomParam('CAPTCHA'):
+                            self.removeCustomParam('CAPTCHA')
+                        self.addCustomParam({'CAPTCHA': self.captcha})
 
         try:
             self.TPW = tesla_info(self.name, self.id , self.access)

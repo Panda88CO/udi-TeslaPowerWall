@@ -124,7 +124,7 @@ class TeslaPWController(polyinterface.Controller):
                     LOGGER.info('Input CAPTA value from received email ')
                     time.sleep(10)
                     self.captcha = self.getCustomParam('CAPTCHA')
-                self.TPW.teslaCloudConnect(self.captcha)
+                self.TPW.teslaCloudConnect(self.captcha, '')
             self.TPW.teslaInitializeData()
             self.TPW.pollSystemData('all')          
             self.poly.installprofile()
@@ -336,7 +336,7 @@ class TeslaPWController(polyinterface.Controller):
             LOGGER.info('Did not connect to power wall')
 
             self.stop()
-    '''
+    
 
 
     def defineLocalInputParams(self):
@@ -405,6 +405,7 @@ class TeslaPWController(polyinterface.Controller):
             self.addCustomParam({'CLOUD_USER_PASSWORD': 'XXXXXXXX'})
         self.addNotice('Please restart Node server after setting the parameters')
 
+    '''
 
     def stop(self):
         self.removeNoticesAll()

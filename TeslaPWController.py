@@ -50,8 +50,8 @@ class TeslaPWController(polyinterface.Controller):
         self.localUserEmail = self.getCustomParam('LOCAL_USER_EMAIL')
         self.localUserPassword =self.getCustomParam('LOCAL_USER_PASSWORD')
         self.IPAddress = self.getCustomParam('IP_ADDRESS')
-        self.captchaMethod = self.getCustomParams('CAPTCHA_METHOD')
-        self.captchaAPIkey = self.getCustomParams('CAPTCHA_APIKEY')
+        self.captchaMethod = self.getCustomParam('CAPTCHA_METHOD')
+        self.captchaAPIkey = self.getCustomParam('CAPTCHA_APIKEY')
         self.cloudUserEmail = self.getCustomParam('CLOUD_USER_EMAIL')
         self.cloudUserPassword =self.getCustomParam('CLOUD_USER_PASSWORD')
 

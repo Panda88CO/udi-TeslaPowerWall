@@ -10,7 +10,7 @@ except ImportError:
 
 #from os import truncate
 import sys
-from datetime import time 
+import time 
 from  TeslaInfo import tesla_info
 from TeslaPWSetupNode import teslaPWSetupNode
 
@@ -78,7 +78,7 @@ class TeslaPWController(polyinterface.Controller):
             #determine access method
             while self.access != 'LOCAL' and self.access != 'CLOUD' and self.access != 'BOTH':
                 LOGGER.info('Waiting for ACCESS to be set - current value:' + self.access)           
-                time.sleep(10)
+                time.
                 self.access = self.getCustomParam('ACCESS') 
             #handle local info 
             if self.access == 'LOCAL' or self.access == 'BOTH':

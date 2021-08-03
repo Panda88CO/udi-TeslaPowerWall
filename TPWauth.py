@@ -19,6 +19,8 @@ LOGGER = polyinterface.LOGGER
 MAX_COUNT = 6
 class TPWauth:
     def __init__(self, email, password, captchaMethod):
+        self.CLIENT_ID = "81527cff06843c8634fdc09e8ac0abefb46ac849f38fe1e431c2ef2106796384"
+        self.CLIENT_SECRET = "c7257eb71a564034f9419ee651c7d0e5f7aa6bfbd18bafb5c5c033b093bb2fa3"
         self.code_verifier = ''.join(random.choices(string.ascii_letters+string.digits, k=86))   
         self.code_challenge = hashlib.sha256(self.code_verifier.encode('utf-8')).hexdigest()
         self.email = email

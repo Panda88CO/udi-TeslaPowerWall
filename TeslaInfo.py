@@ -782,11 +782,6 @@ class tesla_info:
         #bat_history
 
 
-
-
-
-
-
     def getTPW_operationMode(self):
         if self.TPWlocalAccess:
             operationVal = self.TPWlocal.get_operation_mode()

@@ -15,8 +15,8 @@ except ImportError:
     import pgc_interface as polyinterface
     PG_CLOUD_ONLY = True  
 
-LOGGER = polyinterface.LOGGER  
-    
+LOGGER = polyinterface.LOGGER 
+MAX_COUNT = 6
 class TPWauth:
     def __init__(self, email, password, captchaMethod):
         self.code_verifier = ''.join(random.choices(string.ascii_letters+string.digits, k=86))   
@@ -103,18 +103,23 @@ class TPWauth:
             captchaCode = captcha.solveCaptcha(self.captchaFile, captchaAPIKey )
         self.data['captcha'] =  captchaCode    
         r = requests.post('https://auth.tesla.com/oauth2/v3/authorize', data=self.data, cookies=self.cookies, headers=self.headers, allow_redirects=False)
-
-        while "Captcha does not match" in r.text:
+        xcount = 1
+        while "Captcha does not match" in r.text and count < MAX_COUNT:
             if self.captchaMethod == 'EMAIL':
                 #LOGGER.debug('Captcha not correct - try to restart node server - captcha = ' + captchaCode)
+                count = count + 1
                 return(None)          
             else:
+                count = count + 1 
                 captchaFile = captcha.getCaptcha(self.headers, self.cookies)
                 captchaCode = captcha.solveCaptcha(captchaFile, self.captchaAPIKEY)
                 self.data['captcha'] =  captchaCode  
                 r = requests.post('https://auth.tesla.com/oauth2/v3/authorize', data=self.data, cookies=self.cookies, headers=self.headers, allow_redirects=False)
+        if count > MAX_COUNT:
+            LOGGER.debug('Maximum number of CAPTCHA solves reached')
+            return(None)
         count = 1
-        while r.status_code != 302 and count < 5:
+        while r.status_code != 302 and count < MAX_COUNT:
             time.sleep(1)
             count = count + 1
             r = requests.post('https://auth.tesla.com/oauth2/v3/authorize', data=self.data, cookies=self.cookies, headers=self.headers, allow_redirects=False)   

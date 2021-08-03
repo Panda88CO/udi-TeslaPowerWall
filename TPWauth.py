@@ -107,12 +107,11 @@ class TPWauth:
         r = requests.post('https://auth.tesla.com/oauth2/v3/authorize', data=self.data, cookies=self.cookies, headers=self.headers, allow_redirects=False)
         count = 1
         while "Captcha does not match" in r.text and count < MAX_COUNT:
+            count = count + 1            
             if self.captchaMethod == 'EMAIL':
-                #LOGGER.debug('Captcha not correct - try to restart node server - captcha = ' + captchaCode)
-                count = count + 1
+                LOGGER.debug('Captcha not correct - try to restart node server - captcha = ' + captchaCode)
                 return(None)          
             else:
-                count = count + 1 
                 captchaFile = captcha.getCaptcha(self.headers, self.cookies)
                 captchaCode = captcha.solveCaptcha(captchaFile, self.captchaAPIKEY)
                 self.data['captcha'] =  captchaCode  

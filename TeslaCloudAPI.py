@@ -27,9 +27,7 @@ class TeslaCloudAPI():
         self.captchaAPIkey = ''
         self.captchaMethod = captchaMethod
 
-
         self.loginData = {}
-        
         
         self.API = "/api/1"
         self.OPERATING_MODES = ["backup", "self_consumption", "autonomous"]

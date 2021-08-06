@@ -4,7 +4,7 @@ import json
 import os 
 
 PG_CLOUD_ONLY = False
-
+'''
 try:
     import polyinterface
 except ImportError:
@@ -12,7 +12,8 @@ except ImportError:
     PG_CLOUD_ONLY = True
 
 LOGGER = polyinterface.LOGGER
-
+'''
+import LOGGER
 class isyHandling:
     def __init__ (self):
         # Note all xxIDs must be lower case without special characters (ISY requirement)

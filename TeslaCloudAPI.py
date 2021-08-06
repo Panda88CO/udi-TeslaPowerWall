@@ -11,7 +11,7 @@ from requests_oauth2 import OAuth2BearerToken
 from TPWauth import TPWauth
 
 PG_CLOUD_ONLY = False
-
+'''
 try:
     import polyinterface
 except ImportError:
@@ -19,7 +19,8 @@ except ImportError:
     PG_CLOUD_ONLY = True
 
 LOGGER = polyinterface.LOGGER
-
+'''
+import LOGGER
 class TeslaCloudAPI():
 
     def __init__(self, email, password, captchaMethod):
@@ -46,6 +47,7 @@ class TeslaCloudAPI():
         self.teslaAuth = TPWauth(self.email, self.password, self.captchaMethod)
 
     def teslaCloudConnect(self, captchacode, captchaAPIkey ):
+        
         self.tokeninfo = self.teslaAuth.tesla_connect(captchacode, self.captchaMethod, captchaAPIkey)
         return(self.tokeninfo)
 

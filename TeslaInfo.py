@@ -9,6 +9,8 @@ except ImportError:
     PG_CLOUD_ONLY = True
 LOGGER = polyinterface.LOGGER
 
+
+
 import requests
 import json
 import os 
@@ -17,6 +19,7 @@ import time
 from tesla_powerwall import Powerwall, GridStatus, OperationMode
 from TeslaCloudAPI import TeslaCloudAPI
 from  ISYprofile import isyHandling
+
 
 
 
@@ -110,6 +113,7 @@ class tesla_info:
             if self.captchaMethod == 'EMAIL':
                 LOGGER.debug('Check email for new captcha -  may not have been correct.')
         else:
+            LOGGER.debug('Logged in - retrieving data')
             self.TPWcloudAccess = True
             self.TPWcloud.teslaCloudInfo()
             self.TPWcloud.teslaRetrieveCloudData()
@@ -351,11 +355,11 @@ class tesla_info:
         
 
     def getISYSendCommands(self, nodeId):
-        #LOGGER.debug('getISYSendCommands :' + str(nodeId))
+        LOGGER.debug('getISYSendCommands :' + str(nodeId))
         self.ISYinfo.getISYSendCommands(nodeId)
     
     def getISYReceiveCommands(self, nodeId,):
-        #LOGGER.debug('getISYReceiveCommands :' + str(nodeId))
+        LOGGER.debug('getISYReceiveCommands :' + str(nodeId))
         self.ISYinfo.getISYReceiveCommands(nodeId)
 
     def supportedParamters (self, nodeId):
@@ -431,7 +435,7 @@ class tesla_info:
                             LOGGER.debug('No connection to Local Tesla Power Wall')
                             self.LocalConnection=False
                             return(False)
-                #LOGGER.debug('Exit poll SystemData Local')
+                LOGGER.debug('Exit poll SystemData Local')
 
             if level == 'all':
                 if self.TPWlocalAccess:
@@ -458,7 +462,7 @@ class tesla_info:
                         else:
                             self.daysTotalGridServices = 0.0 #Does not seem to exist
                             self.daysTotalGenerator = 0.0 #needs to be updated - may not exist
-                        #LOGGER.debug('Local Access - total ')
+                        LOGGER.debug('Local Access - total ')
                         return(True)
                     else:
                         LOGGER.debug('No connection to Local Tesla Power Wall')
@@ -466,7 +470,7 @@ class tesla_info:
                         return(False)
 
                 if self.TPWcloudAccess:
-                    #LOGGER.debug('pollSystemData - all')
+                    LOGGER.debug('pollSystemData - all')
                     self.TPWcloud.teslaUpdateCloudData('all')
                     self.TPWcloud.teslaCalculateDaysTotals()
                     self.daysTotalSolar = self.TPWcloud.teslaExtractDaysSolar()
@@ -492,7 +496,7 @@ class tesla_info:
 
         
     def getISYvalue(self, ISYvar, node):
-        #LOGGER.debug( 'getISYvalue - ' + str(node))
+        LOGGER.debug( 'getISYvalue - ' + str(node))
         if ISYvar in self.ISYmap[node]:
             self.teslaVarName = self.ISYmap[node][ISYvar]['systemVar']
             if self.teslaVarName == self.chargeLevel: 
@@ -578,9 +582,9 @@ class tesla_info:
         return(None)
 
     def getTPW_chargeLevel(self):
-        #LOGGER.debug('\n getTPW_chargeLevel')
-        #LOGGER.debug(self.TPWlocal.get_charge())
-        #LOGGER.debug(self.TPWcloud.teslaExtractChargeLevel())
+        LOGGER.debug('\n getTPW_chargeLevel')
+        LOGGER.debug(self.TPWlocal.get_charge())
+        LOGGER.debug(self.TPWcloud.teslaExtractChargeLevel())
   
         if self.TPWlocalAccess:
             chargeLevel = self.TPWlocal.get_charge()
@@ -590,9 +594,9 @@ class tesla_info:
 
 
     def getTPW_backoffLevel(self):
-        #LOGGER.debug('\n getTPW_backoffLevel')
-        #LOGGER.debug(self.TPWlocal.get_backup_reserve_percentage() )
-        #LOGGER.debug(self.TPWcloud.teslaExtractBackoffLevel())
+        LOGGER.debug('\n getTPW_backoffLevel')
+        LOGGER.debug(self.TPWlocal.get_backup_reserve_percentage() )
+        LOGGER.debug(self.TPWcloud.teslaExtractBackoffLevel())
         if self.TPWlocalAccess:
             backoffLevel=self.TPWlocal.get_backup_reserve_percentage()
         else:
@@ -607,23 +611,23 @@ class tesla_info:
         return(self.TPWcloud.teslaSetBackoffLevel(backupPercent))
 
     def getTPW_gridStatus(self):
-        #LOGGER.debug('\n getTPW_gridStatus')
+        LOGGER.debug('\n getTPW_gridStatus')
         
         if self.TPWlocalAccess:
             statusVal = self.TPWlocal.get_grid_status()
             if statusVal.value in self.gridStatusEnum:
                 key = self.gridStatusEnum[statusVal.value ]
-                #LOGGER.debug(key)
+                LOGGER.debug(key)
         else:
             key = self.TPWcloud.teslaExtractGridStatus()
-        #LOGGER.debug(self.TPWcloud.teslaExtractGridStatus())
+        LOGGER.debug(self.TPWcloud.teslaExtractGridStatus())
         return(self.gridstatus[key])
 
 
     def getTPW_solarSupply(self):
-        #LOGGER.debug('getTPW_solarSupply - ' + str(self.TPWlocalAccess))
+        LOGGER.debug('getTPW_solarSupply - ' + str(self.TPWlocalAccess))
         if self.TPWlocalAccess:
-            #LOGGER.debug(self.meters)
+            LOGGER.debug(self.meters)
             solarPwr = self.meters.solar.instant_power
         else:
             solarPwr = self.TPWcloud.teslaExtractSolarSupply()
@@ -631,9 +635,9 @@ class tesla_info:
         #site_live
 
     def getTPW_batterySupply(self):
-        #LOGGER.debug('\ngetTPW_batterySupply')
-        #LOGGER.debug(self.meters.battery.instant_power)
-        #LOGGER.debug(self.TPWcloud.teslaExtractBatterySupply())
+        LOGGER.debug('\ngetTPW_batterySupply')
+        LOGGER.debug(self.meters.battery.instant_power)
+        LOGGER.debug(self.TPWcloud.teslaExtractBatterySupply())
         #site_live)
         if self.TPWlocalAccess:
             batteryPwr = self.meters.battery.instant_power
@@ -645,9 +649,9 @@ class tesla_info:
 
         #site_live
     def getTPW_gridSupply(self):
-        #LOGGER.debug('\n getTPW_gridSupply')
-        #LOGGER.debug(self.meters.site.instant_power)
-        #LOGGER.debug(self.TPWcloud.teslaExtractGridSupply())
+        LOGGER.debug('\n getTPW_gridSupply')
+        LOGGER.debug(self.meters.site.instant_power)
+        LOGGER.debug(self.TPWcloud.teslaExtractGridSupply())
         #site_live)
         if self.TPWlocalAccess:
             gridPwr = self.meters.site.instant_power
@@ -660,9 +664,9 @@ class tesla_info:
 
         #site_live
     def getTPW_load(self):
-        #LOGGER.debug('\n getTPW_load')
-        #LOGGER.debug(self.meters.load.instant_power)
-        #LOGGER.debug(self.TPWcloud.teslaExtractLoad())
+        LOGGER.debug('\n getTPW_load')
+        LOGGER.debug(self.meters.load.instant_power)
+        LOGGER.debug(self.TPWcloud.teslaExtractLoad())
         #site_live)
         if self.TPWlocalAccess:
             loadPwr = self.meters.load.instant_power
@@ -672,7 +676,7 @@ class tesla_info:
 
 
     def getTPW_daysSolar(self):
-        #LOGGER.debug('\n getTPW_daysSolar')
+        LOGGER.debug('\n getTPW_daysSolar')
         if self.TPWlocalAccess:
             Pwr = self.daysTotalSolar
         else:
@@ -681,7 +685,7 @@ class tesla_info:
         #bat_history
 
     def getTPW_daysConsumption(self):
-        #LOGGER.debug('\n getTPW_daysConsumption')
+        LOGGER.debug('\n getTPW_daysConsumption')
         if self.TPWlocalAccess:
             Pwr = self.daysTotalConsumption
         else:
@@ -690,7 +694,7 @@ class tesla_info:
         #bat_history
 
     def getTPW_daysGeneration(self):  
-        #LOGGER.debug('\n getTPW_daysGeneration')
+        LOGGER.debug('\n getTPW_daysGeneration')
         if self.TPWlocalAccess:
             Pwr = self.daysTotalGeneraton
         else:
@@ -700,7 +704,7 @@ class tesla_info:
 
 
     def getTPW_daysBattery(self):  
-        #LOGGER.debug('\n getTPW_daysBattery')
+        LOGGER.debug('\n getTPW_daysBattery')
         if self.TPWlocalAccess:
             Pwr = self.daysTotalBattery
         else:
@@ -709,7 +713,7 @@ class tesla_info:
         #bat_history
 
     def getTPW_daysGridServicesUse(self):  
-        #LOGGER.debug('\n getTPW_daysGridServicesUse')
+        LOGGER.debug('\n getTPW_daysGridServicesUse')
         if self.TPWlocalAccess:
             Pwr = self.daysTotalGridServices
         else:
@@ -718,7 +722,7 @@ class tesla_info:
         #bat_history
 
     def getTPW_daysGeneratorUse(self):  
-        #LOGGER.debug('\n getTPW_daysGeneratorUse')
+        LOGGER.debug('\n getTPW_daysGeneratorUse')
         if self.TPWlocalAccess:
             Pwr = self.daysTotalGenerator
         else:
@@ -727,7 +731,7 @@ class tesla_info:
         #bat_history
 
     def getTPW_yesterdaySolar(self):
-        #LOGGER.debug('\n getTPW_daysSolar')
+        LOGGER.debug('\n getTPW_daysSolar')
         if self.TPWlocalAccess:
             Pwr = self.yesterdayTotalSolar
         else:
@@ -736,7 +740,7 @@ class tesla_info:
         #bat_history
 
     def getTPW_yesterdayConsumption(self):
-        #LOGGER.debug('\n getTPW_daysConsumption')
+        LOGGER.debug('\n getTPW_daysConsumption')
         if self.TPWlocalAccess:
             Pwr = self.yesterdayTotalConsumption
         else:
@@ -745,7 +749,7 @@ class tesla_info:
         #bat_history
 
     def getTPW_yesterdayGeneration(self):  
-        #LOGGER.debug('\n getTPW_daysGeneration')
+        LOGGER.debug('\n getTPW_daysGeneration')
         if self.TPWlocalAccess:
             Pwr = self.yesterdayTotalGeneration
         else:
@@ -755,7 +759,7 @@ class tesla_info:
 
 
     def getTPW_yesterdayBattery(self):  
-        #LOGGER.debug('\n getTPW_daysBattery')
+        LOGGER.debug('\n getTPW_daysBattery')
         if self.TPWlocalAccess:
             Pwr = self.yesterdayTotalBattery
         else:
@@ -764,7 +768,7 @@ class tesla_info:
         #bat_history
 
     def getTPW_yesterdayGridServicesUse(self):  
-        #LOGGER.debug('\n getTPW_daysGridServicesUse')
+        LOGGER.debug('\n getTPW_daysGridServicesUse')
         if self.TPWlocalAccess:
             Pwr = self.yesterdayTotalGridServices
         else:
@@ -773,7 +777,7 @@ class tesla_info:
         #bat_history
 
     def getTPW_yesterdayGeneratorUse(self):  
-        #LOGGER.debug('\n getTPW_daysGeneratorUse')
+        LOGGER.debug('\n getTPW_daysGeneratorUse')
         if self.TPWlocalAccess:
             Pwr = self.yesterdayTotalGenerator
         else:

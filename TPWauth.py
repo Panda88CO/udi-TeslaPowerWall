@@ -1,3 +1,4 @@
+from ISYprofile import PG_CLOUD_ONLY
 import time
 import json
 import hashlib
@@ -9,13 +10,17 @@ import string
 import random
 import captcha
 
+PG_CLOUD_ONLY = False
+'''
 try:
     import polyinterface
 except ImportError:
     import pgc_interface as polyinterface
     PG_CLOUD_ONLY = True  
+'''
 
-LOGGER = polyinterface.LOGGER 
+#LOGGER = polyinterface.LOGGER 
+import LOGGER
 MAX_COUNT = 6
 class TPWauth:
     def __init__(self, email, password, captchaMethod):
@@ -101,6 +106,7 @@ class TPWauth:
         
 
     def tesla_connect(self, captchaCode, captchaMethod, captchaAPIKey ):
+        LOGGER.debug('AUTH tesla connect - method : '+ str(captchaMethod))
         if captchaMethod == 'AUTO': 
             captchaCode = captcha.solveCaptcha(self.captchaFile, captchaAPIKey )
         self.data['captcha'] =  captchaCode    

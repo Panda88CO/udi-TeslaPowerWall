@@ -426,6 +426,11 @@ class TeslaPWController(polyinterface.Controller):
         self.heartbeat()
 
         if self.nodeDefineDone:
+            for node in self.nodes:
+                #LOGGER.debug('Node : ' + node)
+                if node != self.address and node != 'controller':
+                    self.nodes[node].shortPoll()
+        
             if self.TPW.pollSystemData('critical'):
                 self.updateISYdrivers('critical')
                 self.reportDrivers()
@@ -433,11 +438,7 @@ class TeslaPWController(polyinterface.Controller):
                 LOGGER.info ('Problem polling data from Tesla system')
         else:
             LOGGER.info('Waiting for system/nodes to get created')
-        #LOGGER.debug('Nodes : ' + self.nodes)
-        for node in self.nodes:
-            #LOGGER.debug('Node : ' + node)
-            if node != self.address and node != 'controller':
-                self.nodes[node].shortPoll()
+
         
 
     def longPoll(self):

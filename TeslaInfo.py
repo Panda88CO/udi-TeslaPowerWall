@@ -108,6 +108,7 @@ class tesla_info:
 
 
     def teslaCloudConnect(self, captchaCode= '', captchaAPIKey = '',):
+        LOGGER/debug('teslaCloudConnect')
         if not(self.TPWcloud.teslaCloudConnect(captchaCode, captchaAPIKey)):    
             LOGGER.debug('Error connecting to Tesla Could - check email, password')
             if self.captchaMethod == 'EMAIL':

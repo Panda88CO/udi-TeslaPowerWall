@@ -110,6 +110,7 @@ class TPWauth:
         if captchaMethod == 'AUTO': 
             captchaCode = captcha.solveCaptcha(self.captchaFile, captchaAPIKey )
         self.data['captcha'] =  captchaCode    
+        LOGGER.debug('captcha code:' + str(captchaCode))
         r = requests.post('https://auth.tesla.com/oauth2/v3/authorize', data=self.data, cookies=self.cookies, headers=self.headers, allow_redirects=False)
         count = 1
         while "Captcha does not match" in r.text and count < MAX_COUNT:

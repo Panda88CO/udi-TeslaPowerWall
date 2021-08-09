@@ -2,7 +2,6 @@ tesla_powerwall
 requests_oauth2
 svglib
 reportlab
-base64
 smtplib
 ssl
 email

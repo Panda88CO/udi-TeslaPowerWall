@@ -2,6 +2,6 @@ tesla_powerwall
 requests_oauth2
 svglib
 reportlab
-ssl
 email
 requests>=2.22.0
+ssl

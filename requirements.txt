@@ -1,7 +1,6 @@
 tesla_powerwall
 requests_oauth2
 svglib
-libxml2
 libxslt
 reportlab
 email

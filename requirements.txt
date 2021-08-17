@@ -2,7 +2,6 @@ tesla_powerwall
 requests_oauth2
 svglib
 reportlab
-libxml2-dev
-libxslt-dev
+python3-lxml
 email
 requests>=2.22.0

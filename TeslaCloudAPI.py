@@ -24,12 +24,12 @@ LOGGER = polyinterface.LOGGER
 class TeslaCloudAPI():
 
     def __init__(self, email, password, captchaMethod):
-        self.TESLA_URL = "https://owner-api.teslamotors.com"
+        
         self.captchaAPIkey = ''
         self.captchaMethod = captchaMethod
 
         self.loginData = {}
-        
+        self.TESLA_URL = "https://owner-api.teslamotors.com"
         self.API = "/api/1"
         self.OPERATING_MODES = ["backup", "self_consumption", "autonomous"]
         self.TOU_MODES = ["economics", "balanced"]
@@ -148,6 +148,7 @@ class TeslaCloudAPI():
         else:
             LOGGER.info('Getting New Token')
             self.tokeninfo = self.__tesla_connect(self.email, self.password)
+            #self.tokeninfo['created_at'] = datetime.now()
         return(self.tokeninfo)
 
 

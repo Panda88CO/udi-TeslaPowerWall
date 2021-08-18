@@ -26,6 +26,8 @@ class TPWauth:
     def __init__(self, email, password, captchaMethod):
         self.CLIENT_ID = "81527cff06843c8634fdc09e8ac0abefb46ac849f38fe1e431c2ef2106796384"
         self.CLIENT_SECRET = "c7257eb71a564034f9419ee651c7d0e5f7aa6bfbd18bafb5c5c033b093bb2fa3"
+        self.TESLA_URL = "https://owner-api.teslamotors.com"
+
         self.code_verifier = ''.join(random.choices(string.ascii_letters+string.digits, k=86))   
         self.code_challenge = hashlib.sha256(self.code_verifier.encode('utf-8')).hexdigest()
         self.email = email
@@ -71,7 +73,8 @@ class TPWauth:
                 pass
         
         time.sleep(1)
-        self.S = S
+        #self.S = S
+        #self.S['created_at'] = datetime.now()
         return S
 
 
@@ -157,11 +160,12 @@ class TPWauth:
                 s.auth = OAuth2BearerToken(S['access_token'])
                 r = s.post(self.TESLA_URL + '/oauth/token',data)
                 S = json.loads(r.text)
-            except:
+            except Exception as e:
+                print('exception ' + str(e))
                 pass
         
         time.sleep(1)
-        
+
         return S
 
 
@@ -246,7 +250,8 @@ class TPWauth:
                 pass
         
         time.sleep(1)
-        
+        #self.S = S
+        #self.S['created_at']=datetime.now()
         return S
     '''
     def __tesla_connect(self,email, pwd):

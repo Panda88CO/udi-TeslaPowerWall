@@ -84,8 +84,6 @@ class TeslaPWController(polyinterface.Controller):
             self.addCustomParam({'LOGFILE':'DISABLED'})
 
 
-
-
         if PG_CLOUD_ONLY:
             self.cloudAccess = True
             self.logFile = False
@@ -95,6 +93,12 @@ class TeslaPWController(polyinterface.Controller):
             self.removeCustomParam('LOCAL_USER_EMAIL')
             self.removeCustomParam('LOCAL_USER_PASSWORD')
             self.removeCustomParam('IP_ADDRESS')
+
+        if self.access == 'BOTH' or self.access== 'CLOUD':
+            self.cloudAccess = True
+        if  self.access == 'BOTH' or self.access== 'LOCAL':
+            self.localAccess = True
+
 
         try:
             self.TPW = tesla_info(self.name, self.id , self.access)

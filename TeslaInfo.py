@@ -43,17 +43,17 @@ class tesla_info:
 
 
         if teslaConnection == 'BOTH':
-            self.TPWlocal = True
-            self.TPWcloud = True
+            self.TPWlocalAccess = True
+            self.TPWcloudAccess = True
         elif teslaConnection == 'LOCAL':
-            self.TPWlocal = True
-            self.TPWcloud = False
+            self.TPWlocalAccess = True
+            self.TPWcloudAccess = False
         elif teslaConnection == 'CLOUD':
-            self.TPWlocal = False
-            self.TPWcloud = True
+            self.TPWlocalAccess = False
+            self.TPWcloudAccess = True
         else:
-            self.TPWlocal = False
-            self.TPWcloud = False
+            self.TPWlocalAccess = False
+            self.TPWcloudAccess = False
             LOGGER.debug('No connection specified')
 
 
@@ -267,7 +267,7 @@ class tesla_info:
         self.ISYinfo.addIsyVaraiable(self.controllerID, self.chargeLevel, 'percent', 0, 100, None, None, 2, 'Battery Charge Level', None )
 
 
-        if self.generatorInstalled and (self.TPWcloudAccess and not(self.TPWlocalAccess)) or (PG_CLOUD_ONLY): #I have no generator so I cannot test this if it 
+        if self.generatorInstalled and (self.TPWcloud and not(self.TPWlocalAccess)) or (PG_CLOUD_ONLY): #I have no generator so I cannot test this if it 
             self.ISYinfo.addIsyVaraiable (self.controllerID, self.daysGenerator, 'KWh', -100, 100, None, None, 2, 'Generator Power Today', None ) 
             self.ISYinfo.addIsyVaraiable (self.controllerID, self.yesterdayGenerator, 'KWh', -100, 100, None, None, 2, 'Generator Power Yesterday', None ) 
         
@@ -442,12 +442,12 @@ class tesla_info:
                 if self.TPWlocalAccess:
                     if not(self.LocalConnection):
                         LOGGER.debug('No local connection - tying to re-login')
-                        if self.TPWlocal:
+                        if self.TPWlocalAccess:
                             self.TPWlocal.logout()
                             time.sleep(1)
                         if self.localLogin(self.IPAddress):
                             self.LocalConnection=True
-                    if self.LocalConnection:
+                    if self.LocalAPI:
                         self.status = self.TPWlocal.get_sitemaster() 
                         self.meters = self.TPWlocal.get_meters()
 
@@ -895,6 +895,6 @@ class tesla_info:
 
 
     def disconnectTPW(self):
-        if self.TPWlocal:
+        if self.TPWlocalAccess:
             self.TPWlocal.close()
 

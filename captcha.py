@@ -4,7 +4,8 @@ from svglib.svglib import svg2rlg
 from reportlab.graphics import renderPM
 import base64
 
-import smtplib, ssl
+import smtplib
+import ssl
 
 from email import encoders
 from email.mime.base import MIMEBase

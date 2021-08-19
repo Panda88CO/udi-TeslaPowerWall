@@ -138,10 +138,14 @@ def sendEmailCaptcha(captchaFile, email):
 
 
     context = ssl.create_default_context()
-    with smtplib.SMTP('smtp-mail.outlook.com', 587) as smtp:
-        smtp.ehlo()  # Say EHLO to server
-        smtp.starttls(context=context)  # Puts the connection in TLS mode.
-        smtp.ehlo()
-        smtp.login(sender_email, password)
-        #smtp.sendmail(sender_email, receiver_email, text)
-        LOGGER.info('captcha email sent')
+    try:
+        with smtplib.SMTP('smtp-mail.outlook.com', 587) as smtp:
+            smtp.ehlo()  # Say EHLO to server
+            smtp.starttls(context=context)  # Puts the connection in TLS mode.
+            smtp.ehlo()
+            smtp.login(sender_email, password)
+            #smtp.sendmail(sender_email, receiver_email, text)
+            LOGGER.info('captcha email sent')
+    except Exception as e:
+        LOGGER.debug('Exception sendEmailCaptcha: ' + str(e))
+              

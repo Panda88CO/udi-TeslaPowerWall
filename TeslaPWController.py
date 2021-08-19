@@ -42,7 +42,7 @@ class TeslaPWController(polyinterface.Controller):
         self.captcha = ''
         if self.getCustomParam('CAPTCHA'):
             self.removeCustomParam('CAPTCHA')
-            self.addCustomParam({'CAPTCHA': self.captcha})
+        self.addCustomParam({'CAPTCHA': self.captcha})
 
 
         self.access = self.getCustomParam('ACCESS') 
@@ -109,7 +109,7 @@ class TeslaPWController(polyinterface.Controller):
                 else:
                     self.TPW.loginCloud(self.cloudUserEmail, self.cloudUserPassword, self.captchaMethod, self.captchaAPIkey)
                     self.captcha = self.getCustomParam('CAPTCHA')
-                    while self.captcha == '':
+                    while self.captcha == '' or self.captcha == None:
                         LOGGER.info('Input CAPTCHA value from received email ')
                         time.sleep(10)
                         self.captcha = self.getCustomParam('CAPTCHA')
@@ -118,10 +118,10 @@ class TeslaPWController(polyinterface.Controller):
             self.TPW.pollSystemData('all')          
             self.poly.installprofile()
 
-            if self.getCustomParam('CAPTCHA'):
-                self.captcha = ''
+            self.captcha = ''
+            if self.getCustomParam('CAPTCHA'):    
                 self.removeCustomParam('CAPTCHA')
-                self.addCustomParam({'CAPTCHA': self.captcha})
+            self.addCustomParam({'CAPTCHA': self.captcha})
 
             if self.logFile:
                 self.TPW.createLogFile(self.logFile)

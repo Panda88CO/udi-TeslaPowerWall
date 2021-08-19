@@ -84,6 +84,7 @@ class TeslaCloudAPI():
             temp =self.teslaGetSiteInfo('site_live')
             if temp != None:
                 self.site_live = temp
+                return(True)
         elif mode == 'all':
             temp= self.teslaGetSiteInfo('site_live')
             if temp != None:
@@ -96,6 +97,9 @@ class TeslaCloudAPI():
             temp = self.teslaGetSiteInfo('site_history_day')            
             if temp != None:
                 self.site_history = temp
+                return(True)
+            else:
+                return(False)
         else:
             temp= self.teslaGetSiteInfo('site_live')
             if temp != None:
@@ -112,6 +116,9 @@ class TeslaCloudAPI():
             temp = self.teslaGetSiteInfo('site_status')
             if temp != None:
                 self.site_status = temp
+                return(True)
+            else:
+                return(False)
 
 
     def supportedOperatingModes(self):

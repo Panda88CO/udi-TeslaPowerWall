@@ -62,7 +62,7 @@ class isyHandling:
 
 
 
-    def addISYcontroller(self,  ctrlId, name, icon ):
+    def addISYcontroller(self, ctrlId, name, icon ):
         tempDict = {'nlsICON':icon, 'nlsName': name }
         if not(ctrlId in self.sData):
             #self.nodeCount = self.nodeCount+1

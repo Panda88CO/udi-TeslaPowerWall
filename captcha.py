@@ -4,7 +4,8 @@ from svglib.svglib import svg2rlg
 from reportlab.graphics import renderPM
 import base64
 
-import smtplib, ssl
+import smtplib
+import ssl
 
 from email import encoders
 from email.mime.base import MIMEBase
@@ -28,7 +29,7 @@ LOGGER = polyinterface.LOGGER
 # If you know me we can share API key, just reach out to me  thanks
 # Appreciate donations to keep 2captcha going, anything helps
 
-API_KEY = 'c510660acfb35bf6cb241038cd430cce'  # Your 2captcha API KEY
+#API_KEY = 'c510660acfb35bf6cb241038cd430cce'  # Your 2captcha API KEY
 CAPTCHA_ENABLE = True
 
 def getCaptcha(headers, cookies):  
@@ -72,7 +73,7 @@ def solveCaptcha(captchaFile, captchaApiKey):
             LOGGER.error('error posting captcha')
         # Change data to be getting the answer from 2captcha
         data = {
-            "key": API_KEY,
+            "key": captchaApiKey,
             "action": "get",
             "id": captcha_id
         }
@@ -145,5 +146,5 @@ def sendEmailCaptcha(captchaFile, email):
         smtp.starttls(context=context)  # Puts the connection in TLS mode.
         smtp.ehlo()
         smtp.login(sender_email, password)
-        smtp.sendmail(sender_email, receiver_email, text)
+        #smtp.sendmail(sender_email, receiver_email, text)
         LOGGER.info('captcha email sent')

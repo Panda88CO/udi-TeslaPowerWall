@@ -6,15 +6,15 @@ Cloud account is needed if ISY is to make changes to Tesla Power Wall - e.g. onl
 
 ### Polisy/ local Polyglot
 Configuration requires 4 steps first time (Polisy/Polyglot - non cloud):
-#### 1) First user needs to sepcifiy source of data (LOCAL/CLOUD/BOTH) 
-#### 2) Restart node
-#### 3) Next user will speficy the needed user IDs and passwords for the selected option  (and local Tesla power wall IP address if chosen).  
-#### 4) Restart
+1) First user needs to sepcifiy source of data (LOCAL/CLOUD/BOTH) 
+2) Restart node
+3) Next user will speficy the needed user IDs and passwords for the selected option  (and local Tesla power wall IP address if chosen).  
+4) Restart
 
 ### Polyglot cloud
-#### 1) Enter email and password for cloud account using CLOUD_USER_EMAIL and CLOUD_USER_PASSWORD keywords 
-#### 2) Stop
-#### 3) Start aand wait 2-3min
+1) Enter email and password for cloud account using CLOUD_USER_EMAIL and CLOUD_USER_PASSWORD keywords 
+2) Stop
+3) Start and wait 2-3min
 
 ## Notes 
 LOGFILE can be used to generate a daily summary file (csv) in dailyData directory - File must be downloaded with separate tool for now.

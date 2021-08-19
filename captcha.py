@@ -1,10 +1,12 @@
+
 import requests
 from time import sleep
 from svglib.svglib import svg2rlg
 from reportlab.graphics import renderPM
 import base64
 
-import smtplib, ssl
+import smtplib
+import ssl
 
 from email import encoders
 from email.mime.base import MIMEBase
@@ -20,15 +22,11 @@ except ImportError:
 LOGGER = polyinterface.LOGGER
 
 
-# You will need pip install svglib
-
 # It goes to say this work takes effort so please use my referral to support my work
-# https://2captcha.com?from=11874928 
-# The link above allows you to create a acount with 2captcha which is what we use
-# If you know me we can share API key, just reach out to me  thanks
-# Appreciate donations to keep 2captcha going, anything helps
+# https://2captcha.com?from=12244449 
+# The link above allows you to create a acount with 2captcha 
 
-API_KEY = 'c510660acfb35bf6cb241038cd430cce'  # Your 2captcha API KEY
+
 CAPTCHA_ENABLE = True
 
 def getCaptcha(headers, cookies):  
@@ -37,12 +35,12 @@ def getCaptcha(headers, cookies):
     catpcha = requests.get('https://auth.tesla.com/captcha', headers=headers, cookies=cookies)
 
     # Save captch as .png image to send 2Captcha service locally
-    file = open("captcha.svg", "wb")
+    file = open('captcha.svg', 'wb')
     file.write(catpcha.content)
     file.close()
 
-    drawing = svg2rlg("captcha.svg")
-    renderPM.drawToFile(drawing, "captcha.png", fmt="PNG")
+    drawing = svg2rlg('captcha.svg')
+    renderPM.drawToFile(drawing, 'captcha.png', fmt='PNG')
     return('captcha.png')
 
 
@@ -54,14 +52,14 @@ def solveCaptcha(captchaFile, captchaApiKey):
 
         # Now use the image file saved locally to post to captcha service and wait for response
         # here we post site key to 2captcha to get captcha ID (and we parse it here too)
-        current_url = "http://2captcha.com/in.php"
+        current_url = 'http://2captcha.com/in.php'
 
         data = {
-            "key": captchaApiKey,
-            "method": "base64",
-            "body": encoded_string,
-            "regsense": 1,
-            "textinstructions": "text",        
+            'key': captchaApiKey,
+            'method': 'base64',
+            'body': encoded_string,
+            'regsense': 1,
+            'textinstructions': 'text',        
         }
            
         #files = open(captchaFile, 'rb')
@@ -72,11 +70,11 @@ def solveCaptcha(captchaFile, captchaApiKey):
             LOGGER.error('error posting captcha')
         # Change data to be getting the answer from 2captcha
         data = {
-            "key": API_KEY,
-            "action": "get",
-            "id": captcha_id
+            'key': captchaApiKey,
+            'action': 'get',
+            'id': captcha_id
         }
-        answer_url = "http://2captcha.com/res.php"
+        answer_url = 'http://2captcha.com/res.php'
         resp = requests.get(answer_url, params=data)
 
         captcha_answer = resp.text
@@ -98,29 +96,29 @@ def solveCaptcha(captchaFile, captchaApiKey):
 
 def sendEmailCaptcha(captchaFile, email):
 
-    subject = "Please solve captcha image"
-    body = "This is an email with captcha image from TeslaPowerWall login.  Input data to polisy"
-    sender_email = "isy_powerwall@outlook.com"
+    subject = 'Please solve captcha image'
+    body = 'This is an email with captcha image from TeslaPowerWall login.  Input data to polisy CONFIGURATION'
+    sender_email = 'isy_powerwall@outlook.com'
     receiver_email = email
-    password = "isy123ISY!@#"
+    password = 'isy123ISY!@#'
 
     # Create a multipart message and set headers
     message = MIMEMultipart()
-    message["From"] = sender_email
-    message["To"] = receiver_email
-    message["Subject"] = subject
+    message['From'] = sender_email
+    message['To'] = receiver_email
+    message['Subject'] = subject
     #message["Bcc"] = receiver_email  # Recommended for mass emails
 
     # Add body to email
-    message.attach(MIMEText(body, "plain"))
+    message.attach(MIMEText(body, 'plain'))
 
     filename = captchaFile  # In same directory as script
 
     # Open PDF file in binary mode
-    with open(filename, "rb") as attachment:
+    with open(filename, 'rb') as attachment:
         # Add file as application/octet-stream
         # Email client can usually download this automatically as attachment
-        part = MIMEBase("application", "octet-stream")
+        part = MIMEBase('application', 'octet-stream')
         part.set_payload(attachment.read())
 
     # Encode file in ASCII characters to send by email    
@@ -128,8 +126,8 @@ def sendEmailCaptcha(captchaFile, email):
 
     # Add header as key/value pair to attachment part
     part.add_header(
-        "Content-Disposition",
-        f"attachment; filename= {filename}",
+        'Content-Disposition',
+        f'attachment; filename= {filename}',
     )
 
     # Add attachment to message and convert message to string
@@ -140,10 +138,10 @@ def sendEmailCaptcha(captchaFile, email):
 
 
     context = ssl.create_default_context()
-    with smtplib.SMTP("smtp-mail.outlook.com", 587) as smtp:
+    with smtplib.SMTP('smtp-mail.outlook.com', 587) as smtp:
         smtp.ehlo()  # Say EHLO to server
         smtp.starttls(context=context)  # Puts the connection in TLS mode.
         smtp.ehlo()
         smtp.login(sender_email, password)
-        smtp.sendmail(sender_email, receiver_email, text)
+        #smtp.sendmail(sender_email, receiver_email, text)
         LOGGER.info('captcha email sent')

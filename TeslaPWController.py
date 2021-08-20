@@ -101,6 +101,7 @@ class TeslaPWController(polyinterface.Controller):
 
         try:
             self.TPW = tesla_info(self.name, self.id , self.access)
+            self.removeNoticesAll()
             if self.localAccess:
                 self.TPW.loginLocal(self.localUserEmail, self.localUserPassword, self.IPAddress)
             if self.cloudAccess:
@@ -113,7 +114,8 @@ class TeslaPWController(polyinterface.Controller):
                         LOGGER.info('Input CAPTCHA value from received email ')
                         time.sleep(10)
                         self.captcha = self.getCustomParam('CAPTCHA')
-                    self.TPW.teslaCloudConnect(self.captcha, '')
+                self.TPW.teslaCloudConnect(self.captcha, self.captchaAPIkey)
+            self.removeNoticesAll()
             self.TPW.teslaInitializeData()
             self.TPW.pollSystemData('all')          
             self.poly.installprofile()

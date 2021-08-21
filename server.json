@@ -1,5 +1,5 @@
 {
-    "name": "TeslaPWControl New",
+    "name": "Tesla Power Wall",
     "docs": "https://github.com/Panda88CO/udi-TeslaPowerWall",
     "type": "python3",
     "executable": "TeslaPWController.py",

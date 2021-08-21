@@ -24,6 +24,7 @@ class TeslaPWController(polyinterface.Controller):
         self.ISYforced = False
         self.name = 'Tesla PowerWall Info'
         self.id = 'teslapw'
+        self.address = self.id
         self.primary = self.address
         self.hb = 0
         if not(PG_CLOUD_ONLY):

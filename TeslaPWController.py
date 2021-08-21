@@ -24,7 +24,7 @@ class TeslaPWController(polyinterface.Controller):
         self.ISYforced = False
         self.name = 'Tesla PowerWall Info'
         self.id = 'teslapw'
-        #self.address = self.id
+        self.address = self.id
         self.primary = self.address
         LOGGER.debug('self address : ' + str(self.address))
         self.hb = 0
@@ -147,10 +147,11 @@ class TeslaPWController(polyinterface.Controller):
 
             LOGGER.info('Creating Setup Node')
             nodeList = self.TPW.getNodeIdList()
-            LOGGER.debug("controller start" + str(nodeList))
+            LOGGER.debug('Setup start ' + str(nodeList))
             for node in nodeList:
                 #LOGGER.debug(node)
                 name = self.TPW.getNodeName(node)
+                LOGGER.debug('Setup Node node, name ' + str(node) + ' , '+ str(name))
                 self.addNode(teslaPWSetupNode(self, self.address, node, name))
             
             #self.heartbeat()

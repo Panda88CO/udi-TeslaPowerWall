@@ -1,63 +1,63 @@
 <editors> 
   <editor id = "CTRL_1" > 
+     <range  uom="25" subset="0-1" nls="CTRL_1" />
+</editor>
+  <editor id = "PWSTATUS1" > 
      <range  uom="33" min="0" max="20" prec="2" />
 </editor>
-  <editor id = "CTRL_2" > 
+  <editor id = "PWSTATUS2" > 
      <range  uom="33" min="-100" max="100" prec="2" />
 </editor>
-  <editor id = "CTRL_3" > 
+  <editor id = "PWSTATUS3" > 
      <range  uom="33" min="-100" max="100" prec="2" />
 </editor>
-  <editor id = "CTRL_4" > 
+  <editor id = "PWSTATUS4" > 
      <range  uom="33" min="-20" max="20" prec="2" />
 </editor>
-  <editor id = "CTRL_5" > 
+  <editor id = "PWSTATUS5" > 
      <range  uom="33" min="-100" max="-100" prec="2" />
 </editor>
-  <editor id = "CTRL_6" > 
+  <editor id = "PWSTATUS6" > 
      <range  uom="33" min="-100" max="100" prec="2" />
 </editor>
-  <editor id = "CTRL_7" > 
+  <editor id = "PWSTATUS7" > 
      <range  uom="33" min="-100" max="100" prec="2" />
 </editor>
-  <editor id = "CTRL_8" > 
+  <editor id = "PWSTATUS8" > 
      <range  uom="33" min="-100" max="100" prec="2" />
 </editor>
-  <editor id = "CTRL_9" > 
+  <editor id = "PWSTATUS9" > 
      <range  uom="33" min="-100" max="100" prec="2" />
 </editor>
-  <editor id = "CTRL_10" > 
+  <editor id = "PWSTATUS10" > 
      <range  uom="33" min="-100" max="100" prec="1" />
 </editor>
-  <editor id = "CTRL_11" > 
+  <editor id = "PWSTATUS11" > 
      <range  uom="33" min="-100" max="100" prec="2" />
 </editor>
-  <editor id = "CTRL_12" > 
+  <editor id = "PWSTATUS12" > 
      <range  uom="33" min="-100" max="100" prec="2" />
 </editor>
-  <editor id = "CTRL_13" > 
+  <editor id = "PWSTATUS13" > 
      <range  uom="33" min="-100" max="100" prec="2" />
 </editor>
-  <editor id = "CTRL_14" > 
+  <editor id = "PWSTATUS14" > 
      <range  uom="33" min="-100" max="100" prec="2" />
 </editor>
-  <editor id = "CTRL_15" > 
+  <editor id = "PWSTATUS15" > 
      <range  uom="51" min="0" max="100" prec="2" />
 </editor>
-  <editor id = "CTRL_16" > 
-     <range  uom="33" min="-100" max="100" prec="2" />
+  <editor id = "PWSTATUS16" > 
+     <range  uom="25" subset="0-3" nls="PWSTATUS16" />
 </editor>
-  <editor id = "CTRL_17" > 
-     <range  uom="33" min="-100" max="100" prec="2" />
+  <editor id = "PWSTATUS17" > 
+     <range  uom="25" subset="0-3" nls="PWSTATUS17" />
 </editor>
-  <editor id = "CTRL_18" > 
-     <range  uom="25" subset="0-3" nls="CTRL_18" />
+  <editor id = "PWSTATUS18" > 
+     <range  uom="25" subset="0-1" nls="PWSTATUS18" />
 </editor>
-  <editor id = "CTRL_19" > 
-     <range  uom="25" subset="0-3" nls="CTRL_19" />
-</editor>
-  <editor id = "CTRL_20" > 
-     <range  uom="25" subset="0-1" nls="CTRL_20" />
+  <editor id = "PWSTATUS19" > 
+     <range  uom="25" subset="0-1" nls="PWSTATUS19" />
 </editor>
   <editor id = "PWSETUP1" > 
      <range  uom="51" min="0" max="100" prec="1" />

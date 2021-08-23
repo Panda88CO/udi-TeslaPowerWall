@@ -3,30 +3,41 @@
       <editors />
       <sts>
          <st id="GV1" editor="CTRL_1" />
-         <st id="GV2" editor="CTRL_2" />
-         <st id="GV3" editor="CTRL_3" />
-         <st id="GV4" editor="CTRL_4" />
-         <st id="GV5" editor="CTRL_5" />
-         <st id="GV6" editor="CTRL_6" />
-         <st id="GV7" editor="CTRL_7" />
-         <st id="GV8" editor="CTRL_8" />
-         <st id="GV9" editor="CTRL_9" />
-         <st id="GV10" editor="CTRL_10" />
-         <st id="GV11" editor="CTRL_11" />
-         <st id="GV12" editor="CTRL_12" />
-         <st id="GV13" editor="CTRL_13" />
-         <st id="GV14" editor="CTRL_14" />
-         <st id="GV15" editor="CTRL_15" />
-         <st id="GV16" editor="CTRL_16" />
-         <st id="GV17" editor="CTRL_17" />
-         <st id="GV18" editor="CTRL_18" />
-         <st id="GV19" editor="CTRL_19" />
-         <st id="GV20" editor="CTRL_20" />
       </sts>
       <cmds>
          <sends>
             <cmd id="DON" /> 
             <cmd id="DOF" /> 
+         </sends>
+         <accepts>
+         </accepts>
+      </cmds>
+   </nodeDef> 
+   <nodeDef id="pwstatus" nls="nlspwstatus">
+      <editors />
+      <sts>
+         <st id="GV1" editor="PWSTATUS1" />
+         <st id="GV2" editor="PWSTATUS2" />
+         <st id="GV3" editor="PWSTATUS3" />
+         <st id="GV4" editor="PWSTATUS4" />
+         <st id="GV5" editor="PWSTATUS5" />
+         <st id="GV6" editor="PWSTATUS6" />
+         <st id="GV7" editor="PWSTATUS7" />
+         <st id="GV8" editor="PWSTATUS8" />
+         <st id="GV9" editor="PWSTATUS9" />
+         <st id="GV10" editor="PWSTATUS10" />
+         <st id="GV11" editor="PWSTATUS11" />
+         <st id="GV12" editor="PWSTATUS12" />
+         <st id="GV13" editor="PWSTATUS13" />
+         <st id="GV14" editor="PWSTATUS14" />
+         <st id="GV15" editor="PWSTATUS15" />
+         <st id="GV16" editor="PWSTATUS16" />
+         <st id="GV17" editor="PWSTATUS17" />
+         <st id="GV18" editor="PWSTATUS18" />
+         <st id="GV19" editor="PWSTATUS19" />
+      </sts>
+      <cmds>
+         <sends>
          </sends>
          <accepts>
             <cmd id="UPDATE" /> 

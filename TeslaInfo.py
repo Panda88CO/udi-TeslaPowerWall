@@ -240,6 +240,7 @@ class tesla_info:
         self.isyINFO.addISYcommandSend(self.controllerID, 'DOF')
         self.isyINFO.addIsyVaraiable (self.controllerID, self.nodeServerUp, 'list',None,None, '0-1',None, None, 'Nodeserver Up', { 0:'False', 1: 'True' } ) 
 
+        #self.isyINFO.addControllerDefStruct(self.controllerID, self.controllerName )
 
         self.isyINFO.addISYnode(self.statusNodeID, self.statusNodeName, 'Electricity')
         self.isyINFO.addISYcommandReceive(self.statusNodeID, 'UPDATE', 'Update System Data', None)
@@ -284,7 +285,7 @@ class tesla_info:
 
 
         self.isyINFO.addIsyVaraiable (self.statusNodeID, self.gridServiceActive, 'list', None,None, '0-1',None, None, 'Grid Services Active', { 0:'False', 1: 'True' }) 
-        self.isyINFO.addControllerDefStruct(self.statusNodeID, self.controllerName )
+        #self.isyINFO.addNodeDefStruct(self.statusNodeID, self.statusNodeName )
 
         if self.TPWcloudAccess:
             self.isyINFO.addISYnode(self.setupNodeID, self.setupNodeName, 'Electricity')
@@ -327,8 +328,11 @@ class tesla_info:
     
             self.isyINFO.addISYcommandReceive(self.setupNodeID, 'UPDATE', 'Update System Data', None)
 
-            self.isyINFO.addNodeDefStruct(self.setupNodeID, self.setupNodeName)
-
+        #self.isyINFO.addNodeDefStruct(self.setupNodeID, self.setupNodeName)
+        
+        self.isyINFO.addControllerDefStruct(self.controllerID, self.controllerName )
+        self.isyINFO.addNodeDefStruct(self.statusNodeID, self.statusNodeName )
+        self.isyINFO.addNodeDefStruct(self.setupNodeID, self.setupNodeName)
         self.isyINFO.createSetupFiles('nodedefs.xml', 'editors.xml', 'en_us.txt')
         self.ISYmap = self.isyINFO.createISYmapping()
 
@@ -585,6 +589,8 @@ class tesla_info:
                 return(self.getTPW_getTouData('weekday', 'peak', 'start'))   
             elif self.teslaVarName == self.weekdayPeakEndSec:
                 return(self.getTPW_getTouData('weekday', 'peak', 'stop'))   
+            elif self.teslaVarName == self.nodeServerUp:
+                return(self.nodeServerUp())
             else:
 
                 LOGGER.debug('Error - unknown variable: ' + str(self.teslaVarName )) 
@@ -592,6 +598,9 @@ class tesla_info:
         else:    
             LOGGER.debug('Error - unknown variable: ' + str(ISYvar)) 
 
+    # Need to be imlemented 
+    def nodeServeUp(self):
+        return(True)
 
     def TPW_updateMeter(self):
         self.pollSystemData('all')

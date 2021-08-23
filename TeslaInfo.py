@@ -465,7 +465,6 @@ class tesla_info:
                         else:
                             self.daysTotalGridServices = 0.0 #Does not seem to exist
                             self.daysTotalGenerator = 0.0 #needs to be updated - may not exist
-                        LOGGER.debug('Local Access - total ')
                         return(True)
                     else:
                         LOGGER.debug('No connection to Local Tesla Power Wall')
@@ -473,7 +472,7 @@ class tesla_info:
                         return(False)
 
                 if self.TPWcloudAccess:
-                    LOGGER.debug('pollSystemData - all')
+                    LOGGER.debug('pollSystemData - CLOUD all')
                     self.TPWcloud.teslaUpdateCloudData('all')
                     self.TPWcloud.teslaCalculateDaysTotals()
                     self.daysTotalSolar = self.TPWcloud.teslaExtractDaysSolar()
@@ -487,8 +486,7 @@ class tesla_info:
                     self.yesterdayTotalGeneration  = self.TPWcloud.teslaExtractYesterdayGeneraton()
                     self.yesterdayTotalBattery =  self.TPWcloud.teslaExtractYesterdayBattery() 
                     self.yesterdayTotalGridServices = self.TPWcloud.teslaExtractYesterdayGridServiceUse()
-                    self.yesterdayTotalGenerator = self.TPWcloud.teslaExtractYesterdayGeneratorUse()            
-
+                    self.yesterdayTotalGenerator = self.TPWcloud.teslaExtractYesterdayGeneratorUse()          
             return(True)
 
         except Exception as e:
@@ -625,7 +623,7 @@ class tesla_info:
     def getTPW_solarSupply(self):
         
         if self.TPWlocalAccess:
-            LOGGER.debug(self.meters)
+            #LOGGER.debug(self.meters)
             solarPwr = self.meters.solar.instant_power
         else:
             solarPwr = self.TPWcloud.teslaExtractSolarSupply()

@@ -120,7 +120,7 @@ class TeslaPWController(polyinterface.Controller):
             self.removeNoticesAll()
             self.TPW.teslaInitializeData()
             self.TPW.pollSystemData('all')          
-            self.poly.installprofile()
+            #self.poly.installprofile()
 
             self.captcha = ''
             if self.getCustomParam('CAPTCHA'):    
@@ -144,6 +144,7 @@ class TeslaPWController(polyinterface.Controller):
                 
             #if PG_CLOUD_ONLY:
             #    self.poly.installprofile()            
+            self.poly.installprofile()
 
             LOGGER.info('Creating Setup Node')
             nodeList = self.TPW.getNodeIdList()

@@ -200,8 +200,6 @@ class TeslaPWController(polyinterface.Controller):
         else:
             LOGGER.info('Waiting for system/nodes to get created')
 
-        
-
     def longPoll(self):
         LOGGER.info('Tesla Power Wall  Controller longPoll')
         self.heartbeat()
@@ -255,7 +253,7 @@ class TeslaPWController(polyinterface.Controller):
         self.updateISYdrivers(ll''a)
         self.reportDrivers('all')
     '''
-    
+
     '''
     def discover(self, command=None):
         #LOGGER.debug('discover zones')

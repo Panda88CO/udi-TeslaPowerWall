@@ -131,11 +131,8 @@ class TeslaPWController(polyinterface.Controller):
 
             if self.logFile:
                 self.TPW.createLogFile(self.logFile)
-            self.ISYparams = self.TPW.supportedParamters(self.id)
-            self.ISYcriticalParams = self.TPW.criticalParamters(self.id)
-            LOGGER.debug('Controller start params: ' + str(self.ISYparams))
-            LOGGER.debug('Controller start critical params: ' + str(self.ISYcriticalParams))
-            
+
+            '''
             for key in self.ISYparams:
                 info = self.ISYparams[key]
                 if info != {}:
@@ -143,9 +140,8 @@ class TeslaPWController(polyinterface.Controller):
                     LOGGER.debug('driver: ' + str(key)+ ' value:' + str(value) + ' uom:' + str(info['uom']) )
                     if not(PG_CLOUD_ONLY):
                         self.drivers.append({'driver':key, 'value':value, 'uom':info['uom'] })
-                
-            #if PG_CLOUD_ONLY:
-            #    self.poly.installprofile()            
+            '''    
+        
             self.poly.installprofile()
 
             LOGGER.info('Creating Setup Node')
@@ -154,7 +150,7 @@ class TeslaPWController(polyinterface.Controller):
     
             for node in nodeList:
                 name = self.TPW.getNodeName(node)
-                LOGGER.debug('Setup Node node, name ' + str(node) + ' , '+ str(name))
+                LOGGER.debug('Setup Node(node, name) ' + str(node) + ' , '+ str(name))
                 if node == self.TPW.getSetupNodeID():           #LOGGER.debug(node)
                     self.addNode(teslaPWSetupNode(self, self.address, node, name))
                 if node == self.TPW.getStatusNodeID():    
@@ -223,21 +219,20 @@ class TeslaPWController(polyinterface.Controller):
     def updateISYdrivers(self, level):
         LOGGER.debug('System updateISYdrivers - ' + str(level))
         params = []
-        #LOGGER.debug(self.id)
+        LOGGER.debug(self.id + ' nbr drivers:' + str(len(self.drivers)))
         #LOGGER.debug(self.ISYparams)
         if level == 'all':
-            params = self.ISYparams
+            #params = self.ISYparams
             #LOGGER.debug ('all: ' + str(params) )
-            if params:
-                for key in params:
-                    info = params[key]
-                    if info != {}:
-                        value = self.TPW.getISYvalue(key, self.id)
-                        #LOGGER.debug('Update ISY drivers :' + str(key)+ ' ' + info['systemVar']+ ' value:' + str(value) )
-                        #self.setDriver(str(key), value) 
-                        self.setDriver(key, value, report = True, force = True) 
-                        LOGGER.debug('Update ISY drivers :' + str(key)+ ' ' + info['systemVar']+ ' value:' + str(value) )
+            for index in range(len(self.drivers)):
+                tempDriver = self.drivers[index]
+                value = self.TPW.getISYvalue(tempDriver['driver'], self.id)
+                #LOGGER.debug('Update ISY drivers :' + str(key)+ ' ' + info['systemVar']+ ' value:' + str(value) )
+                #self.setDriver(str(key), value) 
+                self.setDriver(tempDriver['driver'], value, report = True, force = True) 
+                LOGGER.debug('Update ISY drivers :' + str(tempDriver['driver'])+ '  value:' + str(value) )
         elif level == 'critical':
+            '''
             params = self.ISYcriticalParams
             #LOGGER.debug ('Critial: ' + str(params) )
             if params:
@@ -247,6 +242,15 @@ class TeslaPWController(polyinterface.Controller):
                     self.setDriver(key, value, report = True, force = True)       
                     #self.setDriver(str(key), value)       
                     #LOGGER.debug('Update ISY drivers :' + str(key)+ '  value: ' + str(value) )
+            '''
+
+            for index in range(len(self.drivers)):
+                tempDriver = self.drivers[index]
+                value = self.TPW.getISYvalue(tempDriver['driver'], self.id)
+                #LOGGER.debug('Update ISY drivers :' + str(key)+ ' ' + info['systemVar']+ ' value:' + str(value) )
+                #self.setDriver(str(key), value) 
+                self.setDriver(tempDriver['driver'], value, report = True, force = True) 
+                LOGGER.debug('Update ISY drivers :' + str(tempDriver['driver'])+ '  value:' + str(value) )         
         else:
             LOGGER.debug('Wrong parameter passed: ' + str(level))
             #LOGGER.debug(params)
@@ -272,7 +276,7 @@ class TeslaPWController(polyinterface.Controller):
  
     commands = { 'UPDATE': ISYupdate}
 
-    drivers = [{'driver': 'GV1', 'value':1, 'uom':2}]
+    drivers = [{'driver': 'GV1', 'value':1, 'uom':25}]
     '''
     if PG_CLOUD_ONLY:
         drivers= [{'driver': 'GV1', 'value':0, 'uom':33}

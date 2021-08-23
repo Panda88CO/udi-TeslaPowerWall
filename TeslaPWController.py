@@ -255,10 +255,12 @@ class TeslaPWController(polyinterface.Controller):
         self.updateISYdrivers(ll''a)
         self.reportDrivers('all')
     '''
-
+    
+    '''
     def discover(self, command=None):
         #LOGGER.debug('discover zones')
         self.nodeDefineDone = True
+    '''
 
     def ISYupdate (self, command):
         LOGGER.debug('ISY-update called')

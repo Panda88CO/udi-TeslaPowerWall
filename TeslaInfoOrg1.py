@@ -184,14 +184,11 @@ class tesla_info:
     
 
     def createISYsetup (self):
-        self.setupNodeID = 'pwsetup' 
-        self.nodeServerUp = 'nodeServerUp'
+        
+        self.setupNodeID = 'pwsetup'
         self.setupNodeName = 'Control Parameters'
 
-        self.statusNodeID = 'pwstatus'
-        self.statusNodeName = 'Power Wall Status'
-
-        self.nodeIDlist = [self.statusNodeID, self.setupNodeID]
+        self.nodeIDlist = [self.setupNodeID]
         self.chargeLevel = 'chargeLevel'
         self.backoffLevel = 'backoffLevel'
         self.gridStatus = 'gridStatus'
@@ -235,56 +232,56 @@ class tesla_info:
 
         self.isyINFO.addISYcontroller(self.controllerID, self.controllerName,'Electricity' )
 
-        #maybe need to add connected status
+
         self.isyINFO.addISYcommandSend(self.controllerID, 'DON')
         self.isyINFO.addISYcommandSend(self.controllerID, 'DOF')
-        self.isyINFO.addIsyVaraiable (self.controllerID, self.nodeServerUp, 'list',None,None, '0-1',None, None, 'Nodeserver Up', { 0:'False', 1: 'True' } ) 
 
 
-        self.isyINFO.addISYnode(self.statusNodeID, self.statusNodeName, 'Electricity')
-        self.isyINFO.addISYcommandReceive(self.statusNodeID, 'UPDATE', 'Update System Data', None)
+
+        
+        self.isyINFO.addISYcommandReceive(self.controllerID, 'UPDATE', 'Update System Data', None)
 
         if self.solarInstalled or PG_CLOUD_ONLY: # only add if solar exist - cannot test if this works as intented, and I cannot remove solar (I have solar)
-            self.isyINFO.addIsyVaraiable (self.statusNodeID, self.solarSupply, 'KWh', 0, 20, None, None, 2, 'Current Solar Supply', None ) 
-            self.isyINFO.addIsyVaraiable (self.statusNodeID, self.daysSolar, 'KWh', - 100, 100, None, None, 2, 'Solar Power Today', None ) 
-            self.isyINFO.addIsyVaraiable (self.statusNodeID,self.yesterdaySolar,  'KWh', -100, 100, None, None, 2, 'Solar Power Yesterday', None )
+            self.isyINFO.addIsyVaraiable (self.controllerID, self.solarSupply, 'KWh', 0, 20, None, None, 2, 'Current Solar Supply', None ) 
+            self.isyINFO.addIsyVaraiable (self.controllerID, self.daysSolar, 'KWh', - 100, 100, None, None, 2, 'Solar Power Today', None ) 
+            self.isyINFO.addIsyVaraiable (self.controllerID,self.yesterdaySolar,  'KWh', -100, 100, None, None, 2, 'Solar Power Yesterday', None )
 
 
-        self.isyINFO.addIsyVaraiable (self.statusNodeID, self.batterySupply, 'KWh', -20, 20, None, None, 2, 'Current Battery Supply', None ) 
-        self.isyINFO.addIsyVaraiable (self.statusNodeID, self.daysBattery, 'KWh', -100, -100, None, None, 2, 'Battery Power Today', None ) 
-        self.isyINFO.addIsyVaraiable (self.statusNodeID, self.yesterdayBattery, 'KWh', -100, 100, None, None, 2, 'Battery Power Yesterday', None ) 
+        self.isyINFO.addIsyVaraiable (self.controllerID, self.batterySupply, 'KWh', -20, 20, None, None, 2, 'Current Battery Supply', None ) 
+        self.isyINFO.addIsyVaraiable (self.controllerID, self.daysBattery, 'KWh', -100, -100, None, None, 2, 'Battery Power Today', None ) 
+        self.isyINFO.addIsyVaraiable (self.controllerID, self.yesterdayBattery, 'KWh', -100, 100, None, None, 2, 'Battery Power Yesterday', None ) 
 
-        self.isyINFO.addIsyVaraiable (self.statusNodeID, self.gridSupply, 'KWh', -100, 100, None, None, 2, 'Current Grid Supply', None ) 
-        self.isyINFO.addIsyVaraiable (self.statusNodeID, self.daysConsumption, 'KWh', -100, 100, None, None, 2, 'Power Consumed Today', None ) 
-        self.isyINFO.addIsyVaraiable (self.statusNodeID, self.yesterdayConsumption, 'KWh', -100, 100, None, None, 2, 'Power Consumed Yesterday', None ) 
+        self.isyINFO.addIsyVaraiable (self.controllerID, self.gridSupply, 'KWh', -100, 100, None, None, 2, 'Current Grid Supply', None ) 
+        self.isyINFO.addIsyVaraiable (self.controllerID, self.daysConsumption, 'KWh', -100, 100, None, None, 2, 'Power Consumed Today', None ) 
+        self.isyINFO.addIsyVaraiable (self.controllerID, self.yesterdayConsumption, 'KWh', -100, 100, None, None, 2, 'Power Consumed Yesterday', None ) 
 
-        self.isyINFO.addIsyVaraiable (self.statusNodeID, self.load, 'KWh', -100, 100, None, None, 1, 'Current Load', None ) 
-        self.isyINFO.addIsyVaraiable (self.statusNodeID, self.daysGeneration, 'KWh', -100, 100, None, None, 2, 'Total Power Today', None ) 
-        self.isyINFO.addIsyVaraiable (self.statusNodeID, self.yesterdayGeneration, 'KWh', -100, 100, None, None, 2, 'Total Power Yesterday', None ) 
+        self.isyINFO.addIsyVaraiable (self.controllerID, self.load, 'KWh', -100, 100, None, None, 1, 'Current Load', None ) 
+        self.isyINFO.addIsyVaraiable (self.controllerID, self.daysGeneration, 'KWh', -100, 100, None, None, 2, 'Total Power Today', None ) 
+        self.isyINFO.addIsyVaraiable (self.controllerID, self.yesterdayGeneration, 'KWh', -100, 100, None, None, 2, 'Total Power Yesterday', None ) 
 
         if self.TPWcloudAccess:
-            self.isyINFO.addIsyVaraiable (self.statusNodeID, self.daysGridServices, 'KWh', -100, 100, None, None, 2, 'Grid Service Power Today', None ) 
-            self.isyINFO.addIsyVaraiable (self.statusNodeID, self.yesterdayGridServices, 'KWh', -100, 100, None, None, 2, 'Grid Service Power Yesterday', None )   
+            self.isyINFO.addIsyVaraiable (self.controllerID, self.daysGridServices, 'KWh', -100, 100, None, None, 2, 'Grid Service Power Today', None ) 
+            self.isyINFO.addIsyVaraiable (self.controllerID, self.yesterdayGridServices, 'KWh', -100, 100, None, None, 2, 'Grid Service Power Yesterday', None )   
             
-        self.isyINFO.addIsyVaraiable(self.statusNodeID, self.chargeLevel, 'percent', 0, 100, None, None, 2, 'Battery Charge Level', None )
+        self.isyINFO.addIsyVaraiable(self.controllerID, self.chargeLevel, 'percent', 0, 100, None, None, 2, 'Battery Charge Level', None )
 
 
         if self.generatorInstalled and (self.TPWcloudAccess and not(self.TPWlocalAccess)) or (PG_CLOUD_ONLY): #I have no generator so I cannot test this if it 
-            self.isyINFO.addIsyVaraiable (self.statusNodeID, self.daysGenerator, 'KWh', -100, 100, None, None, 2, 'Generator Power Today', None ) 
-            self.isyINFO.addIsyVaraiable (self.statusNodeID, self.yesterdayGenerator, 'KWh', -100, 100, None, None, 2, 'Generator Power Yesterday', None ) 
+            self.isyINFO.addIsyVaraiable (self.controllerID, self.daysGenerator, 'KWh', -100, 100, None, None, 2, 'Generator Power Today', None ) 
+            self.isyINFO.addIsyVaraiable (self.controllerID, self.yesterdayGenerator, 'KWh', -100, 100, None, None, 2, 'Generator Power Yesterday', None ) 
         
-        self.isyINFO.addIsyVaraiable (self.statusNodeID, self.gridStatus, 'list', None, None, '0-3', None, None, 'Grid Status', self.ISYgridEnum ) 
+        self.isyINFO.addIsyVaraiable (self.controllerID, self.gridStatus, 'list', None, None, '0-3', None, None, 'Grid Status', self.ISYgridEnum ) 
 
-        self.isyINFO.addIsyVaraiable (self.statusNodeID, self.operationMode, 'list', None, None, '0-3', None, None, 'Operation Mode', self.ISYoperationModeEnum )                
+        self.isyINFO.addIsyVaraiable (self.controllerID, self.operationMode, 'list', None, None, '0-3', None, None, 'Operation Mode', self.ISYoperationModeEnum )                
 
-        self.addISYCriticalParam(self.statusNodeID, self.operationMode)
+        self.addISYCriticalParam(self.controllerID, self.operationMode)
 
         if self.TPWlocalAccess:
-            self.isyINFO.addIsyVaraiable (self.statusNodeID, self.ConnectedTesla, 'list', None,None, '0-1',None, None, 'Connected to Tesla', { 0:'False', 1: 'True' }) 
+            self.isyINFO.addIsyVaraiable (self.controllerID, self.ConnectedTesla, 'list', None,None, '0-1',None, None, 'Connected to Tesla', { 0:'False', 1: 'True' }) 
 
 
-        self.isyINFO.addIsyVaraiable (self.statusNodeID, self.gridServiceActive, 'list', None,None, '0-1',None, None, 'Grid Services Active', { 0:'False', 1: 'True' }) 
-        self.isyINFO.addControllerDefStruct(self.statusNodeID, self.controllerName )
+        self.isyINFO.addIsyVaraiable (self.controllerID, self.gridServiceActive, 'list', None,None, '0-1',None, None, 'Grid Services Active', { 0:'False', 1: 'True' }) 
+        self.isyINFO.addControllerDefStruct(self.controllerID, self.controllerName )
 
         if self.TPWcloudAccess:
             self.isyINFO.addISYnode(self.setupNodeID, self.setupNodeName, 'Electricity')
@@ -378,12 +375,6 @@ class tesla_info:
 
     def getNodeName(self, nodeID):
         return(self.isyINFO.getISYNodeName(nodeID))
-
-    def getStatusNodeID(self):
-        return(self.statusNodeID)
-
-    def getSetupNodeID(self):
-        return(self.setupNodeID)
 
     def addISYCriticalParam(self, Id, value):
         if Id in self.ISYCritical:

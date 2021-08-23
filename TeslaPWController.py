@@ -13,6 +13,8 @@ import sys
 import time 
 from  TeslaInfo import tesla_info
 from TeslaPWSetupNode import teslaPWSetupNode
+from TeslaPWStatusNode import teslaPWStatusNode
+
 
 LOGGER = polyinterface.LOGGER
                
@@ -149,14 +151,15 @@ class TeslaPWController(polyinterface.Controller):
             LOGGER.info('Creating Setup Node')
             nodeList = self.TPW.getNodeIdList()
             LOGGER.debug('Setup start ' + str(nodeList))
+    
             for node in nodeList:
-                #LOGGER.debug(node)
                 name = self.TPW.getNodeName(node)
                 LOGGER.debug('Setup Node node, name ' + str(node) + ' , '+ str(name))
-                self.addNode(teslaPWSetupNode(self, self.address, node, name))
-            
-            #self.heartbeat()
-            
+                if node == self.TPW.getSetupNodeID():           #LOGGER.debug(node)
+                    self.addNode(teslaPWSetupNode(self, self.address, node, name))
+                if node == self.TPW.getStatusNodeID():    
+                    self.addNode(teslaPWStatusNode(self, self.address, node, name))
+
             self.TPW.pollSystemData('all')
             self.updateISYdrivers('all')
             #self.reportDrivers()
@@ -269,29 +272,31 @@ class TeslaPWController(polyinterface.Controller):
  
     commands = { 'UPDATE': ISYupdate}
 
+    drivers = [{'driver': 'GV1', 'value':1, 'uom':2}]
+    '''
     if PG_CLOUD_ONLY:
-        drivers= [{'driver': 'GV1', 'value':0, 'uom':30}
-                 ,{'driver': 'GV2', 'value':0, 'uom':30}
-                 ,{'driver': 'GV3', 'value':0, 'uom':30}
-                 ,{'driver': 'GV4', 'value':0, 'uom':30}
-                 ,{'driver': 'GV5', 'value':0, 'uom':30}
-                 ,{'driver': 'GV6', 'value':0, 'uom':30}
-                 ,{'driver': 'GV7', 'value':0, 'uom':30}
-                 ,{'driver': 'GV8', 'value':0, 'uom':30}
-                 ,{'driver': 'GV9', 'value':0, 'uom':30}
-                 ,{'driver': 'GV10', 'value':0, 'uom':30}
-                 ,{'driver': 'GV11', 'value':0, 'uom':30}
-                 ,{'driver': 'GV12', 'value':0, 'uom':30}
-                 ,{'driver': 'GV13', 'value':0, 'uom':30}
-                 ,{'driver': 'GV14', 'value':0, 'uom':30}
+        drivers= [{'driver': 'GV1', 'value':0, 'uom':33}
+                 ,{'driver': 'GV2', 'value':0, 'uom':33}
+                 ,{'driver': 'GV3', 'value':0, 'uom':33}
+                 ,{'driver': 'GV4', 'value':0, 'uom':33}
+                 ,{'driver': 'GV5', 'value':0, 'uom':33}
+                 ,{'driver': 'GV6', 'value':0, 'uom':33}
+                 ,{'driver': 'GV7', 'value':0, 'uom':33}
+                 ,{'driver': 'GV8', 'value':0, 'uom':33}
+                 ,{'driver': 'GV9', 'value':0, 'uom':33}
+                 ,{'driver': 'GV10', 'value':0, 'uom':33}
+                 ,{'driver': 'GV11', 'value':0, 'uom':33}
+                 ,{'driver': 'GV12', 'value':0, 'uom':33}
+                 ,{'driver': 'GV13', 'value':0, 'uom':33}
+                 ,{'driver': 'GV14', 'value':0, 'uom':33}
                  ,{'driver': 'GV15', 'value':0, 'uom':51}
-                 ,{'driver': 'GV16', 'value':0, 'uom':30}
-                 ,{'driver': 'GV17', 'value':0, 'uom':30}   
+                 ,{'driver': 'GV16', 'value':0, 'uom':33}
+                 ,{'driver': 'GV17', 'value':0, 'uom':33}   
                  ,{'driver': 'GV18', 'value':0, 'uom':25}
                  ,{'driver': 'GV19', 'value':0, 'uom':25}
                  ,{'driver': 'GV20', 'value':0, 'uom':25}
         ] 
-
+    '''
 if __name__ == "__main__":
     try:
         #LOGGER.info('Starting Tesla Power Wall Controller')

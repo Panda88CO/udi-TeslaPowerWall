@@ -88,14 +88,14 @@ class teslaPWStatusNode(polyinterface.Node):
                     info = params[key]
                     if info != {}:
                         value = self.TPW.getISYvalue(key, self.id)
-                        #LOGGER.debug('Update ISY drivers :' + str(key)+ ' ' + info['systemVar']+ ' value:' + str(value) )
+                        LOGGER.debug('Update ISY drivers :' + str(key)+ ' ' + info['systemVar']+ ' value:' + str(value) )
                         self.setDriver(key, value, report = True, force = True)      
         elif level == 'critical':
             params = self.ISYcriticalParams
             if params:
                 for key in params:
                     value = self.TPW.getISYvalue(key, self.id)
-                    #LOGGER.debug('Update ISY drivers :' + str(key)+ ' value: ' + str(value) )
+                    LOGGER.debug('Update ISY drivers :' + str(key)+ ' value: ' + str(value) )
                     self.setDriver(key, value, report = True, force = True)        
 
         else:

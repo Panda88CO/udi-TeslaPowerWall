@@ -30,8 +30,8 @@ class TeslaPWController(polyinterface.Controller):
         self.primary = self.address
         LOGGER.debug('self address : ' + str(self.address))
         self.hb = 0
-        if not(PG_CLOUD_ONLY):
-            self.drivers = []
+        #if not(PG_CLOUD_ONLY):
+        #    self.drivers = [{'driver': 'GV1', 'value':1, 'uom':25}]
   
         self.nodeDefineDone = False
         self.TPW = None
@@ -243,8 +243,10 @@ class TeslaPWController(polyinterface.Controller):
     commands = { 'UPDATE': ISYupdate}
 
     drivers = [{'driver': 'GV1', 'value':1, 'uom':25}]
+    
+    #if PG_CLOUD_ONLY:
+    #    drivers = [{'driver': 'GV1', 'value':1, 'uom':25}]
     '''
-    if PG_CLOUD_ONLY:
         drivers= [{'driver': 'GV1', 'value':0, 'uom':33}
                  ,{'driver': 'GV2', 'value':0, 'uom':33}
                  ,{'driver': 'GV3', 'value':0, 'uom':33}

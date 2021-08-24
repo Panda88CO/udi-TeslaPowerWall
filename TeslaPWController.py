@@ -62,7 +62,7 @@ class TeslaPWController(polyinterface.Controller):
         
         self.IPAddress = self.getCustomParam('IP_ADDRESS')
         if  self.IPAddress == None:
-            self.addCustomParam({'IP_ADDRESS': '192.168.1.200'})  
+            self.addCustomParam({'IP_ADDRESS': '192.168.1.xxx'})  
 
         self.cloudUserEmail = self.getCustomParam('CLOUD_USER_EMAIL')
         if self.cloudUserEmail == None:

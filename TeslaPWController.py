@@ -209,27 +209,17 @@ class TeslaPWController(polyinterface.Controller):
         
     def updateISYdrivers(self, level):
         LOGGER.debug('System updateISYdrivers - ' + str(level))
-        params = []
-        LOGGER.debug(self.id + ' nbr drivers:' + str(len(self.drivers)))
-        #LOGGER.debug(self.ISYparams)
         if level == 'all':
-            #params = self.ISYparams
-            #LOGGER.debug ('all: ' + str(params) )
             value = self.TPW.getISYvalue('GV1', self.id)
-            #LOGGER.debug('Update ISY drivers :' + str(key)+ ' ' + info['systemVar']+ ' value:' + str(value) )
-            #self.setDriver(str(key), value) 
             self.setDriver('GV1', value, report = True, force = True) 
             LOGGER.debug('Update ISY drivers :' + str('GV1')+ '  value:' + str(value) )
         elif level == 'critical':
-            #tempDriver = self.drivers[index]
             value = self.TPW.getISYvalue('GV1', self.id)
-            #LOGGER.debug('Update ISY drivers :' + str(key)+ ' ' + info['systemVar']+ ' value:' + str(value) )
-            #self.setDriver(str(key), value) 
             self.setDriver('GV1', value, report = True, force = True) 
             LOGGER.debug('Update ISY drivers :' + str('GV1')+ '  value:' + str(value) )         
         else:
             LOGGER.debug('Wrong parameter passed: ' + str(level))
-            #LOGGER.debug(params)
+ 
 
     '''
     def query(self, command=None):

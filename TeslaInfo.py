@@ -590,7 +590,7 @@ class tesla_info:
             elif self.teslaVarName == self.weekdayPeakEndSec:
                 return(self.getTPW_getTouData('weekday', 'peak', 'stop'))   
             elif self.teslaVarName == self.nodeServerUp:
-                return(self.nodeServerUp())
+                return(self.isNodeServerUp())
             else:
 
                 LOGGER.debug('Error - unknown variable: ' + str(self.teslaVarName )) 
@@ -599,7 +599,7 @@ class tesla_info:
             LOGGER.debug('Error - unknown variable: ' + str(ISYvar)) 
 
     # Need to be imlemented 
-    def nodeServeUp(self):
+    def isNodeServeUp(self):
         return(True)
 
     def TPW_updateMeter(self):

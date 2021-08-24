@@ -599,7 +599,7 @@ class tesla_info:
             LOGGER.debug('Error - unknown variable: ' + str(ISYvar)) 
 
     # Need to be imlemented 
-    def isNodeServeUp(self):
+    def isNodeServerUp(self):
         return(True)
 
     def TPW_updateMeter(self):

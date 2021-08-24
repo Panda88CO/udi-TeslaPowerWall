@@ -154,22 +154,22 @@ class tesla_info:
             self.ISYgridEnum[self.gridstatus [key]]= key
 
         self.gridStatusEnum = {GridStatus.CONNECTED.value: 'on_grid', GridStatus.ISLANEDED_READY.value:'islanded_ready', GridStatus.ISLANEDED.value:'islanded', GridStatus.TRANSITION_TO_GRID.value:'transition ot grid' }
-
         self.operationLocalEnum =  {OperationMode.BACKUP.value:'backup',OperationMode.SELF_CONSUMPTION.value:'self_consumption', OperationMode.AUTONOMOUS.value:'autonomous', OperationMode.SITE_CONTROL.value: 'site_ctrl' }
-        
-        self.operationCloudEnum = {0:'backup', 1:'self_consumption', 2: 'autonomous', 3:'site_ctrl'}
+        self.operationModeEnum = {0:'backup', 1:'self_consumption', 2:'autonomous', 3:'site_ctrl'}
+        self.ISYoperationModeEnum = {}
+        for key in self.operationModeEnum:
+            self.ISYoperationModeEnum[self.operationModeEnum[key]] = key
 
-        #self.operationCloudEnum = {}  
+        self.operationCloudEnum = {}  
 
         if self.TPWcloudAccess:
             ModeList = self.TPWcloud.supportedOperatingModes()
             for i in range(0,len(ModeList)):
                 self.operationCloudEnum[i]= ModeList[i] 
-            
-            
-            ModeList = self.operationCloudEnum
+            ModeList = self.ISYoperationModeEnum
+
             for  key in ModeList:
-                self.ISYoperationModeEnum[ModeList[key]]= key
+                self.operationCloudEnum[ModeList[key]]= key
             
             ModeList = self.TPWcloud.supportedTouModes()
             self.touCloudEnum = {}
@@ -279,7 +279,7 @@ class tesla_info:
         
         self.isyINFO.addIsyVaraiable (self.statusNodeID, self.gridStatus, 'list', None, None, '0-3', None, None, 'Grid Status', self.ISYgridEnum ) 
 
-        self.isyINFO.addIsyVaraiable (self.statusNodeID, self.operationMode, 'list', None, None, '0-3', None, None, 'Operation Mode', self.operationLocalEnum )                
+        self.isyINFO.addIsyVaraiable (self.statusNodeID, self.operationMode, 'list', None, None, '0-3', None, None, 'Operation Mode', self.operationModeEnum )                
 
         self.addISYCriticalParam(self.statusNodeID, self.operationMode)
 
@@ -297,7 +297,7 @@ class tesla_info:
             self.isyINFO.addIsyVaraiable( self.setupNodeID, self.backoffLevel, 'percent', 0, 100, None, None, 1, 'Backup Reserve (%)', None ) 
 
             self.isyINFO.addISYcommandReceive(self.setupNodeID, 'OP_MODE', 'Operating Mode', self.operationMode)
-            self.isyINFO.addIsyVaraiable (self.setupNodeID, self.operationMode, 'list', None, None, '0-'+ str(len(self.operationCloudEnum)-1), None, None, 'Operating Mode', self.operationCloudEnum  ) 
+            self.isyINFO.addIsyVaraiable (self.setupNodeID, self.operationMode, 'list', None, None, '0-'+ str(len(self.operationModeEnum)-1), None, None, 'Operating Mode', self.operationModeEnum  ) 
 
             self.isyINFO.addISYcommandReceive(self.setupNodeID, 'STORM_MODE', 'Set Storm Mode', self.stormMode)
             self.isyINFO.addIsyVaraiable( self.setupNodeID, self.stormMode,'list', None,None, '0-1',None, None, 'Storm Mode', { 0:'Disabled', 1: 'Enabled' }) 
@@ -803,7 +803,7 @@ class tesla_info:
         return(self.isyINFO.varToISY(node, self.operationMode))
 
     def setTPW_operationMode(self, index):
-        return(self.TPWcloud.teslaSetOperationMode(self.operationCloudEnum[index]))
+        return(self.TPWcloud.teslaSetOperationMode(self.operationModeEnum[index]))
 
     ''' 
     def getTPW_running(self):

@@ -392,5 +392,6 @@ class isyHandling:
             nodeFile.close()
             editorFile.close()
             nlsFile.close()
+            
         return(status)
     

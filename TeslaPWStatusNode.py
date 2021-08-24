@@ -19,7 +19,7 @@ class teslaPWStatusNode(polyinterface.Node):
     def __init__(self, controller, primary, address, name):
         super().__init__(controller, primary, address, name)
 
-        LOGGER.info('_init_ Tesla Power Wall setup NOde')
+        LOGGER.info('_init_ Tesla Power Wall Status NOde')
         self.ISYforced = False
         self.TPW = self.parent.TPW
         self.address = address 
@@ -31,7 +31,7 @@ class teslaPWStatusNode(polyinterface.Node):
              self.drivers = []
 
         self.nodeDefineDone = False
-        LOGGER.debug('Start Tesla Power Wall Setup Node')  
+        LOGGER.debug('Start Tesla Power Wall Status Node')  
 
         self.ISYparams = self.TPW.supportedParamters(self.id)
         #LOGGER.debug ('Node = ISYparams :' + str(self.ISYparams))
@@ -61,22 +61,22 @@ class teslaPWStatusNode(polyinterface.Node):
     
     def shortPoll(self):
         #No need to poll data - done by Controller
-        LOGGER.debug('Tesla Power Wall setupNode shortPoll')
+        LOGGER.debug('Tesla Power Wall Status Node shortPoll')
         if self.nodeDefineDone:
             self.updateISYdrivers('critical')
         else:
-           LOGGER.info('waiting for system/nodes to get created')
+           LOGGER.info('Status Node: waiting for system/nodes to get created')
 
                 
 
     def longPoll(self):
         #No need to poll data - done by Controller
-        LOGGER.debug('Tesla Power Wall  sentupNode longPoll')
+        LOGGER.debug('Tesla Power Wall  status Node longPoll')
         if self.nodeDefineDone:
            self.updateISYdrivers('all')
            #self.reportDrivers() 
         else:
-           LOGGER.info('waiting for system/nodes to get created')
+           LOGGER.info('Status Node: waiting for system/nodes to get created')
 
     def updateISYdrivers(self, level):
         LOGGER.debug('Node updateISYdrivers')

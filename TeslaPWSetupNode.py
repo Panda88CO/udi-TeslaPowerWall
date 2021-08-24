@@ -78,7 +78,7 @@ class teslaPWSetupNode(polyinterface.Node):
             #self.heartbeat()
             self.updateISYdrivers('critical')
         else:
-           LOGGER.info('waiting for system/nodes to get created')
+           LOGGER.info('Setup Node: waiting for system/nodes to get created')
 
                 
 
@@ -89,7 +89,7 @@ class teslaPWSetupNode(polyinterface.Node):
            self.updateISYdrivers('all')
            #self.reportDrivers() 
         else:
-           LOGGER.info('waiting for system/nodes to get created')
+           LOGGER.info('Setup Node: waiting for system/nodes to get created')
 
     def updateISYdrivers(self, level):
         LOGGER.debug('Node updateISYdrivers')

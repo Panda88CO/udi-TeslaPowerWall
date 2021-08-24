@@ -245,8 +245,8 @@ class TeslaPWController(polyinterface.Controller):
 
     #drivers = [{'driver': 'GV1', 'value':1, 'uom':25}]
     
-    if PG_CLOUD_ONLY:
-        drivers = [{'driver': 'GV1', 'value':1, 'uom':25}]
+    #if PG_CLOUD_ONLY:
+    #    drivers = [{'driver': 'GV1', 'value':1, 'uom':25}]
     '''
         drivers= [{'driver': 'GV1', 'value':0, 'uom':33}
                  ,{'driver': 'GV2', 'value':0, 'uom':33}

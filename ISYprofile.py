@@ -386,7 +386,7 @@ class isyHandling:
             nlsFile.close()
         
         except Exception as e:
-            LOGGER.debug('Exception createSetupFiles: '+ str(e))
+            LOGGER.error('Exception createSetupFiles: '+ str(e))
             LOGGER.info('Something went wrong in creating setup files')
             status = False
             nodeFile.close()

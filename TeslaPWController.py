@@ -153,7 +153,7 @@ class TeslaPWController(polyinterface.Controller):
             self.TPW.createLogFile(self.logFile)
             self.nodeDefineDone = True
         except Exception as e:
-            LOGGER.debug('Exception Controller start: '+ str(e))
+            LOGGER.error('Exception Controller start: '+ str(e))
             LOGGER.info('Did not connect to power wall')
             self.stop()
 

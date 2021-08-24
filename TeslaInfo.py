@@ -357,8 +357,8 @@ class tesla_info:
             dataFile.write(str(dayInfo)+ ','+str(solar)+','+str(consumption)+','+str(generation)+','+str(battery)+','+str(gridUse)+','+str(generator)+'\n')
             dataFile.close()
         except Exception as e:
-            LOGGER.debug('Exception storeDaysData: '+  str(e))         
-            LOGGER.debug ('Failed to add data to '+str(filename))
+            LOGGER.error('Exception storeDaysData: '+  str(e))         
+            LOGGER.error ('Failed to add data to '+str(filename))
         
 
     def getISYSendCommands(self, nodeId):
@@ -508,8 +508,8 @@ class tesla_info:
             return(True)
 
         except Exception as e:
-            LOGGER.debug('Exception PollSystemData: '+  str(e))
-            LOGGER.debug('problems extracting data from tesla power wall')
+            LOGGER.error('Exception PollSystemData: '+  str(e))
+            LOGGER.error('problems extracting data from tesla power wall')
             # NEED To logout and log back in locally
             # Need to retrieve/renew token from cloud
 

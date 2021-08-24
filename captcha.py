@@ -144,8 +144,8 @@ def sendEmailCaptcha(captchaFile, email):
             smtp.starttls(context=context)  # Puts the connection in TLS mode.
             smtp.ehlo()
             smtp.login(sender_email, password)
-            #smtp.sendmail(sender_email, receiver_email, text)
+            smtp.sendmail(sender_email, receiver_email, text)
             LOGGER.info('captcha email sent')
     except Exception as e:
-        LOGGER.debug('Exception sendEmailCaptcha: ' + str(e))
+        LOGGER.error('Exception sendEmailCaptcha: ' + str(e))
               

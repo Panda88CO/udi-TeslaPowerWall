@@ -124,8 +124,9 @@ class isyHandling:
             tempList.append({key:self.sData[nodeId]['ISYnode']['accepts'][key]['ISYeditor']} )
         return(tempList)
 
+
+
     def addIsyVaraiable (self, nodeId, name,  ISYuom, ISYmin, ISYmax, ISYsubset,ISYstep,ISYprecision, nlsText, nlsValues):
-        
         uom = self.getISYunit(ISYuom)
         tempDict = { 'ISYeditor':
                             {'ISYuom':uom, 'ISYmin':ISYmin, 'ISYmax':ISYmax, 'ISYsubset':ISYsubset, 'ISYstep':ISYstep, 'ISYprec':ISYprecision}

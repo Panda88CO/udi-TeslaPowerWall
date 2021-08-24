@@ -133,7 +133,7 @@ class TeslaPWController(polyinterface.Controller):
                 self.TPW.createLogFile(self.logFile)
 
        
-            self.poly.installprofile()
+            #self.poly.installprofile()
 
             LOGGER.info('Creating Setup Node')
             nodeList = self.TPW.getNodeIdList()

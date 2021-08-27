@@ -150,8 +150,8 @@ class TeslaPWController(polyinterface.Controller):
                     self.addNode(teslaPWSetupNode(self, self.primary, node, name))
                 if node == self.TPW.getStatusNodeID():    
                     self.addNode(teslaPWStatusNode(self, self.primary, node, name))
-        '''
-        '''
+        
+        
             self.TPW.pollSystemData('all')
             self.updateISYdrivers('all')
             #self.reportDrivers()

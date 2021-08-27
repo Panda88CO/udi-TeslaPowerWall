@@ -31,7 +31,7 @@ class TeslaPWController(polyinterface.Controller):
         LOGGER.debug('self address : ' + str(self.address))
         self.hb = 0
         #if not(PG_CLOUD_ONLY):
-        self.drivers = [{'driver': 'GV1', 'value':1, 'uom':25},]
+        #self.drivers = [{'driver': 'GV1', 'value':1, 'uom':25},]
         LOGGER.debug('MAIN ADDING DRIVER' + str(self.drivers))
         self.nodeDefineDone = False
         self.TPW = None
@@ -243,33 +243,11 @@ class TeslaPWController(polyinterface.Controller):
  
     commands = { 'UPDATE': ISYupdate}
 
-    #drivers = [{'driver': 'GV1', 'value':1, 'uom':25}]
+    drivers = [{'driver': 'GV1', 'value':1, 'uom':25}]
     
     #if PG_CLOUD_ONLY:
     #    drivers = [{'driver': 'GV1', 'value':1, 'uom':25}]
-    '''
-        drivers= [{'driver': 'GV1', 'value':0, 'uom':33}
-                 ,{'driver': 'GV2', 'value':0, 'uom':33}
-                 ,{'driver': 'GV3', 'value':0, 'uom':33}
-                 ,{'driver': 'GV4', 'value':0, 'uom':33}
-                 ,{'driver': 'GV5', 'value':0, 'uom':33}
-                 ,{'driver': 'GV6', 'value':0, 'uom':33}
-                 ,{'driver': 'GV7', 'value':0, 'uom':33}
-                 ,{'driver': 'GV8', 'value':0, 'uom':33}
-                 ,{'driver': 'GV9', 'value':0, 'uom':33}
-                 ,{'driver': 'GV10', 'value':0, 'uom':33}
-                 ,{'driver': 'GV11', 'value':0, 'uom':33}
-                 ,{'driver': 'GV12', 'value':0, 'uom':33}
-                 ,{'driver': 'GV13', 'value':0, 'uom':33}
-                 ,{'driver': 'GV14', 'value':0, 'uom':33}
-                 ,{'driver': 'GV15', 'value':0, 'uom':51}
-                 ,{'driver': 'GV16', 'value':0, 'uom':33}
-                 ,{'driver': 'GV17', 'value':0, 'uom':33}   
-                 ,{'driver': 'GV18', 'value':0, 'uom':25}
-                 ,{'driver': 'GV19', 'value':0, 'uom':25}
-                 ,{'driver': 'GV20', 'value':0, 'uom':25}
-        ] 
-    '''
+
 if __name__ == "__main__":
     try:
         #LOGGER.info('Starting Tesla Power Wall Controller')

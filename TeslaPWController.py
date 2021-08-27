@@ -35,10 +35,11 @@ class TeslaPWController(polyinterface.Controller):
         LOGGER.debug('MAIN ADDING DRIVER' + str(self.drivers))
         self.nodeDefineDone = False
         self.TPW = None
+        self.setDriver('GV1', 1)
 
     def start(self):
         #self.removeNoticesAll()
-        self.addNotice('Check CONFIG to make sure all relevant paraeters are set')
+        #self.addNotice('Check CONFIG to make sure all relevant paraeters are set')
         #self.customParams = self.poly.config['customParams']
         #LOGGER.debug(self.customParams)
         self.cloudAccess = False
@@ -180,7 +181,7 @@ class TeslaPWController(polyinterface.Controller):
         if self.nodeDefineDone:
             for node in self.nodes:
                 #LOGGER.debug('Node : ' + node)
-                if node != self.address and node != self.primary:
+                if node != self.address:
                     self.nodes[node].shortPoll()
         
             if self.TPW.pollSystemData('critical'):
@@ -197,7 +198,7 @@ class TeslaPWController(polyinterface.Controller):
         if self.nodeDefineDone:
             for node in self.nodes:
                 #LOGGER.debug('Node : ' + node)
-                if node != self.address and node != self.primary:
+                if node != self.address :
                     self.nodes[node].longPoll()
             if self.TPW.pollSystemData('all'):
                 self.updateISYdrivers('all')

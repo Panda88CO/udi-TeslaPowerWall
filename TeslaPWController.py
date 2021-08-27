@@ -11,9 +11,9 @@ except ImportError:
 #from os import truncate
 import sys
 import time 
-#from  TeslaInfo import tesla_info
-#from TeslaPWSetupNode import teslaPWSetupNode
-#from TeslaPWStatusNode import teslaPWStatusNode
+from  TeslaInfo import tesla_info
+from TeslaPWSetupNode import teslaPWSetupNode
+from TeslaPWStatusNode import teslaPWStatusNode
 
 
 LOGGER = polyinterface.LOGGER
@@ -24,7 +24,7 @@ class TeslaPWController(polyinterface.Controller):
         super(TeslaPWController, self).__init__(polyglot)
         LOGGER.info('_init_ Tesla Power Wall Controller')
         self.ISYforced = False
-        #self.name = 'Tesla PowerWall Info'
+        self.NodeName = 'Tesla PowerWall Info'
         self.id = 'teslapw'
         #self.address = self.id
         self.primary = self.address
@@ -46,7 +46,7 @@ class TeslaPWController(polyinterface.Controller):
         self.cloudAccess = False
         self.localAccess = False
         self.captcha = ''
-        '''
+        
         if self.getCustomParam('CAPTCHA'):
             self.removeCustomParam('CAPTCHA')
         self.addCustomParam({'CAPTCHA': self.captcha})
@@ -137,8 +137,8 @@ class TeslaPWController(polyinterface.Controller):
 
        
             #self.poly.installprofile()
-        '''
-        '''
+        
+        
             LOGGER.info('Creating Setup Node')
             nodeList = self.TPW.getNodeIdList()
             LOGGER.debug('Setup start ' + str(nodeList))

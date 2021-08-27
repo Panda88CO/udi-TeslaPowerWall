@@ -11,9 +11,9 @@ except ImportError:
 #from os import truncate
 import sys
 import time 
-from  TeslaInfo import tesla_info
-from TeslaPWSetupNode import teslaPWSetupNode
-from TeslaPWStatusNode import teslaPWStatusNode
+#from  TeslaInfo import tesla_info
+#from TeslaPWSetupNode import teslaPWSetupNode
+#from TeslaPWStatusNode import teslaPWStatusNode
 
 
 LOGGER = polyinterface.LOGGER

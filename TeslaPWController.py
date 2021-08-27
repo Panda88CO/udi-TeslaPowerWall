@@ -161,7 +161,7 @@ class TeslaPWController(polyinterface.Controller):
             LOGGER.error('Exception Controller start: '+ str(e))
             LOGGER.info('Did not connect to power wall')
             self.stop()
-        '''
+        
 
     def stop(self):
         self.removeNoticesAll()
@@ -180,7 +180,7 @@ class TeslaPWController(polyinterface.Controller):
  
     def shortPoll(self):
         LOGGER.info('Tesla Power Wall Controller shortPoll')
-        '''
+        
         self.heartbeat()
 
         if self.nodeDefineDone:
@@ -196,10 +196,10 @@ class TeslaPWController(polyinterface.Controller):
                 LOGGER.info ('Problem polling data from Tesla system')
         else:
             LOGGER.info('Waiting for system/nodes to get created')
-        '''
+        
     def longPoll(self):
         LOGGER.info('Tesla Power Wall  Controller longPoll')
-        '''
+        
         self.heartbeat()
         if self.nodeDefineDone:
             for node in self.nodes:
@@ -213,7 +213,7 @@ class TeslaPWController(polyinterface.Controller):
                 LOGGER.info ('Problem polling data from Tesla system')
         else:
             LOGGER.info('Waiting for system/nodes to get created')
-        '''
+        
         
     def updateISYdrivers(self, level):
         LOGGER.debug('System updateISYdrivers - ' + str(level))
@@ -232,7 +232,7 @@ class TeslaPWController(polyinterface.Controller):
     '''
     def query(self, command=None):
         LOGGER.debug('TOP querry')
-        self.updateISYdrivers(ll''a)
+        self.updateISYdrivers('all')
         self.reportDrivers('all')
     '''
 

@@ -28,7 +28,7 @@ class TeslaPWController(polyinterface.Controller):
         self.id = 'teslapw'
         #self.address = self.id
         self.primary = self.address
-        LOGGER.debug('self address : ' + str(self.address))
+        LOGGER.debug('self.address : ' + str(self.address))
         self.hb = 0
         #if not(PG_CLOUD_ONLY):
         #self.drivers = [{'driver': 'GV1', 'value':1, 'uom':25},]

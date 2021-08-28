@@ -41,7 +41,7 @@ class TeslaPWController(polyinterface.Controller):
     def start(self):
         #self.removeNoticesAll()
         #self.addNotice('Check CONFIG to make sure all relevant paraeters are set')
-        self.customParams = self.poly.config['customParams']
+        #self.customParams = self.poly.config['customParams']
         #LOGGER.debug(self.customParams)
         self.cloudAccess = False
         self.localAccess = False

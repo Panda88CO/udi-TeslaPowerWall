@@ -4,5 +4,4 @@ polyinterface
 
 svglib
 reportlab
-email
 requests>=2.22.0

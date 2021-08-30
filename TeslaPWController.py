@@ -29,7 +29,7 @@ class TeslaPWController(polyinterface.Controller):
         self.name= self.id
         #self.address = self.id
         
-        self.address='main'
+        #self.address='ctrl'
         self.primary = self.address
         LOGGER.debug('self.address : ' + str(self.address))
         LOGGER.debug('self.name :' + str(self.name))

@@ -261,7 +261,7 @@ class TeslaPWController(polyinterface.Controller):
 if __name__ == "__main__":
     try:
         #LOGGER.info('Starting Tesla Power Wall Controller')
-        polyglot = polyinterface.Interface('TeslaPowerWall')
+        polyglot = polyinterface.Interface('TeslaPWControl')
         polyglot.start()
         control = TeslaPWController(polyglot)
         control.runForever()

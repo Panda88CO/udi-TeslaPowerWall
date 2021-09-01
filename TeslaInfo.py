@@ -117,6 +117,7 @@ class tesla_info:
 
 
     def teslaInitializeData(self):
+        LOGGER.debug('teslaInitializeData')
         if not(self.TPWcloudAccess):
             LOGGER.debug ('no access to cloud data - starting accumulting from 0')
             self.yesterdayTotalSolar = 0

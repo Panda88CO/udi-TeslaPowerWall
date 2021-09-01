@@ -5,7 +5,6 @@ try:
     import polyinterface
 except ImportError:
     import pgc_interface as polyinterface
-
     PG_CLOUD_ONLY = True
 
 #from os import truncate
@@ -35,7 +34,7 @@ class TeslaPWController(polyinterface.Controller):
         LOGGER.debug('self.name :' + str(self.name))
         self.hb = 0
         #if not(PG_CLOUD_ONLY):
-        #self.drivers = [{'driver': 'GV1', 'value':1, 'uom':25},]
+        self.drivers = [{'driver': 'GV1', 'value':1, 'uom':25} ]
         LOGGER.debug('MAIN ADDING DRIVER' + str(self.drivers))
         self.nodeDefineDone = False
         self.TPW = None
@@ -257,7 +256,7 @@ class TeslaPWController(polyinterface.Controller):
  
     commands = { 'UPDATE': ISYupdate }
 
-    drivers = [{'driver': 'ST', 'value':1, 'uom':2}]
+    #drivers = [{'driver': 'GV1', 'value':1, 'uom':25}]
     
     #if PG_CLOUD_ONLY:
     #    drivers = [{'driver': 'GV1', 'value':1, 'uom':25}]

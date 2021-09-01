@@ -603,7 +603,7 @@ class tesla_info:
 
     # Need to be imlemented 
     def isNodeServerUp(self):
-        return(True)
+        return(1)
 
     def TPW_updateMeter(self):
         self.pollSystemData('all')

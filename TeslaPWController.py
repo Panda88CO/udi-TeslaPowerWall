@@ -26,7 +26,10 @@ class TeslaPWController(polyinterface.Controller):
         self.ISYforced = False
         self.NodeName = 'Tesla PowerWall Info'
         self.id = 'teslapw'
+        self.name= self.id
         #self.address = self.id
+        
+        #self.address='ctrl'
         self.primary = self.address
         LOGGER.debug('self.address : ' + str(self.address))
         LOGGER.debug('self.name :' + str(self.name))
@@ -258,7 +261,7 @@ class TeslaPWController(polyinterface.Controller):
 if __name__ == "__main__":
     try:
         #LOGGER.info('Starting Tesla Power Wall Controller')
-        polyglot = polyinterface.Interface('Tesla Power Wall')
+        polyglot = polyinterface.Interface('TeslaPWControl')
         polyglot.start()
         control = TeslaPWController(polyglot)
         control.runForever()

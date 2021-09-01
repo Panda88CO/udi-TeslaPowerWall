@@ -24,12 +24,12 @@ class TeslaPWController(polyinterface.Controller):
         LOGGER.info('_init_ Tesla Power Wall Controller - 1')
         self.ISYforced = False
         self.name = 'Tesla PowerWall Info'
-        self.id = 'teslapw'
+        #self.address= 'teslapw'
        
-        #self.address = self.id
+        #self.address = self.address
         
         #self.address='ctrl'
-        self.primary = self.address
+        #self.primary = self.address
         LOGGER.debug('self.address : ' + str(self.address))
         LOGGER.debug('self.name :' + str(self.name))
         self.hb = 0
@@ -48,7 +48,7 @@ class TeslaPWController(polyinterface.Controller):
         self.cloudAccess = False
         self.localAccess = False
         self.captcha = ''
-        '''
+        
         if self.getCustomParam('CAPTCHA'):
             self.removeCustomParam('CAPTCHA')
         self.addCustomParam({'CAPTCHA': self.captcha})
@@ -106,11 +106,11 @@ class TeslaPWController(polyinterface.Controller):
         if  self.access == 'BOTH' or self.access== 'LOCAL':
             self.localAccess = True
 
-        '''       
+            
         try:
             '''    
 
-            self.TPW = tesla_info(self.name, self.id , self.access)
+            self.TPW = tesla_info(self.name, self.address, self.access)
             #self.removeNoticesAll()
             if self.localAccess:
                 self.TPW.loginLocal(self.localUserEmail, self.localUserPassword, self.IPAddress)
@@ -152,9 +152,9 @@ class TeslaPWController(polyinterface.Controller):
                 name = self.TPW.getNodeName(node)
                 LOGGER.debug('Setup Node(node, name) ' + str(node) + ' , '+ str(name))
                 if node == self.TPW.getSetupNodeID():  
-                    self.addNode(teslaPWSetupNode(self, self.primary, node, name))
+                    self.addNode(teslaPWSetupNode(self,self.address, node, name))
                 if node == self.TPW.getStatusNodeID():    
-                    self.addNode(teslaPWStatusNode(self, self.primary, node, name))
+                    self.addNode(teslaPWStatusNode(self,self.address, node, name))
         
             '''
             #self.TPW.pollSystemData('all')
@@ -240,11 +240,11 @@ class TeslaPWController(polyinterface.Controller):
         LOGGER.debug('System updateISYdrivers - ' + str(level))
         value = 1
         if level == 'all':
-            #value = self.TPW.getISYvalue('GV1', self.id)
+            #value = self.TPW.getISYvalue('GV1', self.address)
             self.setDriver('GV1', value, report = True, force = True) 
             LOGGER.debug('Update ISY drivers :' + str('GV1')+ '  value:' + str(value) )
         elif level == 'critical':
-            #value = self.TPW.getISYvalue('GV1', self.id)
+            #value = self.TPW.getISYvalue('GV1', self.address)
             self.setDriver('GV1', value, report = True, force = True) 
             LOGGER.debug('Update ISY drivers :' + str('GV1')+ '  value:' + str(value) )         
         else:

@@ -40,6 +40,7 @@ class tesla_info:
         self.solarInstalled = False
         self.ISYCritical = {}
         self.localAccessUp = False
+        self.cloudAccessUp = False
         self.isyINFO = isyHandling()
         self.lastDay = date.today()  
 
@@ -486,7 +487,7 @@ class tesla_info:
 
                 if self.TPWcloudAccess:
                     LOGGER.debug('pollSystemData - CLOUD all')
-                    self.TPWcloud.teslaUpdateCloudData('all')
+                    self.cloudAccessUp = self.TPWcloud.teslaUpdateCloudData('all')
                     self.TPWcloud.teslaCalculateDaysTotals()
                     self.daysTotalSolar = self.TPWcloud.teslaExtractDaysSolar()
                     self.daysTotalConsumption = self.TPWcloud.teslaExtractDaysConsumption()
@@ -595,7 +596,10 @@ class tesla_info:
 
     # Need to be imlemented 
     def isNodeServerUp(self):
-        return(1)
+        if self.localAccessUp == True or self.cloudAccessUp == True:
+             return(1)
+        else:
+             return(0) 
 
     def TPW_updateMeter(self):
         self.pollSystemData('all')

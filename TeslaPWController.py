@@ -23,9 +23,9 @@ class TeslaPWController(polyinterface.Controller):
         super(TeslaPWController, self).__init__(polyglot)
         LOGGER.info('_init_ Tesla Power Wall Controller - 1')
         self.ISYforced = False
-        self.NodeName = 'Tesla PowerWall Info'
+        self.name = 'Tesla PowerWall Info'
         self.id = 'teslapw'
-        self.name= self.id
+       
         #self.address = self.id
         
         #self.address='ctrl'
@@ -34,7 +34,7 @@ class TeslaPWController(polyinterface.Controller):
         LOGGER.debug('self.name :' + str(self.name))
         self.hb = 0
         #if not(PG_CLOUD_ONLY):
-        self.drivers = [{'driver': 'GV1', 'value':1, 'uom':25} ]
+        self.drivers = [{'driver': 'GV1', 'value':1, 'uom':2} ]
         LOGGER.debug('MAIN ADDING DRIVER' + str(self.drivers))
         self.nodeDefineDone = False
         #self.TPW = None
@@ -170,9 +170,11 @@ class TeslaPWController(polyinterface.Controller):
         
 
     def stop(self):
+        '''
         self.removeNoticesAll()
         if self.TPW:
             self.TPW.disconnectTPW()
+        '''
         LOGGER.debug('stop - Cleaning up')
 
     def heartbeat(self):
@@ -264,9 +266,10 @@ class TeslaPWController(polyinterface.Controller):
 
     def ISYupdate (self, command):
         LOGGER.debug('ISY-update called')
-        if self.TPW.pollSystemData('all'):
-            self.updateISYdrivers('all')
-            #self.reportDrivers()
+        #
+        #if self.TPW.pollSystemData('all'):
+        #    self.updateISYdrivers('all')
+        #    #self.reportDrivers()
  
     commands = { 'UPDATE': ISYupdate }
 

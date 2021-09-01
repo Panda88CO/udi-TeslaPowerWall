@@ -140,8 +140,8 @@ class TeslaPWController(polyinterface.Controller):
 
        
             #self.poly.installprofile()
-        
-        
+
+            '''   
             LOGGER.info('Creating Setup Node')
             nodeList = self.TPW.getNodeIdList()
             LOGGER.debug('Setup start ' + str(nodeList))
@@ -154,11 +154,11 @@ class TeslaPWController(polyinterface.Controller):
                 if node == self.TPW.getStatusNodeID():    
                     self.addNode(teslaPWStatusNode(self, self.primary, node, name))
         
-        
+            '''
             self.TPW.pollSystemData('all')
             self.updateISYdrivers('all')
             #self.reportDrivers()
-            self.TPW.createLogFile(self.logFile)
+
             self.nodeDefineDone = True
         except Exception as e:
             LOGGER.error('Exception Controller start: '+ str(e))
@@ -174,16 +174,18 @@ class TeslaPWController(polyinterface.Controller):
 
     def heartbeat(self):
         LOGGER.debug('heartbeat: hb={}'.format(self.hb))
+        '''
         if self.hb == 0:
             self.reportCmd('DON',2)
             self.hb = 1
         else:
             self.reportCmd('DOF',2)
             self.hb = 0
- 
+        '''
+
     def shortPoll(self):
         LOGGER.info('Tesla Power Wall Controller shortPoll')
-        
+        '''
         self.heartbeat()
 
         if self.nodeDefineDone:
@@ -199,10 +201,11 @@ class TeslaPWController(polyinterface.Controller):
                 LOGGER.info ('Problem polling data from Tesla system')
         else:
             LOGGER.info('Waiting for system/nodes to get created')
-        
+        '''
+
     def longPoll(self):
         LOGGER.info('Tesla Power Wall  Controller longPoll')
-        
+        '''
         self.heartbeat()
         if self.nodeDefineDone:
             for node in self.nodes:
@@ -217,7 +220,8 @@ class TeslaPWController(polyinterface.Controller):
         else:
             LOGGER.info('Waiting for system/nodes to get created')
         
-        
+        '''
+
     def updateISYdrivers(self, level):
         LOGGER.debug('System updateISYdrivers - ' + str(level))
         if level == 'all':
@@ -251,9 +255,9 @@ class TeslaPWController(polyinterface.Controller):
             self.updateISYdrivers('all')
             #self.reportDrivers()
  
-    commands = { 'UPDATE': ISYupdate}
+    commands = { 'UPDATE': ISYupdate }
 
-    drivers = [{'driver': 'GV1', 'value':1, 'uom':25}]
+    drivers = [{'driver': 'ST', 'value':1, 'uom':2}]
     
     #if PG_CLOUD_ONLY:
     #    drivers = [{'driver': 'GV1', 'value':1, 'uom':25}]

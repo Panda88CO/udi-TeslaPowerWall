@@ -88,26 +88,21 @@ class teslaPWStatusNode(polyinterface.Node):
                     info = params[key]
                     if info != {}:
                         value = self.TPW.getISYvalue(key, self.id)
-                        LOGGER.debug('Update ISY drivers :' + str(key)+ ' ' + info['systemVar']+ ' value:' + str(value) )
+                        #LOGGER.debug('Update ISY drivers :' + str(key)+ ' ' + info['systemVar']+ ' value:' + str(value) )
                         self.setDriver(key, value, report = True, force = True)      
         elif level == 'critical':
             params = self.ISYcriticalParams
             if params:
                 for key in params:
                     value = self.TPW.getISYvalue(key, self.id)
-                    LOGGER.debug('Update ISY drivers :' + str(key)+ ' value: ' + str(value) )
+                    #LOGGER.debug('Update ISY drivers :' + str(key)+ ' value: ' + str(value) )
                     self.setDriver(key, value, report = True, force = True)        
 
         else:
            LOGGER.debug('Wrong parameter passed: ' + str(level))
   
 
-    '''
-    def query(self, command=None):
-       LOGGER.debug('TOP querry')
-        self.updateISYdrivers(ll''a)
-        self.reportDrivers('all')
-    '''
+
 
 
 
@@ -120,22 +115,5 @@ class teslaPWStatusNode(polyinterface.Node):
 
     commands = { 'UPDATE': ISYupdate, 
                 }
-    '''
-    if PG_CLOUD_ONLY:
-        drivers= [{'driver': 'GV1', 'value':0, 'uom':51}
-                 ,{'driver': 'GV2', 'value':0, 'uom':25}
-                 ,{'driver': 'GV3', 'value':0, 'uom':25}
-                 ,{'driver': 'GV4', 'value':0, 'uom':25}
-                 ,{'driver': 'GV5', 'value':0, 'uom':58}
-                 ,{'driver': 'GV6', 'value':0, 'uom':58}
-                 ,{'driver': 'GV7', 'value':0, 'uom':58}
-                 ,{'driver': 'GV8', 'value':0, 'uom':58}
-                 ,{'driver': 'GV9', 'value':0, 'uom':58}
-                 ,{'driver': 'GV10', 'value':0, 'uom':58}
-                 ,{'driver': 'GV11', 'value':0, 'uom':58}
-                 ,{'driver': 'GV12', 'value':0, 'uom':58}
 
-        ] 
-    '''
-        
 

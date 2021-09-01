@@ -24,27 +24,20 @@ class TeslaPWController(polyinterface.Controller):
         LOGGER.info('_init_ Tesla Power Wall Controller - 1')
         self.ISYforced = False
         self.name = 'Tesla PowerWall Info'
-        #self.address= 'teslapw'
-       
-        #self.address = self.address
-        
-        #self.address='ctrl'
-        #self.primary = self.address
+
         LOGGER.debug('self.address : ' + str(self.address))
         LOGGER.debug('self.name :' + str(self.name))
         self.hb = 0
         #if not(PG_CLOUD_ONLY):
         self.drivers = [{'driver': 'GV1', 'value':1, 'uom':2} ]
-        LOGGER.debug('MAIN ADDING DRIVER' + str(self.drivers))
+        #LOGGER.debug('MAIN ADDING DRIVER' + str(self.drivers))
         self.nodeDefineDone = False
-        #self.TPW = None
         self.setDriver('GV1', 1)
 
     def start(self):
-        #self.removeNoticesAll()
-        #self.addNotice('Check CONFIG to make sure all relevant paraeters are set')
-        #self.customParams = self.poly.config['customParams']
-        #LOGGER.debug(self.customParams)
+        self.removeNoticesAll()
+        self.addNotice('Check CONFIG to make sure all relevant paraeters are set')
+
         self.cloudAccess = False
         self.localAccess = False
         self.captcha = ''
@@ -101,9 +94,9 @@ class TeslaPWController(polyinterface.Controller):
             self.removeCustomParam('LOCAL_USER_PASSWORD')
             self.removeCustomParam('IP_ADDRESS')
 
-        if self.access == 'BOTH' or self.access== 'CLOUD':
+        if self.access == 'BOTH' or self.access == 'CLOUD':
             self.cloudAccess = True
-        if  self.access == 'BOTH' or self.access== 'LOCAL':
+        if  self.access == 'BOTH' or self.access == 'LOCAL':
             self.localAccess = True
 
             
@@ -111,7 +104,7 @@ class TeslaPWController(polyinterface.Controller):
              
 
             self.TPW = tesla_info(self.name, self.address, self.access)
-            #self.removeNoticesAll()
+            self.removeNoticesAll()
             if self.localAccess:
                 self.TPW.loginLocal(self.localUserEmail, self.localUserPassword, self.IPAddress)
             if self.cloudAccess:
@@ -127,27 +120,21 @@ class TeslaPWController(polyinterface.Controller):
                         self.captcha = self.getCustomParam('CAPTCHA')
                 self.TPW.teslaCloudConnect(self.captcha, self.captchaAPIkey)
             self.removeNoticesAll()
-            LOGGER.debug('')
-            self.TPW.teslaInitializeData()
-            self.TPW.pollSystemData('all')          
-            #self.poly.installprofile()
-
             self.captcha = ''
             if self.getCustomParam('CAPTCHA'):    
                 self.removeCustomParam('CAPTCHA')
-            self.addCustomParam({'CAPTCHA': self.captcha})
+            self.addCustomParam({'CAPTCHA': self.captcha})            
 
+            self.TPW.teslaInitializeData()
+            self.TPW.pollSystemData('all')          
+     
             if self.logFile:
                 self.TPW.createLogFile(self.logFile)
 
-       
-            #self.poly.installprofile()
+            self.poly.installprofile()
             
-        
-            
-            LOGGER.info('Creating Setup Node')
+            LOGGER.info('Creating Nodes')
             nodeList = self.TPW.getNodeIdList()
-            LOGGER.debug('Setup start ' + str(nodeList))
             
             for node in nodeList:
                 name = self.TPW.getNodeName(node)
@@ -158,7 +145,6 @@ class TeslaPWController(polyinterface.Controller):
                     self.addNode(teslaPWStatusNode(self,self.address, node, name))
         
             self.updateISYdrivers('all')
-            #self.reportDrivers()
             LOGGER.debug('Node installation complete')
             self.nodeDefineDone = True
             
@@ -177,7 +163,7 @@ class TeslaPWController(polyinterface.Controller):
         LOGGER.debug('stop - Cleaning up')
 
     def heartbeat(self):
-        LOGGER.debug('heartbeat: hb={}'.format(self.hb))
+        LOGGER.debug('heartbeat: + ' + str(self.hb))
         
         if self.hb == 0:
             self.reportCmd('DON',2)
@@ -220,7 +206,7 @@ class TeslaPWController(polyinterface.Controller):
                     if node != self.address :
                         self.nodes[node].longPoll()
             else:
-                LOGGER.info ('Problem polling data from Tesla system')
+                LOGGER.error ('Problem polling data from Tesla system')
         else:
             LOGGER.info('Waiting for system/nodes to get created')
         
@@ -238,7 +224,7 @@ class TeslaPWController(polyinterface.Controller):
             self.setDriver('GV1', value, report = True, force = True) 
             LOGGER.debug('Update ISY drivers :' + str('GV1')+ '  value:' + str(value) )         
         else:
-            LOGGER.debug('Wrong parameter passed: ' + str(level))
+            LOGGER.error('Wrong parameter passed: ' + str(level))
  
 
 
@@ -254,11 +240,6 @@ class TeslaPWController(polyinterface.Controller):
                     self.nodes[node].longPoll()
  
     commands = { 'UPDATE': ISYupdate }
-
-    #drivers = [{'driver': 'GV1', 'value':1, 'uom':25}]
-    
-    #if PG_CLOUD_ONLY:
-    #    drivers = [{'driver': 'GV1', 'value':1, 'uom':25}]
 
 if __name__ == "__main__":
     try:

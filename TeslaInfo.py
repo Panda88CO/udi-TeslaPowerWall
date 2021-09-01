@@ -247,11 +247,18 @@ class tesla_info:
         self.isyINFO.addISYnode(self.statusNodeID, self.statusNodeName, 'Electricity')
         self.isyINFO.addISYcommandReceive(self.statusNodeID, 'UPDATE', 'Update System Data', None)
 
+        self.isyINFO.addIsyVaraiable(self.statusNodeID, self.chargeLevel, 'percent', 0, 100, None, None, 2, 'Battery Charge Level', None )
+        self.isyINFO.addIsyVaraiable (self.statusNodeID, self.operationMode, 'list', None, None, '0-3', None, None, 'Operation Mode', self.operationModeEnum )  
+        self.isyINFO.addIsyVaraiable (self.statusNodeID, self.gridStatus, 'list', None, None, '0-3', None, None, 'Grid Status', self.ISYgridEnum ) 
+
+        if self.TPWlocalAccess:
+            self.isyINFO.addIsyVaraiable (self.statusNodeID, self.ConnectedTesla, 'list', None,None, '0-1',None, None, 'Connected to Tesla', { 0:'False', 1: 'True' }) 
+        self.isyINFO.addIsyVaraiable (self.statusNodeID, self.gridServiceActive, 'list', None,None, '0-1',None, None, 'Grid Services Active', { 0:'False', 1: 'True' }) 
+
         if self.solarInstalled or PG_CLOUD_ONLY: # only add if solar exist - cannot test if this works as intented, and I cannot remove solar (I have solar)
             self.isyINFO.addIsyVaraiable (self.statusNodeID, self.solarSupply, 'KWh', 0, 20, None, None, 2, 'Current Solar Supply', None ) 
             self.isyINFO.addIsyVaraiable (self.statusNodeID, self.daysSolar, 'KWh', - 100, 100, None, None, 2, 'Solar Power Today', None ) 
             self.isyINFO.addIsyVaraiable (self.statusNodeID,self.yesterdaySolar,  'KWh', -100, 100, None, None, 2, 'Solar Power Yesterday', None )
-
 
         self.isyINFO.addIsyVaraiable (self.statusNodeID, self.batterySupply, 'KWh', -20, 20, None, None, 2, 'Current Battery Supply', None ) 
         self.isyINFO.addIsyVaraiable (self.statusNodeID, self.daysBattery, 'KWh', -100, -100, None, None, 2, 'Battery Power Today', None ) 
@@ -269,25 +276,12 @@ class tesla_info:
             self.isyINFO.addIsyVaraiable (self.statusNodeID, self.daysGridServices, 'KWh', -100, 100, None, None, 2, 'Grid Service Power Today', None ) 
             self.isyINFO.addIsyVaraiable (self.statusNodeID, self.yesterdayGridServices, 'KWh', -100, 100, None, None, 2, 'Grid Service Power Yesterday', None )   
             
-        self.isyINFO.addIsyVaraiable(self.statusNodeID, self.chargeLevel, 'percent', 0, 100, None, None, 2, 'Battery Charge Level', None )
-
-
         if self.generatorInstalled and (self.TPWcloudAccess and not(self.TPWlocalAccess)) or (PG_CLOUD_ONLY): #I have no generator so I cannot test this if it 
             self.isyINFO.addIsyVaraiable (self.statusNodeID, self.daysGenerator, 'KWh', -100, 100, None, None, 2, 'Generator Power Today', None ) 
             self.isyINFO.addIsyVaraiable (self.statusNodeID, self.yesterdayGenerator, 'KWh', -100, 100, None, None, 2, 'Generator Power Yesterday', None ) 
         
-        self.isyINFO.addIsyVaraiable (self.statusNodeID, self.gridStatus, 'list', None, None, '0-3', None, None, 'Grid Status', self.ISYgridEnum ) 
-
-        self.isyINFO.addIsyVaraiable (self.statusNodeID, self.operationMode, 'list', None, None, '0-3', None, None, 'Operation Mode', self.operationModeEnum )                
-
         self.addISYCriticalParam(self.statusNodeID, self.operationMode)
 
-        if self.TPWlocalAccess:
-            self.isyINFO.addIsyVaraiable (self.statusNodeID, self.ConnectedTesla, 'list', None,None, '0-1',None, None, 'Connected to Tesla', { 0:'False', 1: 'True' }) 
-
-
-        self.isyINFO.addIsyVaraiable (self.statusNodeID, self.gridServiceActive, 'list', None,None, '0-1',None, None, 'Grid Services Active', { 0:'False', 1: 'True' }) 
-        #self.isyINFO.addNodeDefStruct(self.statusNodeID, self.statusNodeName )
 
         if self.TPWcloudAccess:
             self.isyINFO.addISYnode(self.setupNodeID, self.setupNodeName, 'Electricity')
@@ -338,7 +332,6 @@ class tesla_info:
         self.isyINFO.createSetupFiles('nodedefs.xml', 'editors.xml', 'en_us.txt')
         self.ISYmap = self.isyINFO.createISYmapping()
 
-        
 
     def createISYsetupfiles(self, nodeDefFile, editorFile, nlsFile):
             self.isyINFO.createSetupFiles(nodeDefFile, editorFile, nlsFile)
@@ -447,7 +440,7 @@ class tesla_info:
                             #    self.TPWcloud.teslaUpdateCloudData('critical')
                             return(True)
                     else:
-                        LOGGER.debug('No connection to Local Tesla Power Wall')
+                        LOGGER.error('No connection to Local Tesla Power Wall')
                         self.TPWlocal.logout()
                         time.sleep(1)
                         if self.loginLocal(self.localEmail, self.localPassword, self.IPAddress):
@@ -487,7 +480,7 @@ class tesla_info:
                             self.daysTotalGenerator = 0.0 #needs to be updated - may not exist
                         return(True)
                     else:
-                        LOGGER.debug('No connection to Local Tesla Power Wall')
+                        LOGGER.error('No connection to Local Tesla Power Wall')
                         self.localAccessUp = False
                         return(False)
 

@@ -42,7 +42,7 @@ class teslaPWSetupNode(polyinterface.Node):
 
         for key in self.ISYparams:
             info = self.ISYparams[key]
-            #LOGGER.debug(key )
+
             if info != {}:
                 value = self.TPW.getISYvalue(key, self.id)
                 LOGGER.debug('SetupNode: driver' + str(key)+ ' value:' + str(value) + ' uom:' + str(info['uom']) )
@@ -61,21 +61,11 @@ class teslaPWSetupNode(polyinterface.Node):
     def stop(self):
         LOGGER.debug('stop - Cleaning up')
 
-    def heartbeat(self):
-        LOGGER.debug('heartbeat: hb={}'.format(self.hb))
-        if self.hb == 0:
-            self.reportCmd('DON',2)
-            self.hb = 1
-        else:
-            self.reportCmd('DOF',2)
-            self.hb = 0
-
     
     def shortPoll(self):
         #No need to poll data - done by Controller
         LOGGER.debug('Tesla Power Wall setupNode shortPoll')
         if self.nodeDefineDone:
-            #self.heartbeat()
             self.updateISYdrivers('critical')
         else:
            LOGGER.info('Setup Node: waiting for system/nodes to get created')
@@ -87,7 +77,6 @@ class teslaPWSetupNode(polyinterface.Node):
         LOGGER.debug('Tesla Power Wall  sentupNode longPoll')
         if self.nodeDefineDone:
            self.updateISYdrivers('all')
-           #self.reportDrivers() 
         else:
            LOGGER.info('Setup Node: waiting for system/nodes to get created')
 
@@ -115,16 +104,7 @@ class teslaPWSetupNode(polyinterface.Node):
            LOGGER.debug('Wrong parameter passed: ' + str(level))
   
 
-    '''
-    def query(self, command=None):
-       LOGGER.debug('TOP querry')
-        self.updateISYdrivers(ll''a)
-        self.reportDrivers('all')
-    '''
 
-    def discover(self, command=None):
-        #LOGGER.debug('discover zones')
-        self.nodeDefineDone = True
 
     def setStormMode(self, command):
         LOGGER.debug('setStormMode')

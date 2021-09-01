@@ -37,14 +37,7 @@ class TPWauth:
         self.cookies = None
         self.data = {}
         self.captchaMethod = captchaMethod
-        
-        '''
-        headers = {
-        'User-Agent': 'PowerwallDarwinManager',
-        'x-tesla-user-agent': '' ,
-        'X-Requested-With': 'com.teslamotors.tesla',
-        }
-        '''
+
         self.headers = {'User-Agent' : 'PowerwallDarwinManager'  }
         self.__tesla_initConnect(self.email, self.password)
 
@@ -172,6 +165,7 @@ class TPWauth:
     def __tesla_connect(self,email, pwd):
         #code_verifier = ''.join(random.choices(string.ascii_letters+string.digits, k=86))
         #code_challenge = hashlib.sha256(code_verifier.encode('utf-8')).hexdigest()
+
         state_str = 'ThisIsATest' #Random string
         '''
         headers = {
@@ -181,8 +175,6 @@ class TPWauth:
         }
         '''
 
-        #self.headers = {'User-Agent' : 'PowerwallDarwinManager'  }
-        #r = req.get('https://auth.tesla.com/oauth2/v3/authorize', headers=headers )
         data = {}
         data['audience'] = ''
         data['client_id']='ownerapi'
@@ -251,8 +243,7 @@ class TPWauth:
                 pass
         
         time.sleep(1)
-        #self.S = S
-        #self.S['created_at']=datetime.now()
+
         return S
 
 

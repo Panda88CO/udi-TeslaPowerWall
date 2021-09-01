@@ -510,10 +510,10 @@ class tesla_info:
 
         
     def getISYvalue(self, ISYvar, node):
-        LOGGER.debug( 'getISYvalue - ' + str(node))
+        #LOGGER.debug( 'getISYvalue - ' + str(node))
         if ISYvar in self.ISYmap[node]:
             self.teslaVarName = self.ISYmap[node][ISYvar]['systemVar']
-            LOGGER.debug('tesla Var Name: ' + str(self.teslaVarName))
+            #LOGGER.debug('tesla Var Name: ' + str(self.teslaVarName))
             if self.teslaVarName == self.chargeLevel: 
                 return(self.getTPW_chargeLevel())
             elif self.teslaVarName == self.backoffLevel: 

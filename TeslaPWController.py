@@ -37,7 +37,7 @@ class TeslaPWController(polyinterface.Controller):
         self.drivers = [{'driver': 'GV1', 'value':1, 'uom':25} ]
         LOGGER.debug('MAIN ADDING DRIVER' + str(self.drivers))
         self.nodeDefineDone = False
-        self.TPW = None
+        #self.TPW = None
         self.setDriver('GV1', 1)
 
     def start(self):
@@ -48,7 +48,7 @@ class TeslaPWController(polyinterface.Controller):
         self.cloudAccess = False
         self.localAccess = False
         self.captcha = ''
-        
+        '''
         if self.getCustomParam('CAPTCHA'):
             self.removeCustomParam('CAPTCHA')
         self.addCustomParam({'CAPTCHA': self.captcha})
@@ -106,8 +106,10 @@ class TeslaPWController(polyinterface.Controller):
         if  self.access == 'BOTH' or self.access== 'LOCAL':
             self.localAccess = True
 
-        '''
+        '''       
         try:
+            '''    
+
             self.TPW = tesla_info(self.name, self.id , self.access)
             #self.removeNoticesAll()
             if self.localAccess:
@@ -140,7 +142,7 @@ class TeslaPWController(polyinterface.Controller):
        
             #self.poly.installprofile()
             '''
-            #test
+        
             '''  
             LOGGER.info('Creating Setup Node')
             nodeList = self.TPW.getNodeIdList()
@@ -158,8 +160,9 @@ class TeslaPWController(polyinterface.Controller):
             #self.TPW.pollSystemData('all')
             self.updateISYdrivers('all')
             #self.reportDrivers()
-
+            LOGGER.debug('Node installation complete')
             self.nodeDefineDone = True
+            
         except Exception as e:
             LOGGER.error('Exception Controller start: '+ str(e))
             LOGGER.info('Did not connect to power wall')
@@ -233,12 +236,13 @@ class TeslaPWController(polyinterface.Controller):
 
     def updateISYdrivers(self, level):
         LOGGER.debug('System updateISYdrivers - ' + str(level))
+        value = 1
         if level == 'all':
-            value = self.TPW.getISYvalue('GV1', self.id)
+            #value = self.TPW.getISYvalue('GV1', self.id)
             self.setDriver('GV1', value, report = True, force = True) 
             LOGGER.debug('Update ISY drivers :' + str('GV1')+ '  value:' + str(value) )
         elif level == 'critical':
-            value = self.TPW.getISYvalue('GV1', self.id)
+            #value = self.TPW.getISYvalue('GV1', self.id)
             self.setDriver('GV1', value, report = True, force = True) 
             LOGGER.debug('Update ISY drivers :' + str('GV1')+ '  value:' + str(value) )         
         else:

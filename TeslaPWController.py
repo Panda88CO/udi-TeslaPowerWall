@@ -21,7 +21,7 @@ class TeslaPWController(polyinterface.Controller):
 
     def __init__(self, polyglot):
         super(TeslaPWController, self).__init__(polyglot)
-        LOGGER.info('_init_ Tesla Power Wall Controller')
+        LOGGER.info('_init_ Tesla Power Wall Controller - 1')
         self.ISYforced = False
         self.NodeName = 'Tesla PowerWall Info'
         self.id = 'teslapw'
@@ -140,7 +140,8 @@ class TeslaPWController(polyinterface.Controller):
        
             #self.poly.installprofile()
             '''
-            '''   
+            #test
+            '''  
             LOGGER.info('Creating Setup Node')
             nodeList = self.TPW.getNodeIdList()
             LOGGER.debug('Setup start ' + str(nodeList))

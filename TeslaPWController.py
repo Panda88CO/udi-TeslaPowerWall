@@ -29,10 +29,10 @@ class TeslaPWController(polyinterface.Controller):
         LOGGER.debug('self.name :' + str(self.name))
         self.hb = 0
         #if not(PG_CLOUD_ONLY):
-        self.drivers = [{'driver': 'GV1', 'value':1, 'uom':2} ]
+        self.drivers = [{'driver': 'GV1', 'value':0, 'uom':25} ]
         #LOGGER.debug('MAIN ADDING DRIVER' + str(self.drivers))
         self.nodeDefineDone = False
-        self.setDriver('GV1', 1)
+        self.setDriver('GV1', 0)
 
     def start(self):
         self.removeNoticesAll()
@@ -123,7 +123,8 @@ class TeslaPWController(polyinterface.Controller):
             self.captcha = ''
             if self.getCustomParam('CAPTCHA'):    
                 self.removeCustomParam('CAPTCHA')
-            self.addCustomParam({'CAPTCHA': self.captcha})            
+            self.addCustomParam({'CAPTCHA': self.captcha}) 
+            self.updateISYdrivers('all')           
 
             self.TPW.teslaInitializeData()
             self.TPW.pollSystemData('all')          
@@ -187,7 +188,7 @@ class TeslaPWController(polyinterface.Controller):
                     if node != self.address:
                         self.nodes[node].shortPoll()
             else:
-                LOGGER.info ('Problem polling data from Tesla system') 
+                LOGGER.info('Problem polling data from Tesla system') 
         else:
             LOGGER.info('Waiting for system/nodes to get created')
         
@@ -216,11 +217,11 @@ class TeslaPWController(polyinterface.Controller):
         LOGGER.debug('System updateISYdrivers - ' + str(level))
         value = 1
         if level == 'all':
-            #value = self.TPW.getISYvalue('GV1', self.address)
+            value = self.TPW.getISYvalue('GV1', self.address)
             self.setDriver('GV1', value, report = True, force = True) 
             LOGGER.debug('Update ISY drivers :' + str('GV1')+ '  value:' + str(value) )
         elif level == 'critical':
-            #value = self.TPW.getISYvalue('GV1', self.address)
+            value = self.TPW.getISYvalue('GV1', self.address)
             self.setDriver('GV1', value, report = True, force = True) 
             LOGGER.debug('Update ISY drivers :' + str('GV1')+ '  value:' + str(value) )         
         else:

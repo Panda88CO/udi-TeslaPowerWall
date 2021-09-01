@@ -32,7 +32,7 @@ class TeslaPWController(polyinterface.Controller):
         self.drivers = [{'driver': 'GV1', 'value':0, 'uom':25} ]
         #LOGGER.debug('MAIN ADDING DRIVER' + str(self.drivers))
         self.nodeDefineDone = False
-        self.setDriver('GV1', 0)
+        self.setDriver('GV1', 0, report = True, force = True))
 
     def start(self):
         self.removeNoticesAll()
@@ -123,8 +123,7 @@ class TeslaPWController(polyinterface.Controller):
             self.captcha = ''
             if self.getCustomParam('CAPTCHA'):    
                 self.removeCustomParam('CAPTCHA')
-            self.addCustomParam({'CAPTCHA': self.captcha}) 
-            self.updateISYdrivers('all')           
+            self.addCustomParam({'CAPTCHA': self.captcha})     
 
             self.TPW.teslaInitializeData()
             self.TPW.pollSystemData('all')          
@@ -144,7 +143,7 @@ class TeslaPWController(polyinterface.Controller):
                     self.addNode(teslaPWSetupNode(self,self.address, node, name))
                 if node == self.TPW.getStatusNodeID():    
                     self.addNode(teslaPWStatusNode(self,self.address, node, name))
-        
+            LOGGER.debug('updateISYdrivers')
             self.updateISYdrivers('all')
             LOGGER.debug('Node installation complete')
             self.nodeDefineDone = True

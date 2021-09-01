@@ -106,7 +106,7 @@ class TeslaPWController(polyinterface.Controller):
         if  self.access == 'BOTH' or self.access== 'LOCAL':
             self.localAccess = True
 
-
+        '''
         try:
             self.TPW = tesla_info(self.name, self.id , self.access)
             #self.removeNoticesAll()
@@ -139,7 +139,7 @@ class TeslaPWController(polyinterface.Controller):
 
        
             #self.poly.installprofile()
-
+            '''
             '''   
             LOGGER.info('Creating Setup Node')
             nodeList = self.TPW.getNodeIdList()
@@ -154,7 +154,7 @@ class TeslaPWController(polyinterface.Controller):
                     self.addNode(teslaPWStatusNode(self, self.primary, node, name))
         
             '''
-            self.TPW.pollSystemData('all')
+            #self.TPW.pollSystemData('all')
             self.updateISYdrivers('all')
             #self.reportDrivers()
 
@@ -184,42 +184,51 @@ class TeslaPWController(polyinterface.Controller):
 
     def shortPoll(self):
         LOGGER.info('Tesla Power Wall Controller shortPoll')
-        '''
+        
         self.heartbeat()
 
         if self.nodeDefineDone:
+            '''
             for node in self.nodes:
                 #LOGGER.debug('Node : ' + node)
                 if node != self.address:
                     self.nodes[node].shortPoll()
-        
-            if self.TPW.pollSystemData('critical'):
-                self.updateISYdrivers('critical')
-                self.reportDrivers()
+            '''
+            self.updateISYdrivers('critical')
+            self.reportDrivers()
+            '''
             else:
                 LOGGER.info ('Problem polling data from Tesla system')
+            '''
         else:
             LOGGER.info('Waiting for system/nodes to get created')
-        '''
+        
 
     def longPoll(self):
         LOGGER.info('Tesla Power Wall  Controller longPoll')
-        '''
+        
         self.heartbeat()
+        
         if self.nodeDefineDone:
+            '''
             for node in self.nodes:
                 #LOGGER.debug('Node : ' + node)
                 if node != self.address :
                     self.nodes[node].longPoll()
+            '''
+            self.updateISYdrivers('all')
+            self.reportDrivers()             
+            '''
             if self.TPW.pollSystemData('all'):
                 self.updateISYdrivers('all')
                 self.reportDrivers() 
             else:
                 LOGGER.info ('Problem polling data from Tesla system')
+            '''
         else:
             LOGGER.info('Waiting for system/nodes to get created')
         
-        '''
+        
 
     def updateISYdrivers(self, level):
         LOGGER.debug('System updateISYdrivers - ' + str(level))

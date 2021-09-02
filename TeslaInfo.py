@@ -596,6 +596,7 @@ class tesla_info:
 
     # Need to be imlemented 
     def isNodeServerUp(self):
+        LOGGER.debug('isNodeServerUp - called' )
         if self.localAccessUp == True or self.cloudAccessUp == True:
              return(1)
         else:

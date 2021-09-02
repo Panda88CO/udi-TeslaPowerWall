@@ -32,7 +32,9 @@ class TeslaPWController(polyinterface.Controller):
         self.drivers = [{'driver': 'GV1', 'value':0, 'uom':25} ]
         #LOGGER.debug('MAIN ADDING DRIVER' + str(self.drivers))
         self.nodeDefineDone = False
-        self.setDriver('GV1', 0, report = True, force = True))
+        self.setDriver('GV1', 0, report = True, force = True)
+
+
 
     def start(self):
         self.removeNoticesAll()
@@ -138,7 +140,7 @@ class TeslaPWController(polyinterface.Controller):
             
             for node in nodeList:
                 name = self.TPW.getNodeName(node)
-                LOGGER.debug('Setup Node(node, name) ' + str(node) + ' , '+ str(name))
+                LOGGER.debug('Setup Node(node, name, address) ' + str(node) + ' , '+ str(name) + ' , '+str(self.address))
                 if node == self.TPW.getSetupNodeID():  
                     self.addNode(teslaPWSetupNode(self,self.address, node, name))
                 if node == self.TPW.getStatusNodeID():    
@@ -163,7 +165,7 @@ class TeslaPWController(polyinterface.Controller):
         LOGGER.debug('stop - Cleaning up')
 
     def heartbeat(self):
-        LOGGER.debug('heartbeat: + ' + str(self.hb))
+        LOGGER.debug('heartbeat: ' + str(self.hb))
         
         if self.hb == 0:
             self.reportCmd('DON',2)

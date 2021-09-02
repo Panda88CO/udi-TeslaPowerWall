@@ -47,7 +47,7 @@ class teslaPWStatusNode(polyinterface.Node):
                 value = self.TPW.getISYvalue(key, self.id)
                 LOGGER.debug('StatusNode: driver' + str(key)+ ' value:' + str(value) + ' uom:' + str(info['uom']) )
                 self.drivers.append({'driver':key, 'value':value, 'uom':info['uom'] })
-
+        LOGGER.debug( 'Status node init - DONE')
 
 
     def start(self):                
@@ -67,8 +67,7 @@ class teslaPWStatusNode(polyinterface.Node):
         else:
            LOGGER.info('Status Node: waiting for system/nodes to get created')
 
-                
-
+            
     def longPoll(self):
         #No need to poll data - done by Controller
         LOGGER.debug('Tesla Power Wall  status Node longPoll')
@@ -79,7 +78,7 @@ class teslaPWStatusNode(polyinterface.Node):
            LOGGER.info('Status Node: waiting for system/nodes to get created')
 
     def updateISYdrivers(self, level):
-        LOGGER.debug('Node updateISYdrivers')
+        LOGGER.debug('StatusNode updateISYdrivers')
         params = []
         if level == 'all':
             params = self.ISYparams
@@ -88,22 +87,20 @@ class teslaPWStatusNode(polyinterface.Node):
                     info = params[key]
                     if info != {}:
                         value = self.TPW.getISYvalue(key, self.id)
-                        #LOGGER.debug('Update ISY drivers :' + str(key)+ ' ' + info['systemVar']+ ' value:' + str(value) )
+                        LOGGER.debug('Update all ISY drivers :' + str(key)+ ' ' + info['systemVar']+ ' value:' + str(value) )
                         self.setDriver(key, value, report = True, force = True)      
         elif level == 'critical':
             params = self.ISYcriticalParams
             if params:
                 for key in params:
                     value = self.TPW.getISYvalue(key, self.id)
-                    #LOGGER.debug('Update ISY drivers :' + str(key)+ ' value: ' + str(value) )
+                    LOGGER.debug('Update critical ISY drivers :' + str(key)+ ' value: ' + str(value) )
                     self.setDriver(key, value, report = True, force = True)        
 
         else:
            LOGGER.debug('Wrong parameter passed: ' + str(level))
   
-
-
-
+        LOGGER.debug('updateISYdrivers - Status node DONE')
 
 
     def ISYupdate (self, command):

@@ -32,16 +32,20 @@ CAPTCHA_ENABLE = True
 def getCaptcha(headers, cookies):  
     # Captcha is session based so use the same headers
     LOGGER.debug('Getting captcha')
-    catpcha = requests.get('https://auth.tesla.com/captcha', headers=headers, cookies=cookies)
+    try:
+        catpcha = requests.get('https://auth.tesla.com/captcha', headers=headers, cookies=cookies)
 
-    # Save captch as .png image to send 2Captcha service locally
-    file = open('captcha.svg', 'wb')
-    file.write(catpcha.content)
-    file.close()
+        # Save captch as .png image to send 2Captcha service locally
+        file = open('captcha.svg', 'wb')
+        file.write(catpcha.content)
+        file.close()
 
-    drawing = svg2rlg('captcha.svg')
-    renderPM.drawToFile(drawing, 'captcha.png', fmt='PNG')
-    return('captcha.png')
+        drawing = svg2rlg('captcha.svg')
+        renderPM.drawToFile(drawing, 'captcha.png', fmt='PNG')
+        return('captcha.png')
+    
+    except Exception as e:
+        LOGGER.error('Exception getCaptcha: '+ str(e))
 
 
 def solveCaptcha(captchaFile, captchaApiKey):

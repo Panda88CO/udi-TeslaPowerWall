@@ -152,7 +152,7 @@ class isyHandling:
             self.keyCount = 0
             nodeId.lower()
             #nodeNbr = self.sData[nodeId]['nodeNumber']
-            LOGGER.debug('addNodeDefStruct: ' + nodeName + ' '+nodeId)
+            #LOGGER.debug('addNodeDefStruct: ' + nodeName + ' '+nodeId)
             self.name = nodeId
             self.nlsKey = 'nls' + self.name
             self.nlsKey.lower()

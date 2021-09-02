@@ -33,6 +33,7 @@ class TeslaPWController(polyinterface.Controller):
         #LOGGER.debug('MAIN ADDING DRIVER' + str(self.drivers))
         self.nodeDefineDone = False
         self.setDriver('GV1', 0, report = True, force = True)
+        LOGGER.debug('Controller init DONE')
 
 
 
@@ -133,7 +134,7 @@ class TeslaPWController(polyinterface.Controller):
             if self.logFile:
                 self.TPW.createLogFile(self.logFile)
 
-            self.poly.installprofile()
+            #self.poly.installprofile()
             
             LOGGER.info('Creating Nodes')
             nodeList = self.TPW.getNodeIdList()
@@ -145,6 +146,7 @@ class TeslaPWController(polyinterface.Controller):
                     self.addNode(teslaPWSetupNode(self,self.address, node, name))
                 if node == self.TPW.getStatusNodeID():    
                     self.addNode(teslaPWStatusNode(self,self.address, node, name))
+            self.nodeDefineDone = True   
             LOGGER.debug('updateISYdrivers')
             self.updateISYdrivers('all')
             LOGGER.debug('Node installation complete')
@@ -154,7 +156,7 @@ class TeslaPWController(polyinterface.Controller):
             LOGGER.error('Exception Controller start: '+ str(e))
             LOGGER.info('Did not connect to power wall')
             self.stop()
-        
+        LOGGER.debug ('Controler - start done')
 
     def stop(self):
        

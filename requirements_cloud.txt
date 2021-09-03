@@ -1,7 +1,3 @@
-tesla_powerwall
-requests_oauth2
-pgc_interface
-
 svglib
 reportlab
 requests>=2.22.0

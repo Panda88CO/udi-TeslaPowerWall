@@ -20,8 +20,8 @@ pip install git+https://github.com/jrester/tesla_powerwall#egg=tesla_powerwall
 pip install git+https://github.com/maraujop/requests-oauth2#egg=requests-oauth2
 
 
-pip install -r svglib 
-pip install -r reportlab
-pip install -r requests
+#pip install -r svglib 
+#pip install -r reportlab
+#pip install -r requests
 
-#pip3 install -r requirements_cloud.txt --user
+pip install -r requirements_cloud.txt --user

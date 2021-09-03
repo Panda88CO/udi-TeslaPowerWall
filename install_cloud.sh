@@ -10,11 +10,11 @@ mkdir -p profile/editor
 #sudo pkg install py38-pillow
 # only needed for PRi operation
 
-pip install -U pip
+pip install --upgrade pip
 
-apt-get install libxml2-dev libxslt-dev python-dev
+apt-get -f install libxml2-dev libxslt-dev python-dev
 
-pip3 install -U pip3
+pip3 install --upgrade pip3
 pip3 install -r tesla_powerwall --user
 pip3 install -r requests_oauth2 --user
 pip3 install -r pgc_interface --user

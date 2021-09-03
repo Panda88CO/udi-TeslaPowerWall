@@ -72,6 +72,7 @@ def solveCaptcha(captchaFile, captchaApiKey):
             captcha_id = resp.text.split('|',1)[1]
         else:
             LOGGER.error('error posting captcha')
+            return(None)
         # Change data to be getting the answer from 2captcha
         data = {
             'key': captchaApiKey,
@@ -93,6 +94,7 @@ def solveCaptcha(captchaFile, captchaApiKey):
             captcha_answer = captcha_answer.split('|',1)[1]
         else:
             LOGGER.error('error getting captcha answer')
+            return(None)
         LOGGER.info('captcha = '+ captcha_answer)
 
         return (captcha_answer)

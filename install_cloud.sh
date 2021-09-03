@@ -14,7 +14,7 @@ pip install --upgrade pip
 
 apt-get -y install libxml2-dev libxslt-dev python-dev
 
-pip3 install --upgrade pip3
+pip3 install --upgrade pip
 pip3 install -r tesla_powerwall --user
 pip3 install -r requests_oauth2 --user
 pip3 install -r pgc_interface --user

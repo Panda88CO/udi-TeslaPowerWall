@@ -18,7 +18,7 @@ pip install --upgrade pip
 pip install git+https://github.com/jrester/tesla_powerwall#egg=tesla_powerwall
 #pip3 install -r tesla_powerwall --user
 pip install git+https://github.com/maraujop/requests-oauth2#egg=requests-oauth2
-pip install -r pgc_interface
+
 
 pip install -r svglib 
 pip install -r reportlab

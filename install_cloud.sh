@@ -12,7 +12,7 @@ mkdir -p profile/editor
 
 pip install --upgrade pip
 
-apt-get -f install libxml2-dev libxslt-dev python-dev
+apt-get -y install libxml2-dev libxslt-dev python-dev
 
 pip3 install --upgrade pip3
 pip3 install -r tesla_powerwall --user

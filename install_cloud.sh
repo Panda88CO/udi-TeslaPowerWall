@@ -14,14 +14,14 @@ pip install --upgrade pip
 
 apt-get -y install libxml2-dev libxslt-dev python-dev
 
-pip3 install --upgrade pip --user
+pip3 install --upgrade pip 
 pip install -r git+https://github.com/jrester/tesla_powerwall.git 
 #pip3 install -r tesla_powerwall --user
 pip3 install -r git+https://github.com/maraujop/requests-oauth2.git 
-pip3 install -r pgc_interface --user 
+pip3 install -r pgc_interface
 
-pip3 install -r svglib --user
-pip3 install -r reportlab --user
-pip3 install -r requests --user
+pip3 install -r svglib 
+pip3 install -r reportlab
+pip3 install -r requests
 
 #pip3 install -r requirements_cloud.txt --user

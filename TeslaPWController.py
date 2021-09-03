@@ -44,58 +44,73 @@ class TeslaPWController(polyinterface.Controller):
         self.cloudAccess = False
         self.localAccess = False
         self.captcha = ''
-        
-        if self.getCustomParam('CAPTCHA'):
-            self.removeCustomParam('CAPTCHA')
-        self.addCustomParam({'CAPTCHA': self.captcha})
-
-        self.access = self.getCustomParam('ACCESS') 
-        if self.access == None:
-            self.addCustomParam({'ACCESS': 'LOCAL/CLOUD/BOTH'})
-
-        self.localUserEmail = self.getCustomParam('LOCAL_USER_EMAIL')
-        if self.localUserEmail == None:
-            self.addCustomParam({'LOCAL_USER_EMAIL': 'me@localPowerwall.com'})
-        
-        self.localUserPassword =self.getCustomParam('LOCAL_USER_PASSWORD')
-        if self.localUserPassword == None:
-            self.addCustomParam({'LOCAL_USER_PASSWORD': 'XXXXXXXX'})
-        
-        self.IPAddress = self.getCustomParam('IP_ADDRESS')
-        if  self.IPAddress == None:
-            self.addCustomParam({'IP_ADDRESS': '192.168.1.xxx'})  
-
-        self.cloudUserEmail = self.getCustomParam('CLOUD_USER_EMAIL')
-        if self.cloudUserEmail == None:
-            self.addCustomParam({'CLOUD_USER_EMAIL': 'me@myTeslaCloudemail.com'})
-
-        self.cloudUserPassword =self.getCustomParam('CLOUD_USER_PASSWORD')
-        if self.cloudUserPassword == None:
-            self.addCustomParam({'CLOUD_USER_PASSWORD': 'XXXXXXXX'})
-
-        self.captchaMethod = self.getCustomParam('CAPTCHA_METHOD')
-        if self.captchaMethod == None:
-            self.addCustomParam({'CAPTCHA_METHOD': 'EMAIL/AUTO'})
-
-        self.captchaAPIkey = self.getCustomParam('CAPTCHA_APIKEY')
-        if self.captchaAPIkey == None:
-            self.addCustomParam({'CAPTCHA_APIKEY': 'api key to enable AUTO captcha solver'})
-
-
-        self.logFile = self.getCustomParam('LOGFILE')
-        if self.logFile == None:
-            self.addCustomParam({'LOGFILE':'DISABLED'})
-
-
         if PG_CLOUD_ONLY:
             self.cloudAccess = True
             self.logFile = False
             self.access = 'CLOUD'
-            self.addCustomParam({'ACCESS':'CLOUD'})
-            self.addCustomParam({'LOGFILE':'DISABLED'})
-            self.removeCustomParam('LOCAL_USER_EMAIL')
-            self.removeCustomParam('LOCAL_USER_PASSWORD')
-            self.removeCustomParam('IP_ADDRESS')
+
+            if self.getCustomParam('CAPTCHA'):
+                self.removeCustomParam('CAPTCHA')
+            self.addCustomParam({'CAPTCHA': self.captcha})
+
+            self.cloudUserEmail = self.getCustomParam('CLOUD_USER_EMAIL')
+            if self.cloudUserEmail == None:
+                self.addCustomParam({'CLOUD_USER_EMAIL': 'me@myTeslaCloudemail.com'})
+
+            self.cloudUserPassword =self.getCustomParam('CLOUD_USER_PASSWORD')
+            if self.cloudUserPassword == None:
+                self.addCustomParam({'CLOUD_USER_PASSWORD': 'XXXXXXXX'})
+
+            self.captchaMethod = self.getCustomParam('CAPTCHA_METHOD')
+            if self.captchaMethod == None:
+                self.addCustomParam({'CAPTCHA_METHOD': 'EMAIL/AUTO'})
+
+            self.captchaAPIkey = self.getCustomParam('CAPTCHA_APIKEY')
+            if self.captchaAPIkey == None:
+                self.addCustomParam({'CAPTCHA_APIKEY': 'api key to enable AUTO captcha solver'})        
+
+        else:
+            if self.getCustomParam('CAPTCHA'):
+                self.removeCustomParam('CAPTCHA')
+            self.addCustomParam({'CAPTCHA': self.captcha})
+
+            self.access = self.getCustomParam('ACCESS') 
+            if self.access == None:
+                self.addCustomParam({'ACCESS': 'LOCAL/CLOUD/BOTH'})
+
+            self.localUserEmail = self.getCustomParam('LOCAL_USER_EMAIL')
+            if self.localUserEmail == None:
+                self.addCustomParam({'LOCAL_USER_EMAIL': 'me@localPowerwall.com'})
+            
+            self.localUserPassword =self.getCustomParam('LOCAL_USER_PASSWORD')
+            if self.localUserPassword == None:
+                self.addCustomParam({'LOCAL_USER_PASSWORD': 'XXXXXXXX'})
+            
+            self.IPAddress = self.getCustomParam('IP_ADDRESS')
+            if  self.IPAddress == None:
+                self.addCustomParam({'IP_ADDRESS': '192.168.1.xxx'})  
+
+            self.cloudUserEmail = self.getCustomParam('CLOUD_USER_EMAIL')
+            if self.cloudUserEmail == None:
+                self.addCustomParam({'CLOUD_USER_EMAIL': 'me@myTeslaCloudemail.com'})
+
+            self.cloudUserPassword =self.getCustomParam('CLOUD_USER_PASSWORD')
+            if self.cloudUserPassword == None:
+                self.addCustomParam({'CLOUD_USER_PASSWORD': 'XXXXXXXX'})
+
+            self.captchaMethod = self.getCustomParam('CAPTCHA_METHOD')
+            if self.captchaMethod == None:
+                self.addCustomParam({'CAPTCHA_METHOD': 'EMAIL/AUTO'})
+
+            self.captchaAPIkey = self.getCustomParam('CAPTCHA_APIKEY')
+            if self.captchaAPIkey == None:
+                self.addCustomParam({'CAPTCHA_APIKEY': 'api key to enable AUTO captcha solver'})
+
+            self.logFile = self.getCustomParam('LOGFILE')
+            if self.logFile == None:
+                self.addCustomParam({'LOGFILE':'DISABLED'})
+
+
 
         if self.access == 'BOTH' or self.access == 'CLOUD':
             self.cloudAccess = True
@@ -134,7 +149,7 @@ class TeslaPWController(polyinterface.Controller):
             if self.logFile:
                 self.TPW.createLogFile(self.logFile)
 
-            #self.poly.installprofile()
+            self.poly.installprofile()
             
             LOGGER.info('Creating Nodes')
             nodeList = self.TPW.getNodeIdList()

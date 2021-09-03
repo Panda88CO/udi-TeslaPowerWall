@@ -15,9 +15,9 @@ pip install --upgrade pip
 apt-get -y install libxml2-dev libxslt-dev python-dev
 
 pip3 install --upgrade pip 
-pip install -r git+https://github.com/jrester/tesla_powerwall.git 
+pip install --upgrade git+https://github.com/jrester/tesla_powerwall
 #pip3 install -r tesla_powerwall --user
-pip3 install -r git+https://github.com/maraujop/requests-oauth2.git 
+pip3 install --upgrade git+https://github.com/maraujop/requests-oauth2
 pip3 install -r pgc_interface
 
 pip3 install -r svglib 

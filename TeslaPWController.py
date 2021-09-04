@@ -152,7 +152,7 @@ class TeslaPWController(polyinterface.Controller):
                         allKeysSet = False
                 time.sleep(2)
             self.localAccess = True
-            #all local jeys defined
+            #all local keys defined
         
 
 

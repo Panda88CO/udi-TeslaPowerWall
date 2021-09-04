@@ -136,14 +136,23 @@ class TeslaPWController(polyinterface.Controller):
                 allKeysSet = True
                 for keys in self.defaultParams['CLOUD']:
                     if self.getCustomParam(keys) ==  self.defaultParams['CLOUD'][keys]:
+                        # ok to not set captcha API KEY if method is email 
                         if not (keys == 'CAPTCHA_APIKEY' and self.getCustomParam('CAPTCHA_METHOD') == 'EMAIL') :
                             allKeysSet = False
                 time.sleep(2)
-
             self.cloudAccess = True
-        if  self.access == 'BOTH' or self.access == 'LOCAL':
-            self.localAccess = True
+            # All cloud keys defined
 
+        if  self.access == 'BOTH' or self.access == 'LOCAL':
+            allKeysSet = False
+            while not(allKeysSet):
+                allKeysSet = True
+                for keys in self.defaultParams['LOCAL']:
+                    if self.getCustomParam(keys) ==  self.defaultParams['LOCAL'][keys]:
+                        allKeysSet = False
+                time.sleep(2)
+            self.localAccess = True
+            #all local jeys defined
         
 
 

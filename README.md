@@ -1,6 +1,8 @@
 # udi-powerwall
 ## Power wall Node server
-The main node displays data - setup node allows configuration of different parameters
+The main node displays node status - (currently not functional) setup node allows configuration of different parameters - status gives a firewall status 
+Currently the clould connection is not working due to change in Tesla Login method
+
 For the setup node to show one need to connect to the cloud (Tesla only allows changes via cloud)
 Note - there is a discrepancy between local and cloud back-off limt.  Local power wall reports about 3% higher than the value specified perventage in the cloud (one can only change back-f value via the cloud or Tesla App)
 
@@ -23,7 +25,7 @@ Configuration requires 4 steps first time:
 Configuration requires user to enter CLOUD_USER_EMAIL and CLOUD_USER_PASSWORD keywords under confuguration, and the restart 
 
 ## Notes 
-Using cloud access user can set all parameters mobile app currently supports (except car charging limit).
+Using cloud access user can set all parameters mobile app currently supports (except car charging limit). - not supported currently
 
 Generator support is not tested (I do not have one) and I have not tested without solar connected.
 

@@ -2,6 +2,6 @@ tesla_powerwall
 requests_oauth2
 polyinterface
 
-svglib
-reportlab
+#svglib
+#reportlab
 requests>=2.22.0

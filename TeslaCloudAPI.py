@@ -4,11 +4,11 @@ import hashlib
 from datetime import datetime
 import requests
 
-from requests_oauth2 import OAuth2BearerToken
+#from requests_oauth2 import OAuth2BearerToken
 #import string
 #import random
 #import captcha
-from TPWauth import TPWauth
+#from TPWauth import TPWauth
 
 PG_CLOUD_ONLY = False
 

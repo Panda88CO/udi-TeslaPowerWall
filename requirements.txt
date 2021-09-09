@@ -1,4 +1,4 @@
 
-requests_oauth2
+#requests_oauth2
 git+https://github.com/jrester/tesla_powerwall#egg=tesla_powerwall
 requests>=2.22.0

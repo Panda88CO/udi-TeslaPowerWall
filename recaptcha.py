@@ -3,7 +3,6 @@ from time import sleep
 import base64
 
 
-
 try:
     import polyinterface
 except ImportError:
@@ -54,8 +53,7 @@ def solveRecaptcha(sitekey, pageurl, captchaApiKey):
             "id": captcha_id
         }
         answer_url = "http://2captcha.com/res.php"
-        resp = requests.get(answer_url,
-                    params=data)
+        resp = requests.get(answer_url, params=data)
 
         captcha_answer = resp.text
         while 'CAPCHA_NOT_READY' in captcha_answer:
@@ -69,7 +67,7 @@ def solveRecaptcha(sitekey, pageurl, captchaApiKey):
             LOGGER.error('error getting captcha answer')
             return(None)
 
-        captcha_answer = captcha_answer.split('|')[1]
+        #captcha_answer = captcha_answer.split('|')[1]
         LOGGER.info('captcha = '+ captcha_answer)
         return captcha_answer
     # if captcha not enabled just return empty string

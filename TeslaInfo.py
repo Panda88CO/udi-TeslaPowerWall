@@ -9,15 +9,13 @@ except ImportError:
     PG_CLOUD_ONLY = True
 LOGGER = polyinterface.LOGGER
 
-
-
 import requests
 import json
 import os 
 from datetime import date
 import time
 from tesla_powerwall import Powerwall, GridStatus, OperationMode
-#from TeslaCloudAPI import TeslaCloudAPI
+from TeslaCloudAPI import TeslaCloudAPI
 from ISYprofile import isyHandling
 
 
@@ -85,7 +83,7 @@ class tesla_info:
                 self.solarInstalled = False
 
 
-    def loginCloud(self, email, password, captchaMethod, captchaAPIkey = '' ):
+    def loginCloud(self, email, password, captchaMethod='AUTO', captchaAPIkey = '' ):
         self.cloudEmail = email
         self.cloudPassword = password
         self.captchaMethod = captchaMethod

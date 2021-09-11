@@ -108,7 +108,7 @@ class tesla_info:
             if self.captchaMethod == 'EMAIL':
                 LOGGER.debug('Check email for new captcha -  may not have been correct.')
         else:
-            LOGGER.debug('Logged in - retrieving data')
+            LOGGER.debug('Logged in Cloud - retrieving data')
             self.TPWcloudAccess = True
             self.TPWcloud.teslaCloudInfo()
             self.TPWcloud.teslaRetrieveCloudData()

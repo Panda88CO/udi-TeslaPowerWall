@@ -206,12 +206,12 @@ class TeslaPWController(polyinterface.Controller):
                     self.addNode(teslaPWSetupNode(self,self.address, node, name))
                 if node == self.TPW.getStatusNodeID():    
                     self.addNode(teslaPWStatusNode(self,self.address, node, name))
-            self.nodeDefineDone = True   
-            LOGGER.debug('updateISYdrivers')
-            self.updateISYdrivers('all')
             LOGGER.debug('Node installation complete')
             self.nodeDefineDone = True
-            
+            LOGGER.debug('updateISYdrivers')
+            self.updateISYdrivers('all')
+            self.longPoll() # Update all drivers
+
         except Exception as e:
             LOGGER.error('Exception Controller start: '+ str(e))
             LOGGER.info('Did not connect to power wall')
@@ -259,9 +259,6 @@ class TeslaPWController(polyinterface.Controller):
 
     def longPoll(self):
         LOGGER.info('Tesla Power Wall  Controller longPoll')
-        
-        
-        
         if self.nodeDefineDone:
             self.heartbeat()
             if self.TPW.pollSystemData('all'):
@@ -275,7 +272,6 @@ class TeslaPWController(polyinterface.Controller):
                 LOGGER.error ('Problem polling data from Tesla system')
         else:
             LOGGER.info('Waiting for system/nodes to get created')
-        
         
 
     def updateISYdrivers(self, level):
@@ -292,7 +288,6 @@ class TeslaPWController(polyinterface.Controller):
         else:
             LOGGER.error('Wrong parameter passed: ' + str(level))
  
-
 
 
     def ISYupdate (self, command):

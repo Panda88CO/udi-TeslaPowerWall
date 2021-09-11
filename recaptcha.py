@@ -23,7 +23,7 @@ def solveRecaptcha(sitekey, pageurl, captchaApiKey):
 
     if(CAPTCHA_ENABLE): 
         # Captcha is session based so use the same headers
-        LOGGER.debug('Getting captcha')
+        LOGGER.debug('Getting recaptcha')
         #catpcha = session.get('https://auth.tesla.com/captcha', headers=headers)
 
 

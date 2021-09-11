@@ -1,5 +1,7 @@
-tesla_powerwall
-requests_oauth2
-svglib
-reportlab
+
+re
+urllib
+string
+random
+base64
 requests>=2.22.0

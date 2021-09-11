@@ -1,6 +1,6 @@
 
 requests_oauth2
-git+https://github.com/jrester/tesla_powerwall#egg=tesla_powerwall
+
 re
 urllib
 string

@@ -1,7 +1,7 @@
 
-re
+#re
 urllib
-string
-random
-base64
+#string
+#random
+#base64
 requests>=2.22.0

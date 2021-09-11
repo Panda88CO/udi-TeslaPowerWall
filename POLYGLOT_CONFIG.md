@@ -7,14 +7,15 @@ Cloud account is needed if ISY is to make changes to Tesla Power Wall - e.g. onl
 ### Polisy/ local Polyglot
 Configuration requires 4 steps first time (Polisy/Polyglot - non cloud):
 1) First user needs to sepcifiy source of data (LOCAL/CLOUD/BOTH) 
-2) Restart node
-3) Next user will speficy the needed user IDs and passwords for the selected option  (and local Tesla power wall IP address if chosen).  
-4) Restart
+2) Save and restart node
+
 
 ### Polyglot cloud
-1) Enter email and password for cloud account using CLOUD_USER_EMAIL and CLOUD_USER_PASSWORD keywords 
-2) Stop
-3) Start and wait 2-3min
+Cloud utilizes an automatic recaptcha solver from 2captcha.com.  A key is required.  Key can be acquired from https://2captcha.com?from=12244449 (referral to me). It is 3$ for 1000 solves.  One needed once pr node start.
+
+1) Enter email and password for cloud account using CLOUD_USER_EMAIL and CLOUD_USER_PASSWORD keywords as well as the above captcha key
+2) save and restart
+3) Start and wait 2-3min - solve takes about 30sec to complete 
 
 ## Notes 
 LOGFILE can be used to generate a daily summary file (csv) in dailyData directory - File must be downloaded with separate tool for now.

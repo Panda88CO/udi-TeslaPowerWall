@@ -193,8 +193,8 @@ class TeslaPWController(polyinterface.Controller):
      
             if self.logFile:
                 self.TPW.createLogFile(self.logFile)
-
-            self.poly.installprofile()
+            if not(PG_CLOUD_ONLY):
+                self.poly.installprofile()
             
             LOGGER.info('Creating Nodes')
             nodeList = self.TPW.getNodeIdList()

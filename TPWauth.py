@@ -179,7 +179,7 @@ class TPWauth:
             auth_url = self.authUrl()
     
             resp = session.get(auth_url, headers=headers)
-            recaptcha_site_key = re.search(r".*sitekey.* : '(.*)'", resp.text).group(1)
+            recaptcha_site_key = regex.search(r".*sitekey.* : '(.*)'", resp.text).group(1)
             LOGGER.debug ('captcha sitekey: ' + recaptcha_site_key)
             LOGGER.debug ('auth url: ' + auth_url)
 
@@ -372,7 +372,7 @@ class TPWauth:
             auth_url = self.authUrl()
             headers = {}
             resp = session.get(auth_url, headers=headers)
-            recaptcha_site_key = re.search(r".*sitekey.* : '(.*)'", resp.text).group(1)
+            recaptcha_site_key = regex.search(r".*sitekey.* : '(.*)'", resp.text).group(1)
             print ('captcha sitekey: ' + recaptcha_site_key)
             print ('auth url: ' + auth_url)
     

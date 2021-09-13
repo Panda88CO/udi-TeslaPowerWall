@@ -1,7 +1,6 @@
 
 requests_oauth2
 
-re
 urllib
 string
 random

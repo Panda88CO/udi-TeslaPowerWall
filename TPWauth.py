@@ -204,7 +204,7 @@ class TPWauth:
                     time.sleep(1)
                     count = count + 1
                     r = requests.post(auth_url, data=data, cookies=self.cookies, headers=headers, allow_redirects=False)   
-        
+            LOGGER.debug('Tesla Post r=:' + str(r.text))
         code = self.myparse2(r.text,'code=')
 
         data = {}
@@ -215,6 +215,7 @@ class TPWauth:
         data['redirect_uri'] = 'https://auth.tesla.com/void/callback'        
         r = requests.post('https://auth.tesla.com/oauth2/v3/token', headers=headers, json=data)
         S = json.loads(r.text)
+        LOGGER.debug('Tesla Access Auth: S= ' + str(S))
         if 'refresh_token' in S:
             self.Rtoken = S['refresh_token']
         else:

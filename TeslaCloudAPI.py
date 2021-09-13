@@ -48,7 +48,7 @@ class TeslaCloudAPI():
 
     def teslaCloudConnect(self, captchacode, captchaAPIkey ):
         LOGGER.debug('teslaCloudConnect')
-        self.tokeninfo = self.teslaAuth.tesla_connect(captchacode, self.captchaMethod, captchaAPIkey)
+        self.tokeninfo = self.teslaAuth.tesla_connect(captchaAPIkey)
         return(self.tokeninfo)
 
     def teslaRetrieveCloudData(self):
@@ -151,10 +151,10 @@ class TeslaCloudAPI():
             tokenExpires = datetime.fromtimestamp(self.tokeninfo['created_at'] + self.tokeninfo['expires_in']- 100)
             if dateNow > tokenExpires:
                 LOGGER.info('Renewing token')
-                self.tokeninfo = self.__tesla_refresh_token()
+                self.tokeninfo = self.teslaAuth.__tesla_refresh_token()
         else:
             LOGGER.info('Getting New Token')
-            self.tokeninfo = self.__tesla_connect(self.email, self.password)
+            self.tokeninfo = self.teslaAuth.tesla_connect(self.captchaAPIkey)
             #self.tokeninfo['created_at'] = datetime.now()
         return(self.tokeninfo)
 
@@ -233,7 +233,7 @@ class TeslaCloudAPI():
                 LOGGER.error('Exception teslaGetSiteInfo: ' + str(e))
                 LOGGER.error('Error getting data' + str(mode))
                 LOGGER.info('Trying to reconnect')
-                self.tokeninfo = self.__tesla_connect(self.email, self.password)
+                self.tokeninfo = self.tesla_connect(self.captchaAPIkey)
                 return(None)
 
         

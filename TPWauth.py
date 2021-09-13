@@ -85,30 +85,35 @@ class TPWauth:
         return "".join(random.choice(letters) for i in range(chars))        
 
     def __tesla_refresh_token(self):
-        data = {}
-        data['grant_type'] = 'refresh_token'
-        data['client_id'] = 'ownerapi'
-        data['refresh_token']=self.Rtoken
-        data['scope']='openid email offline_access'      
-        r = requests.post('https://auth.tesla.com/oauth2/v3/token', data=data)
-        S = json.loads(r.text)
-
-        data = {}
-        data['grant_type'] = 'urn:ietf:params:oauth:grant-type:jwt-bearer'
-        data['client_id']=self.CLIENT_ID
-        data['client_secret']=self.CLIENT_SECRET
-        with requests.Session() as s:
-            try:
-                s.auth = OAuth2BearerToken(S['access_token'])
-                r = s.post(self.TESLA_URL + '/oauth/token',data)
-                S = json.loads(r.text)
-            except  Exception as e:
-                LOGGER.debug('Exception __tesla_refersh_token: ' + str(e))
-                pass
-        
-        time.sleep(1)
-        #self.S = S
-        #self.S['created_at'] = datetime.now()
+        S = {}
+        if self.Rtoken:
+            data = {}
+            data['grant_type'] = 'refresh_token'
+            data['client_id'] = 'ownerapi'
+            data['refresh_token']=self.Rtoken
+            data['scope']='openid email offline_access'      
+            resp = requests.post('https://auth.tesla.com/oauth2/v3/token', data=data)
+            S = json.loads(resp.text)
+            if 'refresh_token' in S:
+                    self.Rtoken = S['refresh_token']
+            else:
+                self.Rtoken = None
+            data = {}
+            data['grant_type'] = 'urn:ietf:params:oauth:grant-type:jwt-bearer'
+            data['client_id']=self.CLIENT_ID
+            data['client_secret']=self.CLIENT_SECRET
+            with requests.Session() as s:
+                try:
+                    s.auth = OAuth2BearerToken(S['access_token'])
+                    r = s.post(self.TESLA_URL + '/oauth/token',data)
+                    S = json.loads(r.text)
+                except  Exception as e:
+                    LOGGER.debug('Exception __tesla_refersh_token: ' + str(e))
+                    pass
+            
+            time.sleep(1)
+            #self.S = S
+            #self.S['created_at'] = datetime.now()
         return S
 
 
@@ -145,11 +150,7 @@ class TPWauth:
             captcha.sendEmailCaptcha(self.captchaFile, self.email)
         '''
 
-    def tesla_connect(self, captchaCode, captchaMethod, captchaAPIKey ):
-        #code_verifier = ''.join(random.choices(string.ascii_letters+string.digits, k=86))
-        #code_challenge = hashlib.sha256(code_verifier.encode('utf-8')).hexdigest()
-
-        state_str = 'ThisIsATest' #Random string
+    def tesla_connect(self, captchaAPIKey ):
         '''
         headers = {
         'User-Agent': 'PowerwallDarwinManager',
@@ -157,74 +158,79 @@ class TPWauth:
         'X-Requested-With': 'com.teslamotors.tesla',
         }
         '''
-
-        data = {}
-        data['audience'] = ''
-        data['client_id']='ownerapi'
-        data['code_challenge']=self.code_challenge
-        data['code_challenge_method']='S256'
-        data['redirect_uri']='https://auth.tesla.com/void/callback'
-        data['response_type']='code'
-        data['scope']='openid email offline_access'
-        data['state']=self.state_str
-        data['login_hint']=self.email
-        data['identity'] = self.email
-        data['credential'] = self.password
-        headers = {}
-
         try:
-            #session = requests.Session()
-            r = requests.get('https://auth.tesla.com/oauth2/v3/authorize',  data)
-            self.cookies = r.cookies
-            data = self.html_parse(data,r.text)
-            auth_url = self.authUrl()
+            session = requests.Session()
             headers = {}
-            resp = requests.get(auth_url, headers=headers)
-            recaptcha_site_key = re.search(r".*sitekey.* : '(.*)'", resp.text).group(1)
-            print ('captcha sitekey: ' + recaptcha_site_key)
-            print ('auth url: ' + auth_url)
+            data = {}
+            #data['audience'] = ''
+            #data['client_id']='ownerapi'
+            #data['code_challenge']=self.code_challenge
+            #data['code_challenge_method']='S256'
+            #data['redirect_uri']='https://auth.tesla.com/void/callback'
+            #data['response_type']='code'
+            #data['scope']='openid email offline_access'
+            #data['state']=self.state_str
+            #data['login_hint']=self.email
+            #r = session.get('https://auth.tesla.com/oauth2/v3/authorize',  data=data)
+            #self.cookies = r.cookies
+            #data = self.html_parse(data,r.text)
+
+
+            auth_url = self.authUrl()
     
+            resp = session.get(auth_url, headers=headers)
+            recaptcha_site_key = re.search(r".*sitekey.* : '(.*)'", resp.text).group(1)
+            LOGGER.debug ('captcha sitekey: ' + recaptcha_site_key)
+            LOGGER.debug ('auth url: ' + auth_url)
+
+            data = self.html_parse(data, resp.text)
+            data['cancel']=''
+            data['identity'] = self.email
+            data['credential'] = self.password
             recaptchaCode = recaptcha.solveRecaptcha(recaptcha_site_key, auth_url, captchaAPIKey)
             data['g-recaptcha-response:'] = recaptchaCode
             data['recaptcha'] = recaptchaCode
-  
-        except Exception as e:
-            print('Exception: ' + e)
+        
+            captchaOK = False
+            while not(captchaOK):
+                #r = session.post(auth_url, data=data, cookies=self.cookies, headers=headers, allow_redirects=False)
+                resp = session.post(auth_url, data=data, headers=headers, allow_redirects=False)
+                if "Captcha does not match" in resp.text:
+                    captchaOK = False
+                else:
+                    captchaOK = True
+                    count = 0
+                    while resp.status_code != 302 and count < 5:
+                        time.sleep(1)
+                        count = count + 1
+                        resp = session.post(auth_url, data=data, headers=headers, allow_redirects=False)   
+                        #r = session.post(auth_url, data=data, cookies=self.cookies, headers=headers, allow_redirects=False)   
+
+                LOGGER.debug('Tesla Post r=:' + str(resp.text))
 
 
-        captchaOK = False
-        while not(captchaOK):
-            r = requests.post(auth_url, data=data, cookies=self.cookies, headers=headers, allow_redirects=False)
-            if "Captcha does not match" in r.text:
-                captchaOK = False
+            code = self.myparse2(resp.text,'code=')
+
+            data = {}
+            data['grant_type'] = 'authorization_code'
+            data['client_id'] = 'ownerapi'
+            data['code'] = code
+            data['code_verifier'] = self.rand_str(108)
+            data['redirect_uri'] = 'https://auth.tesla.com/void/callback'        
+            resp = session.post('https://auth.tesla.com/oauth2/v3/token', headers=headers, json=data)
+            S = json.loads(resp.text)
+            LOGGER.debug('Tesla Access Auth: S= ' + str(S))
+            if 'refresh_token' in S:
+                self.Rtoken = S['refresh_token']
             else:
-                captchaOK = True
-                count = 0
-                while r.status_code != 302 and count < 5:
-                    time.sleep(1)
-                    count = count + 1
-                    r = requests.post(auth_url, data=data, cookies=self.cookies, headers=headers, allow_redirects=False)   
-            LOGGER.debug('Tesla Post r=:' + str(r.text))
-        code = self.myparse2(r.text,'code=')
-
-        data = {}
-        data['grant_type'] = 'authorization_code'
-        data['client_id'] = 'ownerapi'
-        data['code'] = code
-        data['code_verifier'] = self.rand_str(108)
-        data['redirect_uri'] = 'https://auth.tesla.com/void/callback'        
-        r = requests.post('https://auth.tesla.com/oauth2/v3/token', headers=headers, json=data)
-        S = json.loads(r.text)
-        LOGGER.debug('Tesla Access Auth: S= ' + str(S))
-        if 'refresh_token' in S:
-            self.Rtoken = S['refresh_token']
-        else:
-            self.Rtoken = None
-        headers["authorization"] = "bearer " + S['access_token']
-        data = {}
-        data['grant_type'] = 'urn:ietf:params:oauth:grant-type:jwt-bearer'
-        data['client_id']=self.CLIENT_ID
-        data['client_secret']=self.CLIENT_SECRET
+                self.Rtoken = None
+            headers["authorization"] = "bearer " + S['access_token']
+            data = {}
+            data['grant_type'] = 'urn:ietf:params:oauth:grant-type:jwt-bearer'
+            data['client_id']=self.CLIENT_ID
+            data['client_secret']=self.CLIENT_SECRET
+        except Exception as e:
+            LOGGER.error('Exception Auth: ' + e)
 
         with requests.Session() as s:
             try:

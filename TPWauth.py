@@ -7,7 +7,7 @@ import requests
 import os
 from requests_oauth2 import OAuth2BearerToken
 import re
-import urllib
+import urllib3
 import string
 import random
 import base64
@@ -179,9 +179,9 @@ class TPWauth:
             auth_url = self.authUrl()
     
             resp = session.get(auth_url, headers=headers)
-            recaptcha_site_key = regex.search(r".*sitekey.* : '(.*)'", resp.text).group(1)
-            LOGGER.debug ('captcha sitekey: ' + recaptcha_site_key)
-            LOGGER.debug ('auth url: ' + auth_url)
+            recaptcha_site_key = re.search(r".*sitekey.* : '(.*)'", resp.text).group(1)
+            #LOGGER.debug ('captcha sitekey: ' + recaptcha_site_key)
+            #LOGGER.debug ('auth url: ' + auth_url)
 
             data = self.html_parse(data, resp.text)
             data['cancel']=''
@@ -206,7 +206,7 @@ class TPWauth:
                         resp = session.post(auth_url, data=data, headers=headers, allow_redirects=False)   
                         #r = session.post(auth_url, data=data, cookies=self.cookies, headers=headers, allow_redirects=False)   
 
-                LOGGER.debug('Tesla Post r=:' + str(resp.text))
+                #LOGGER.debug('Tesla Post r=:' + str(resp.text))
 
 
             code = self.myparse2(resp.text,'code=')
@@ -219,7 +219,7 @@ class TPWauth:
             data['redirect_uri'] = 'https://auth.tesla.com/void/callback'        
             resp = session.post('https://auth.tesla.com/oauth2/v3/token', headers=headers, json=data)
             S = json.loads(resp.text)
-            LOGGER.debug('Tesla Access Auth: S= ' + str(S))
+            #LOGGER.debug('Tesla Access Auth: S= ' + str(S))
             if 'refresh_token' in S:
                 self.Rtoken = S['refresh_token']
             else:
@@ -372,7 +372,7 @@ class TPWauth:
             auth_url = self.authUrl()
             headers = {}
             resp = session.get(auth_url, headers=headers)
-            recaptcha_site_key = regex.search(r".*sitekey.* : '(.*)'", resp.text).group(1)
+            recaptcha_site_key = re.search(r".*sitekey.* : '(.*)'", resp.text).group(1)
             print ('captcha sitekey: ' + recaptcha_site_key)
             print ('auth url: ' + auth_url)
     

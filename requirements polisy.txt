@@ -2,11 +2,11 @@
 requests_oauth2
 git+https://github.com/jrester/tesla_powerwall#egg=tesla_powerwall
 git+https://github.com/maraujop/requests-oauth2#egg=requests-oauth2
-regex
+#regex
 
-urllib
-string
-random
-base64
+#urllib3
+#string
+#random
+#base64
 
 requests>=2.22.0

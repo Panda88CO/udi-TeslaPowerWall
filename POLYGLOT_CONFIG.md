@@ -13,9 +13,15 @@ Configuration requires 4 steps first time (Polisy/Polyglot - non cloud):
 ### Polyglot cloud
 Cloud utilizes an automatic recaptcha solver from 2captcha.com.  A key is required.  Key can be acquired from https://2captcha.com?from=12244449 (referral to me). It is 3$ for 1000 solves.  One needed once pr node start.
 
-1) Enter email and password for cloud account using CLOUD_USER_EMAIL and CLOUD_USER_PASSWORD keywords as well as the above captcha key
+1) Create 3 user defined parameters
+    CLOUD_USER_EMAIL
+    CLOUD_USER_PASSWORD
+    CAPTCHA_APIKEY
+    Enter email and password for cloud account using CLOUD_USER_EMAIL and CLOUD_USER_PASSWORD keywords as well as the above captcha key
 2) save and restart
 3) Start and wait 2-3min - solve takes about 30sec to complete 
+
+
 
 ## Notes 
 LOGFILE can be used to generate a daily summary file (csv) in dailyData directory - File must be downloaded with separate tool for now.

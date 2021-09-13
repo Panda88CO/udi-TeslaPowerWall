@@ -19,7 +19,7 @@ class teslaPWStatusNode(polyinterface.Node):
     def __init__(self, controller, primary, address, name):
         super().__init__(controller, primary, address, name)
 
-        LOGGER.info('_init_ Tesla Power Wall Status NOde')
+        LOGGER.info('_init_ Tesla Power Wall Status Node')
         self.ISYforced = False
         self.TPW = self.parent.TPW
         self.address = address 
@@ -112,5 +112,28 @@ class teslaPWStatusNode(polyinterface.Node):
 
     commands = { 'UPDATE': ISYupdate, 
                 }
+
+    if PG_CLOUD_ONLY:
+            drivers= [
+                     {'driver': 'GV1', 'value':0, 'uom':51}
+                    ,{'driver': 'GV2', 'value':0, 'uom':25}
+                    ,{'driver': 'GV3', 'value':0, 'uom':25}
+                    ,{'driver': 'GV4', 'value':0, 'uom':25}
+                    ,{'driver': 'GV5', 'value':0, 'uom':58}
+                    ,{'driver': 'GV6', 'value':0, 'uom':33}
+                    ,{'driver': 'GV7', 'value':0, 'uom':33}
+                    ,{'driver': 'GV8', 'value':0, 'uom':33}
+                    ,{'driver': 'GV9', 'value':0, 'uom':33}
+                    ,{'driver': 'GV10', 'value':0, 'uom':33}
+                    ,{'driver': 'GV11', 'value':0, 'uom':33}
+                    ,{'driver': 'GV12', 'value':0, 'uom':33}
+                    ,{'driver': 'GV13', 'value':0, 'uom':33}
+                    ,{'driver': 'GV14', 'value':0, 'uom':33}
+                    ,{'driver': 'GV15', 'value':0, 'uom':33}
+                    ,{'driver': 'GV16', 'value':0, 'uom':33}
+                    ,{'driver': 'GV17', 'value':0, 'uom':33}
+                    ,{'driver': 'GV18', 'value':0, 'uom':33}
+                    ,{'driver': 'GV19', 'value':0, 'uom':33}
+            ]
 
 

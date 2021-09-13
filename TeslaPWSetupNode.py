@@ -39,14 +39,14 @@ class teslaPWSetupNode(polyinterface.Node):
         self.ISYcriticalParams = self.TPW.criticalParamters(self.id)
         #LOGGER.debug ('Node = ISYcriticalParams :' + str(self.ISYcriticalParams))
     
+        if not(PG_CLOUD_ONLY):
+            for key in self.ISYparams:
+                info = self.ISYparams[key]
 
-        for key in self.ISYparams:
-            info = self.ISYparams[key]
-
-            if info != {}:
-                value = self.TPW.getISYvalue(key, self.id)
-                LOGGER.debug('SetupNode: driver' + str(key)+ ' value:' + str(value) + ' uom:' + str(info['uom']) )
-                self.drivers.append({'driver':key, 'value':value, 'uom':info['uom'] })
+                if info != {}:
+                    value = self.TPW.getISYvalue(key, self.id)
+                    LOGGER.debug('SetupNode: driver' + str(key)+ ' value:' + str(value) + ' uom:' + str(info['uom']) )
+                    self.drivers.append({'driver':key, 'value':value, 'uom':info['uom'] })
         LOGGER.debug( 'Setup node init - DONE')
 
         #self.heartbeat()

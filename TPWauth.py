@@ -190,7 +190,7 @@ class TPWauth:
             recaptchaCode = recaptcha.solveRecaptcha(recaptcha_site_key, auth_url, captchaAPIKey)
             data['g-recaptcha-response:'] = recaptchaCode
             data['recaptcha'] = recaptchaCode
-        
+            LOGGER.debug('recaptcha code:' + str(recaptchaCode))
             captchaOK = False
             while not(captchaOK):
                 #r = session.post(auth_url, data=data, cookies=self.cookies, headers=headers, allow_redirects=False)
@@ -219,7 +219,7 @@ class TPWauth:
             data['redirect_uri'] = 'https://auth.tesla.com/void/callback'        
             resp = session.post('https://auth.tesla.com/oauth2/v3/token', headers=headers, json=data)
             S = json.loads(resp.text)
-            #LOGGER.debug('Tesla Access Auth: S= ' + str(S))
+            LOGGER.debug('Tesla Access Auth: S= ' + str(S))
             if 'refresh_token' in S:
                 self.Rtoken = S['refresh_token']
             else:

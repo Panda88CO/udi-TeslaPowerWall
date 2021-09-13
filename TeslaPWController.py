@@ -42,8 +42,7 @@ class TeslaPWController(polyinterface.Controller):
                             }   
 
     def start(self):
-        self.removeNoticesAll()
-        self.addNotice('Check CONFIG to make sure all relevant paraeters are set')
+
         
         self.cloudAccess = False
         self.localAccess = False
@@ -85,6 +84,9 @@ class TeslaPWController(polyinterface.Controller):
             '''
             #We check if sel later so no need to include in self.defaultParams
             #  
+            self.removeNoticesAll()
+            self.addNotice('Check CONFIG to make sure all relevant paraeters are set')
+
             self.access = self.getCustomParam('ACCESS') 
             if self.access == None:
                 self.addCustomParam({'ACCESS': 'LOCAL/CLOUD/BOTH'})
@@ -144,6 +146,7 @@ class TeslaPWController(polyinterface.Controller):
                         if not (keys == 'CAPTCHA_APIKEY' and self.getCustomParam('CAPTCHA_METHOD') == 'EMAIL') :
                             allKeysSet = False
                 time.sleep(2)
+                LOGGER.debug('Waiting for CLOUD parameters to get set' )
             self.cloudAccess = True
             # All cloud keys defined
 
@@ -155,6 +158,7 @@ class TeslaPWController(polyinterface.Controller):
                     if self.getCustomParam(keys) ==  self.defaultParams['LOCAL'][keys]:
                         allKeysSet = False
                 time.sleep(2)
+                LOGGER.debug('Waiting for LOCAL parameters to get set' )
             self.localAccess = True
             #all local keys defined
         
@@ -181,7 +185,6 @@ class TeslaPWController(polyinterface.Controller):
                         self.captcha = self.getCustomParam('CAPTCHA')
                 self.TPW.teslaCloudConnect(self.captcha, self.captchaAPIkey)
                 '''
-            self.removeNoticesAll()
             '''
             self.captcha = ''
             if self.getCustomParam('CAPTCHA'):    
@@ -195,6 +198,7 @@ class TeslaPWController(polyinterface.Controller):
                 self.TPW.createLogFile(self.logFile)
             if not(PG_CLOUD_ONLY):
                 self.poly.installprofile()
+                self.removeNoticesAll()
             
             LOGGER.info('Creating Nodes')
             nodeList = self.TPW.getNodeIdList()
@@ -219,8 +223,8 @@ class TeslaPWController(polyinterface.Controller):
         LOGGER.debug ('Controler - start done')
 
     def stop(self):
-       
-        self.removeNoticesAll()
+        if not(PG_CLOUD_ONLY):
+            self.removeNoticesAll()
         if self.TPW:
             self.TPW.disconnectTPW()
         

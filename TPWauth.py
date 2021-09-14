@@ -7,7 +7,7 @@ import requests
 import os
 from requests_oauth2 import OAuth2BearerToken
 import re
-import urllib3
+import urllib.parse
 import string
 import random
 import base64
@@ -27,7 +27,7 @@ LOGGER = polyinterface.LOGGER
 #import LOGGER
 MAX_COUNT = 6
 class TPWauth:
-    def __init__(self, email, password, captchaMethod):
+    def __init__(self, email, password, captchaAPI):
         self.CLIENT_ID = "81527cff06843c8634fdc09e8ac0abefb46ac849f38fe1e431c2ef2106796384"
         self.CLIENT_SECRET = "c7257eb71a564034f9419ee651c7d0e5f7aa6bfbd18bafb5c5c033b093bb2fa3"
         self.TESLA_URL = "https://owner-api.teslamotors.com"
@@ -36,11 +36,11 @@ class TPWauth:
         self.code_challenge = hashlib.sha256(self.code_verifier.encode('utf-8')).hexdigest()
         self.email = email
         self.password = password
-        self.captchaAPIKEY = ''
+        self.captchaAPIKEY = captchaAPI
         self.state_str = 'ThisIsATest' 
         self.cookies = None
         self.data = {}
-        self.captchaMethod = captchaMethod
+        
 
         self.token = 'fail'
         self.running = False
@@ -65,7 +65,7 @@ class TPWauth:
 
 
     def authUrl(self):
-        print ("getting url")
+        LOGGER.debug ("getting url")
         getVars = {'client_id': 'ownerapi', 
                 'code_challenge': self.challengeSum,
                 'code_challenge_method' : "S256",
@@ -77,7 +77,7 @@ class TPWauth:
         url = 'https://auth.tesla.com/oauth2/v3/authorize'
 
         result = url + "?" + urllib.parse.urlencode(getVars)
-        print(result)
+        LOGGER.debug(result)
         return result
 
     def rand_str(self, chars=43):
@@ -131,7 +131,8 @@ class TPWauth:
         self.data['audience'] = ''
         self.data['client_id']='ownerapi'
         self.data['code_challenge']=self.code_challenge
-        self.data['code_challenge_method']='S256'
+        self.datpi
+        a['code_challenge_method']='S256'
         self.data['redirect_uri']='https://auth.tesla.com/void/callback'
         self.data['response_type']='code'
         self.data['scope']='openid email offline_access'
@@ -187,6 +188,7 @@ class TPWauth:
             data['cancel']=''
             data['identity'] = self.email
             data['credential'] = self.password
+            LOGGER.info('Solving recaptcha - may take 30 sec')
             recaptchaCode = recaptcha.solveRecaptcha(recaptcha_site_key, auth_url, captchaAPIKey)
             data['g-recaptcha-response:'] = recaptchaCode
             data['recaptcha'] = recaptchaCode

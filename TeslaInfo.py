@@ -83,30 +83,23 @@ class tesla_info:
                 self.solarInstalled = False
 
 
-    def loginCloud(self, email, password, captchaMethod='AUTO', captchaAPIkey = '' ):
+    def loginCloud(self, email, password, captchaAPIkey = '' ):
         self.cloudEmail = email
         self.cloudPassword = password
-        self.captchaMethod = captchaMethod
         self.captchaAPIKey = captchaAPIkey
 
         LOGGER.debug('Cloud Access Supported')
-        self.TPWcloud = TeslaCloudAPI(self.cloudEmail, self.cloudPassword, self.captchaMethod)
-        if self.captchaMethod == 'EMAIL':
-            LOGGER.debug('sending email with captcha to email: ' + self.cloudEmail)
-        else:
-            LOGGER.debug('solving captcha automatically')
+        self.TPWcloud = TeslaCloudAPI(self.cloudEmail, self.cloudPassword, self.captchaAPIKey)
         self.TPWcloudAccess = True
            
     
 
 
 
-    def teslaCloudConnect(self, captchaCode= '', captchaAPIKey = '',):
+    def teslaCloudConnect(self ):
         LOGGER.debug('teslaCloudConnect')
-        if not(self.TPWcloud.teslaCloudConnect(captchaCode, captchaAPIKey)):    
-            LOGGER.debug('Error connecting to Tesla Could - check email, password')
-            if self.captchaMethod == 'EMAIL':
-                LOGGER.debug('Check email for new captcha -  may not have been correct.')
+        if not(self.TPWcloud.teslaCloudConnect()):    
+            LOGGER.debug('Error connecting to Tesla Could - check email, password, and API key')
         else:
             LOGGER.debug('Logged in Cloud - retrieving data')
             self.TPWcloudAccess = True

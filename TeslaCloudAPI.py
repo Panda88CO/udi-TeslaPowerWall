@@ -23,11 +23,12 @@ LOGGER = polyinterface.LOGGER
 #import LOGGER
 class TeslaCloudAPI():
 
-    def __init__(self, email, password, captchaMethod):
+    def __init__(self, email, password, captchaAPIkey):
         
+        self.email = email
+        self.password = password
         self.captchaAPIkey = ''
-        self.captchaMethod = captchaMethod
-
+        self.captchaAPIkey = captchaAPIkey
         self.loginData = {}
         self.TESLA_URL = "https://owner-api.teslamotors.com"
         self.API = "/api/1"
@@ -40,15 +41,15 @@ class TeslaCloudAPI():
         self.tokeninfo = {}
         self.touScheduleList = []
         self.connectionEstablished = False
-        LOGGER.debug( 'TeslaCloud init user, pw:' + str(self.email)+ ', password')
+        LOGGER.debug( 'TeslaCloud init user email, password:' + str(self.email)+ ', password')
         self.products = {}
         self.site_id = ''
         #self.battery_id = ''
-        self.teslaAuth = TPWauth(self.email, self.password, self.captchaMethod)
+        self.teslaAuth = TPWauth(self.email, self.password, self.captchaAPIkey)
 
-    def teslaCloudConnect(self, captchacode, captchaAPIkey ):
+    def teslaCloudConnect(self ):
         LOGGER.debug('teslaCloudConnect')
-        self.tokeninfo = self.teslaAuth.tesla_connect(captchaAPIkey)
+        self.tokeninfo = self.teslaAuth.tesla_connect(self.captchaAPIkey)
         return(self.tokeninfo)
 
     def teslaRetrieveCloudData(self):

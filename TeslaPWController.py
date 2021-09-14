@@ -170,8 +170,8 @@ class TeslaPWController(polyinterface.Controller):
             if self.localAccess:
                 self.TPW.loginLocal(self.localUserEmail, self.localUserPassword, self.IPAddress)
             if self.cloudAccess:
-                self.TPW.loginCloud(self.cloudUserEmail, self.cloudUserPassword, 'AUTO', self.captchaAPIkey)
-                self.TPW.teslaCloudConnect('', self.captchaAPIkey)
+                self.TPW.loginCloud(self.cloudUserEmail, self.cloudUserPassword, self.captchaAPIkey)
+                self.TPW.teslaCloudConnect()
                 '''
                 if  self.captchaMethod == 'AUTO':
                     self.TPW.loginCloud(self.cloudUserEmail, self.cloudUserPassword, self.captchaMethod, self.captchaAPIkey)

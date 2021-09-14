@@ -242,7 +242,7 @@ class TeslaPWController(polyinterface.Controller):
             self.heartbeat()    
             if self.TPW.pollSystemData('critical'):
                 self.updateISYdrivers('critical')
-                self.reportDrivers()
+                #self.reportDrivers()
                 for node in self.nodes:
                     #LOGGER.debug('Node : ' + node)
                     if node != self.address:
@@ -260,7 +260,7 @@ class TeslaPWController(polyinterface.Controller):
 
             if self.TPW.pollSystemData('all'):
                 self.updateISYdrivers('all')
-                self.reportDrivers() 
+                #self.reportDrivers() 
                 for node in self.nodes:
                     #LOGGER.debug('Node : ' + node)
                     if node != self.address :
@@ -296,7 +296,7 @@ class TeslaPWController(polyinterface.Controller):
         LOGGER.debug('ISY-update called')
         if self.TPW.pollSystemData('all'):
             self.updateISYdrivers('all')
-            self.reportDrivers()
+            #self.reportDrivers()
             for node in self.nodes:
                 #LOGGER.debug('Node : ' + node)
                 if node != self.address :

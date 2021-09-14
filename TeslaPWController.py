@@ -283,11 +283,11 @@ class TeslaPWController(polyinterface.Controller):
         value = 1
         if level == 'all':
             value = self.TPW.getISYvalue('GV1', self.address)
-            self.setDriver('GV1', value, report = True, force = True) 
+            self.setDriver(str('GV1'), int(value), report = True, force = True) 
             LOGGER.debug('Update ISY drivers :' + str('GV1')+ '  value:' + str(value) )
         elif level == 'critical':
             value = self.TPW.getISYvalue('GV1', self.address)
-            self.setDriver('GV1', value, report = True, force = True) 
+            self.setDriver(str('GV1'), int(value), report = True, force = True) 
             LOGGER.debug('Update ISY drivers :' + str('GV1')+ '  value:' + str(value) )         
         else:
             LOGGER.error('Wrong parameter passed: ' + str(level))
@@ -305,6 +305,9 @@ class TeslaPWController(polyinterface.Controller):
                     self.nodes[node].longPoll()
  
     commands = { 'UPDATE': ISYupdate }
+
+    if PG_CLOUD_ONLY:
+        drivers= [{'driver': 'GV1', 'value':0, 'uom':25}]
 
 if __name__ == "__main__":
     try:

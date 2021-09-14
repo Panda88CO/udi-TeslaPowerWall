@@ -115,12 +115,7 @@ class TeslaPWController(polyinterface.Controller):
             if self.cloudUserPassword == None:
                 self.addCustomParam({'CLOUD_USER_PASSWORD': 'XXXXXXXX'})
                 self.defaultParams['CLOUD']['CLOUD_USER_PASSWORD'] = 'XXXXXXXX'
-            '''
-            self.captchaMethod = self.getCustomParam('CAPTCHA_METHOD')
-            if self.captchaMethod == None:
-                self.addCustomParam({'CAPTCHA_METHOD': 'EMAIL/AUTO'})
-                self.defaultParams['CLOUD']['CAPTCHA_METHOD'] = 'EMAIL/AUTO'
-            '''
+
             self.captchaAPIkey = self.getCustomParam('CAPTCHA_APIKEY')
             if self.captchaAPIkey == None:
                 self.addCustomParam({'CAPTCHA_APIKEY': 'api key to enable AUTO captcha solver'})
@@ -283,11 +278,11 @@ class TeslaPWController(polyinterface.Controller):
         value = 1
         if level == 'all':
             value = self.TPW.getISYvalue('GV1', self.address)
-            self.setDriver(str('GV1'), int(value), report = True, force = True) 
+            self.setDriver('GV1',value) 
             LOGGER.debug('Update ISY drivers :' + str('GV1')+ '  value:' + str(value) )
         elif level == 'critical':
             value = self.TPW.getISYvalue('GV1', self.address)
-            self.setDriver(str('GV1'), int(value), report = True, force = True) 
+            self.setDriver('GV1', value) 
             LOGGER.debug('Update ISY drivers :' + str('GV1')+ '  value:' + str(value) )         
         else:
             LOGGER.error('Wrong parameter passed: ' + str(level))
@@ -308,6 +303,7 @@ class TeslaPWController(polyinterface.Controller):
 
     if PG_CLOUD_ONLY:
         drivers= [{'driver': 'GV1', 'value':0, 'uom':25}]
+
 
 if __name__ == "__main__":
     try:

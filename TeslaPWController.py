@@ -281,7 +281,7 @@ class TeslaPWController(polyinterface.Controller):
                 self.longPollCountMissed = self.longPollCountMissed +1
             else:
                 self.longPollCountMissed = 0
-            self.setDriver('GV1',self.longPollCountMissed, report = True, force = True)     
+            self.setDriver('GV2',self.longPollCountMissed, report = True, force = True)     
             LOGGER.debug('Update ISY drivers :' + str('GV1')+ '  value:' + str(value) )
         elif level == 'critical':
             value = self.TPW.getISYvalue('ST', self.address)

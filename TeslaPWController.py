@@ -282,11 +282,11 @@ class TeslaPWController(polyinterface.Controller):
             else:
                 self.longPollCountMissed = 0
             self.setDriver('GV2',self.longPollCountMissed, report = True, force = True)     
-            LOGGER.debug('Update ISY drivers :' + str('GV1')+ '  value:' + str(value) )
+            LOGGER.debug('Update ISY drivers :' + str('GV2')+ '  value:' + str(value) )
         elif level == 'critical':
             value = self.TPW.getISYvalue('ST', self.address)
             self.setDriver('ST', value, report = True, force = True)  
-            LOGGER.debug('Update ISY drivers :' + str('GV1')+ '  value:' + str(value) )         
+            LOGGER.debug('Update ISY drivers :' + str('ST')+ '  value:' + str(value) )         
         else:
             LOGGER.error('Wrong parameter passed: ' + str(level))
  

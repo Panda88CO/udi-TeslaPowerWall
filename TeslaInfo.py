@@ -181,6 +181,7 @@ class tesla_info:
 
     def createISYsetup (self):
         self.setupNodeID = 'pwsetup' 
+        self.statusName = 'STATUS'
         self.nodeServerUp = 'nodeServerUp'
         self.setupNodeName = 'Control Parameters'
 
@@ -230,7 +231,7 @@ class tesla_info:
         self.yesterdayGenerator = 'yesterGenerator'
 
         self.isyINFO.addISYcontroller(self.controllerID, self.controllerName,'Electricity' )
-        self.isyINFO.addISYstatus(self.controllerID)
+        self.isyINFO.addISYstatus(self.controllerID, self.statusName)
         self.isyINFO.addISYcommandSend(self.controllerID, 'DON')
         self.isyINFO.addISYcommandSend(self.controllerID, 'DOF')
         self.isyINFO.addIsyVaraiable (self.controllerID, self.nodeServerUp, 'raw1bunsign',0, 100, None, None, 0, 'Missed Long Polls',  None) 
@@ -577,7 +578,7 @@ class tesla_info:
                 return(self.getTPW_getTouData('weekday', 'peak', 'start'))   
             elif self.teslaVarName == self.weekdayPeakEndSec:
                 return(self.getTPW_getTouData('weekday', 'peak', 'stop'))   
-            elif self.teslaVarName == self.nodeServerUp:
+            elif (self.teslaVarName == self.nodeServerUp) or (self.teslaVarName ==  self.statusName):
                 return(self.isNodeServerUp())
             else:
 

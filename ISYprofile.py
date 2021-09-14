@@ -100,8 +100,8 @@ class isyHandling:
         return(self.sData[nodeId]['ISYnode']['nlsName'])
 
 
-    def addISYstatus(self, nodeId):
-        self.addIsyVaraiable(nodeId, 'STATUS', 'boolean', 0, 1, None, None, None, 'Controller Status', None)
+    def addISYstatus(self, nodeId, name):
+        self.addIsyVaraiable(nodeId, name, 'boolean', 0, 1, None, None, None, 'Controller Status', None)
 
     def addISYcommandSend(self, nodeId,  sendCmd):
         if nodeId in self.sData:

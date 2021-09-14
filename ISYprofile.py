@@ -99,6 +99,9 @@ class isyHandling:
         #LOGGER.debug('getISYNodeName:  '+ nodeId +' '+self.sData[nodeId]['ISYnode']['nlsName'] )
         return(self.sData[nodeId]['ISYnode']['nlsName'])
 
+
+    def addISCstatus(self, nodeId):
+        self.addIsyVaraiable(nodeId, 'STATUS', 2,'boolean', 0, 1, None, None, None, 'Controller Status', None)
     def addISYcommandSend(self, nodeId,  sendCmd):
         if nodeId in self.sData:
             self.sData[nodeId]['ISYnode']['sends'].append(sendCmd)
@@ -170,7 +173,11 @@ class isyHandling:
                     self.keyCount = self.keyCount + 1
                     editorName = nodeId.upper()+str(self.keyCount) #'editor name'
                     nlsName = editorName
-                    ISYvar = 'GV'+str(self.keyCount)
+                    if mKey == 'STATUS':
+                        ISYvar = 'ST'
+                        self.keyCount = self.keyCount - 1
+                    else:
+                        ISYvar = 'GV'+str(self.keyCount)
                     self.setupFile['nodeDef'][self.name]['sts'][mKey]={ISYvar:editorName}
                     self.setupFile['editors'][editorName]={}
                     #self.setupFile['nls'][editorName][ISYparam]

@@ -230,6 +230,7 @@ class tesla_info:
         self.yesterdayGenerator = 'yesterGenerator'
 
         self.isyINFO.addISYcontroller(self.controllerID, self.controllerName,'Electricity' )
+        self.isyINFO.addISYstatus(self.controllerID)
         self.isyINFO.addISYcommandSend(self.controllerID, 'DON')
         self.isyINFO.addISYcommandSend(self.controllerID, 'DOF')
         self.isyINFO.addIsyVaraiable (self.controllerID, self.nodeServerUp, 'list',None,None, '0-1',None, None, 'Nodeserver Up',  { 0:'False', 1: 'True' }) 

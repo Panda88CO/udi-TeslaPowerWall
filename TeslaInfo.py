@@ -206,7 +206,6 @@ class tesla_info:
 
         self.ConnectedTesla = 'connectedTesla'
 
-
         self.running = 'running'
         self.powerSupplyMode = 'powerSupplyMode'
         self.gridServiceActive = 'gridServiceActive'

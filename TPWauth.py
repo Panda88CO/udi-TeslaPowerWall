@@ -131,8 +131,7 @@ class TPWauth:
         self.data['audience'] = ''
         self.data['client_id']='ownerapi'
         self.data['code_challenge']=self.code_challenge
-        self.datpi
-        a['code_challenge_method']='S256'
+        self.data['code_challenge_method']='S256'
         self.data['redirect_uri']='https://auth.tesla.com/void/callback'
         self.data['response_type']='code'
         self.data['scope']='openid email offline_access'

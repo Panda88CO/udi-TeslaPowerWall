@@ -60,6 +60,7 @@ def solveRecaptcha(sitekey, pageurl, captchaApiKey):
             sleep(15)
             resp = requests.get(answer_url, params=data)
             captcha_answer = resp.text
+            resp.close()
             
         if 'OK' in captcha_answer:
             captcha_answer = captcha_answer.split('|',1)[1]

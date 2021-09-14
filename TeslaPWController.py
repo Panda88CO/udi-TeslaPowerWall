@@ -238,14 +238,11 @@ class TeslaPWController(polyinterface.Controller):
 
     def shortPoll(self):
         LOGGER.info('Tesla Power Wall Controller shortPoll')
-        
-        
-
         if self.nodeDefineDone:
             self.heartbeat()    
             if self.TPW.pollSystemData('critical'):
                 self.updateISYdrivers('critical')
-                self.reportDrivers()
+                #self.reportDrivers()
                 for node in self.nodes:
                     #LOGGER.debug('Node : ' + node)
                     if node != self.address:
@@ -262,7 +259,7 @@ class TeslaPWController(polyinterface.Controller):
             self.heartbeat()
             if self.TPW.pollSystemData('all'):
                 self.updateISYdrivers('all')
-                self.reportDrivers() 
+                #self.reportDrivers() 
                 for node in self.nodes:
                     #LOGGER.debug('Node : ' + node)
                     if node != self.address :

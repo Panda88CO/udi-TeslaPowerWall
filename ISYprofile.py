@@ -21,7 +21,7 @@ class isyHandling:
         #self.systemName = systemName
         LOGGER.debug('isyProfile - init')
         self.sData  = {}
-        self.ISYunit = {'boolean':2, 'list':25, 'kw':30, 'kwh':33, 'percent':51, 'durationsec':58}  #need to be lower case 
+        self.ISYunit = {'boolean':2, 'list':25, 'kw':30, 'kwh':33, 'percent':51, 'durationsec':58, 'raw1bunsign': 107, 'raw2bunsign':108}  #need to be lower case 
         self.nodeCount = 0
         self.setupFile = { 'nodeDef':{}
                             ,'editors':{}
@@ -100,8 +100,9 @@ class isyHandling:
         return(self.sData[nodeId]['ISYnode']['nlsName'])
 
 
-    def addISCstatus(self, nodeId):
-        self.addIsyVaraiable(nodeId, 'STATUS', 2,'boolean', 0, 1, None, None, None, 'Controller Status', None)
+    def addISYstatus(self, nodeId):
+        self.addIsyVaraiable(nodeId, 'STATUS', 'boolean', 0, 1, None, None, None, 'Controller Status', None)
+
     def addISYcommandSend(self, nodeId,  sendCmd):
         if nodeId in self.sData:
             self.sData[nodeId]['ISYnode']['sends'].append(sendCmd)
@@ -175,7 +176,7 @@ class isyHandling:
                     nlsName = editorName
                     if mKey == 'STATUS':
                         ISYvar = 'ST'
-                        self.keyCount = self.keyCount - 1
+                        #self.keyCount = self.keyCount - 1
                     else:
                         ISYvar = 'GV'+str(self.keyCount)
                     self.setupFile['nodeDef'][self.name]['sts'][mKey]={ISYvar:editorName}
@@ -234,7 +235,12 @@ class isyHandling:
                     self.keyCount = self.keyCount + 1
                     editorName = 'CTRL_'+str(self.keyCount)
                     nlsName = editorName
-                    ISYvar = 'GV'+str(self.keyCount)
+                    if mKey == 'STATUS':
+                        ISYvar = 'ST'
+                        #self.keyCount = self.keyCount - 1
+                    else:
+                        ISYvar = 'GV'+str(self.keyCount)
+                    #ISYvar = 'GV'+str(self.keyCount)
                     self.setupFile['nodeDef'][ controllerId]['sts'][mKey]={ISYvar:editorName}
                     self.setupFile['editors'][editorName]={}
                     #self.setupFile['nls'][editorName][ISYparam]

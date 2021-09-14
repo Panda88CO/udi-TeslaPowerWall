@@ -1,6 +1,9 @@
 <editors> 
   <editor id = "CTRL_1" > 
-     <range  uom="25" subset="0-1" nls="CTRL_1" />
+     <range  uom="2" min="0" max="1" />
+</editor>
+  <editor id = "CTRL_2" > 
+     <range  uom="107" min="0" max="100" prec="0" />
 </editor>
   <editor id = "PWSTATUS1" > 
      <range  uom="51" min="0" max="100" prec="2" />
@@ -15,22 +18,22 @@
      <range  uom="25" subset="0-1" nls="PWSTATUS4" />
 </editor>
   <editor id = "PWSTATUS5" > 
-     <range  uom="25" subset="0-1" nls="PWSTATUS5" />
+     <range  uom="33" min="0" max="20" prec="2" />
 </editor>
   <editor id = "PWSTATUS6" > 
-     <range  uom="33" min="0" max="20" prec="2" />
+     <range  uom="33" min="-100" max="100" prec="2" />
 </editor>
   <editor id = "PWSTATUS7" > 
      <range  uom="33" min="-100" max="100" prec="2" />
 </editor>
   <editor id = "PWSTATUS8" > 
-     <range  uom="33" min="-100" max="100" prec="2" />
-</editor>
-  <editor id = "PWSTATUS9" > 
      <range  uom="33" min="-20" max="20" prec="2" />
 </editor>
-  <editor id = "PWSTATUS10" > 
+  <editor id = "PWSTATUS9" > 
      <range  uom="33" min="-100" max="-100" prec="2" />
+</editor>
+  <editor id = "PWSTATUS10" > 
+     <range  uom="33" min="-100" max="100" prec="2" />
 </editor>
   <editor id = "PWSTATUS11" > 
      <range  uom="33" min="-100" max="100" prec="2" />
@@ -42,10 +45,10 @@
      <range  uom="33" min="-100" max="100" prec="2" />
 </editor>
   <editor id = "PWSTATUS14" > 
-     <range  uom="33" min="-100" max="100" prec="2" />
+     <range  uom="33" min="-100" max="100" prec="1" />
 </editor>
   <editor id = "PWSTATUS15" > 
-     <range  uom="33" min="-100" max="100" prec="1" />
+     <range  uom="33" min="-100" max="100" prec="2" />
 </editor>
   <editor id = "PWSTATUS16" > 
      <range  uom="33" min="-100" max="100" prec="2" />
@@ -57,6 +60,9 @@
      <range  uom="33" min="-100" max="100" prec="2" />
 </editor>
   <editor id = "PWSTATUS19" > 
+     <range  uom="33" min="-100" max="100" prec="2" />
+</editor>
+  <editor id = "PWSTATUS20" > 
      <range  uom="33" min="-100" max="100" prec="2" />
 </editor>
   <editor id = "PWSETUP1" > 

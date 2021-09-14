@@ -29,13 +29,13 @@ class TeslaPWController(polyinterface.Controller):
         LOGGER.debug('self.name :' + str(self.name))
         self.hb = 0
         #if not(PG_CLOUD_ONLY):
-        self.drivers = [{'driver': 'GV1', 'value':0, 'uom':25} ]
+        self.drivers = []
         #LOGGER.debug('MAIN ADDING DRIVER' + str(self.drivers))
         self.nodeDefineDone = False
         self.setDriver('GV1', 0, report = True, force = True)
 
         LOGGER.debug('Controller init DONE')
-        
+        self.longPollCountMissed = 0
         
         self.defaultParams = {   'CLOUD':  { } ,
                                 'LOCAL':  { },
@@ -256,7 +256,8 @@ class TeslaPWController(polyinterface.Controller):
     def longPoll(self):
         LOGGER.info('Tesla Power Wall  Controller longPoll')
         if self.nodeDefineDone:
-            self.heartbeat()
+            #self.heartbeat()
+
             if self.TPW.pollSystemData('all'):
                 self.updateISYdrivers('all')
                 #self.reportDrivers() 
@@ -274,12 +275,18 @@ class TeslaPWController(polyinterface.Controller):
         LOGGER.debug('System updateISYdrivers - ' + str(level))
         value = 1
         if level == 'all':
-            value = self.TPW.getISYvalue('GV1', self.address)
-            self.setDriver('GV1',value) 
+            value = self.TPW.getISYvalue('ST', self.address)
+            self.setDriver('ST',value) 
+            if value == 0:
+                self.longPollCountMissed = self.longPollCountMissed +1
+            else:
+                self.longPollCountMissed = 0
+                
+            self.setDriver('ST',self.longPollCountMissed)     
             LOGGER.debug('Update ISY drivers :' + str('GV1')+ '  value:' + str(value) )
         elif level == 'critical':
-            value = self.TPW.getISYvalue('GV1', self.address)
-            self.setDriver('GV1', value) 
+            value = self.TPW.getISYvalue('ST', self.address)
+            self.setDriver('ST', value) 
             LOGGER.debug('Update ISY drivers :' + str('GV1')+ '  value:' + str(value) )         
         else:
             LOGGER.error('Wrong parameter passed: ' + str(level))
@@ -299,7 +306,8 @@ class TeslaPWController(polyinterface.Controller):
     commands = { 'UPDATE': ISYupdate }
 
     if PG_CLOUD_ONLY:
-        drivers= [{'driver': 'GV1', 'value':0, 'uom':25}]
+        drivers= [{'driver': 'ST', 'value':0, 'uom':2},
+                  {'driver': 'GV1', 'value':0, 'uom':107}]
 
 
 if __name__ == "__main__":

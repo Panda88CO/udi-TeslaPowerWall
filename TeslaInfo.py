@@ -233,7 +233,7 @@ class tesla_info:
         self.isyINFO.addISYstatus(self.controllerID)
         self.isyINFO.addISYcommandSend(self.controllerID, 'DON')
         self.isyINFO.addISYcommandSend(self.controllerID, 'DOF')
-        self.isyINFO.addIsyVaraiable (self.controllerID, self.nodeServerUp, 'list',None,None, '0-1',None, None, 'Nodeserver Up',  { 0:'False', 1: 'True' }) 
+        self.isyINFO.addIsyVaraiable (self.controllerID, self.nodeServerUp, 'raw1bunsign',0, 100, None, None, 0, 'Missed Long Polls',  None) 
         self.isyINFO.addISYcommandReceive(self.controllerID, 'UPDATE', 'Update System Data', None)
         #self.isyINFO.addControllerDefStruct(self.controllerID, self.controllerName )
 

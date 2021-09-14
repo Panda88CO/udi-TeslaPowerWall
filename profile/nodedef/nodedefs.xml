@@ -2,7 +2,8 @@
    <nodeDef id="controller" nls="nlscontroller">
       <editors />
       <sts>
-         <st id="GV1" editor="CTRL_1" />
+         <st id="ST" editor="CTRL_1" />
+         <st id="GV2" editor="CTRL_2" />
       </sts>
       <cmds>
          <sends>
@@ -36,6 +37,7 @@
          <st id="GV17" editor="PWSTATUS17" />
          <st id="GV18" editor="PWSTATUS18" />
          <st id="GV19" editor="PWSTATUS19" />
+         <st id="GV20" editor="PWSTATUS20" />
       </sts>
       <cmds>
          <sends>

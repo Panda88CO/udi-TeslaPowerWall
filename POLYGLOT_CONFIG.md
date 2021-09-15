@@ -18,8 +18,8 @@ Cloud utilizes an automatic recaptcha solver from 2captcha.com.  A key is requir
     CLOUD_USER_PASSWORD
     CAPTCHA_APIKEY
     Enter email and password for cloud account using CLOUD_USER_EMAIL and CLOUD_USER_PASSWORD keywords as well as the above captcha key
-2) save and restart
-3) Start and wait 2-3min - solve takes about 30sec to complete 
+2) save and stop - start
+3) Start and wait 3-5min (needs to compile a few libraries) - solve takes about 30sec to complete 
 
 
 

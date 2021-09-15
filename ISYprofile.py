@@ -101,7 +101,7 @@ class isyHandling:
 
 
     def addISYstatus(self, nodeId, name):
-        self.addIsyVaraiable(nodeId, name, 'boolean', 0, 1, None, None, None, 'Controller Status', None)
+        self.addIsyVaraiable(nodeId, name, 'boolean', 0, 1, None, None, None, 'Controller Up', None)
 
     def addISYcommandSend(self, nodeId,  sendCmd):
         if nodeId in self.sData:

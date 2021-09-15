@@ -29,11 +29,11 @@ class TeslaPWController(polyinterface.Controller):
         LOGGER.debug('self.name :' + str(self.name))
         self.hb = 0
         #if not(PG_CLOUD_ONLY):
-        self.drivers = []
+        #self.drivers = []
         #LOGGER.debug('MAIN ADDING DRIVER' + str(self.drivers))
         self.nodeDefineDone = False
-        self.setDriver('GV1', 0, report = True, force = True)
-
+        #self.setDriver('ST', 0, report = True, force = True)
+        #self.setDriver('GV2', 0, report = True, force = True)
         LOGGER.debug('Controller init DONE')
         self.longPollCountMissed = 0
         
@@ -283,7 +283,7 @@ class TeslaPWController(polyinterface.Controller):
             else:
                 self.longPollCountMissed = 0
             self.setDriver('GV2', int(self.longPollCountMissed), report = True, force = True)     
-            LOGGER.debug('Update ISY drivers :' + str('GV2')+ '  value:' + str(value) )
+            LOGGER.debug('Update ISY drivers :' + str('GV2')+ '  value:' + str(self.longPollCountMissed) )
         elif level == 'critical':
             value = self.TPW.getISYvalue('ST', self.address)
             self.setDriver('ST', value, report = True, force = True)  
@@ -293,6 +293,7 @@ class TeslaPWController(polyinterface.Controller):
             else:
                 self.longPollCountMissed = 0
             self.setDriver('GV2', int(self.longPollCountMissed), report = True, force = True)   
+            LOGGER.debug('Update ISY drivers :' + str('GV2')+ '  value:' + str(self.longPollCountMissed) )
         else:
             LOGGER.error('Wrong parameter passed: ' + str(level))
  
@@ -310,9 +311,9 @@ class TeslaPWController(polyinterface.Controller):
  
     commands = { 'UPDATE': ISYupdate }
 
-    if PG_CLOUD_ONLY:
-        drivers= [{'driver': 'ST', 'value':0, 'uom':2},
-                  {'driver': 'GV2', 'value':0, 'uom':107}]
+    #if PG_CLOUD_ONLY:
+    drivers= [{'driver': 'ST', 'value':0, 'uom':2},
+                {'driver': 'GV2', 'value':0, 'uom':107}]
 
 
 if __name__ == "__main__":

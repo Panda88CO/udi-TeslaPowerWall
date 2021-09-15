@@ -277,16 +277,22 @@ class TeslaPWController(polyinterface.Controller):
         if level == 'all':
             value = self.TPW.getISYvalue('ST', self.address)
             self.setDriver('ST',value, report = True, force = True) 
+            LOGGER.debug('Update ISY drivers :' + str('ST')+ '  value:' + str(value) )
             if value == 0:
-                self.longPollCountMissed = self.longPollCountMissed +1
+                self.longPollCountMissed = self.longPollCountMissed + 1
             else:
                 self.longPollCountMissed = 0
-            self.setDriver('GV2',self.longPollCountMissed, report = True, force = True)     
+            self.setDriver('GV2', int(self.longPollCountMissed), report = True, force = True)     
             LOGGER.debug('Update ISY drivers :' + str('GV2')+ '  value:' + str(value) )
         elif level == 'critical':
             value = self.TPW.getISYvalue('ST', self.address)
             self.setDriver('ST', value, report = True, force = True)  
-            LOGGER.debug('Update ISY drivers :' + str('ST')+ '  value:' + str(value) )         
+            LOGGER.debug('Update ISY drivers :' + str('ST')+ '  value:' + str(value) )   
+            if value == 0:
+                self.longPollCountMissed = self.longPollCountMissed + 1
+            else:
+                self.longPollCountMissed = 0
+            self.setDriver('GV2', int(self.longPollCountMissed), report = True, force = True)   
         else:
             LOGGER.error('Wrong parameter passed: ' + str(level))
  
@@ -306,7 +312,7 @@ class TeslaPWController(polyinterface.Controller):
 
     if PG_CLOUD_ONLY:
         drivers= [{'driver': 'ST', 'value':0, 'uom':2},
-                  {'driver': 'GV1', 'value':0, 'uom':107}]
+                  {'driver': 'GV2', 'value':0, 'uom':107}]
 
 
 if __name__ == "__main__":

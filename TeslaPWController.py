@@ -51,12 +51,7 @@ class TeslaPWController(polyinterface.Controller):
             self.cloudAccess = True
             self.logFile = False
             self.access = 'CLOUD'
-            '''
-            if self.getCustomParam('CAPTCHA'):
-                self.removeCustomParam('CAPTCHA')
-            self.addCustomParam({'CAPTCHA': self.captcha})
-            self.defaultParams['CLOUD']['CAPTCHA'] =  self.captcha 
-            '''
+
             self.cloudUserEmail = self.getCustomParam('CLOUD_USER_EMAIL')
             if self.cloudUserEmail == None:
                 self.addCustomParam({'CLOUD_USER_EMAIL': 'me@myTeslaCloudemail.com'})
@@ -66,24 +61,13 @@ class TeslaPWController(polyinterface.Controller):
             if self.cloudUserPassword == None:
                 self.addCustomParam({'CLOUD_USER_PASSWORD': 'XXXXXXXX'})
                 self.defaultParams['CLOUD']['CLOUD_USER_PASSWORD'] = 'XXXXXXXX'
-            '''
-            self.captchaMethod = self.getCustomParam('CAPTCHA_METHOD')
-            if self.captchaMethod == None:
-                self.addCustomParam({'CAPTCHA_METHOD': 'EMAIL/AUTO'})
-                self.defaultParams['CLOUD']['CAPTCHA_METHOD'] = 'EMAIL/AUTO'
-            '''    
+
             self.captchaAPIkey = self.getCustomParam('CAPTCHA_APIKEY')
             if self.captchaAPIkey == None:
                 self.addCustomParam({'CAPTCHA_APIKEY': 'api key to enable AUTO captcha solver'})        
                 self.defaultParams['CLOUD']['CAPTCHA_APIKEY'] =  'api key to enable AUTO captcha solver'
         else:
-            '''
-            if self.getCustomParam('CAPTCHA'):
-                self.removeCustomParam('CAPTCHA')
-            self.addCustomParam({'CAPTCHA': self.captcha})
-            '''
-            #We check if sel later so no need to include in self.defaultParams
-            #  
+
             self.removeNoticesAll()
             self.addNotice('Check CONFIG to make sure all relevant paraeters are set')
 
@@ -167,25 +151,7 @@ class TeslaPWController(polyinterface.Controller):
             if self.cloudAccess:
                 self.TPW.loginCloud(self.cloudUserEmail, self.cloudUserPassword, self.captchaAPIkey)
                 self.TPW.teslaCloudConnect()
-                '''
-                if  self.captchaMethod == 'AUTO':
-                    self.TPW.loginCloud(self.cloudUserEmail, self.cloudUserPassword, self.captchaMethod, self.captchaAPIkey)
-                else:
-                    self.TPW.loginCloud(self.cloudUserEmail, self.cloudUserPassword, self.captchaMethod, self.captchaAPIkey)
-                    self.captcha = self.getCustomParam('CAPTCHA')
-                    self.addNotice('Input CAPTCHA value from received email')
-                    while self.captcha == '' or self.captcha == None:
-                        LOGGER.info('Input CAPTCHA value from received email')
-                        time.sleep(10)
-                        self.captcha = self.getCustomParam('CAPTCHA')
-                self.TPW.teslaCloudConnect(self.captcha, self.captchaAPIkey)
-                '''
-            '''
-            self.captcha = ''
-            if self.getCustomParam('CAPTCHA'):    
-                self.removeCustomParam('CAPTCHA')
-            self.addCustomParam({'CAPTCHA': self.captcha})     
-            '''
+
             self.TPW.teslaInitializeData()
             self.TPW.pollSystemData('all')          
      
@@ -277,23 +243,23 @@ class TeslaPWController(polyinterface.Controller):
         if level == 'all':
             value = self.TPW.getISYvalue('ST', self.address)
             self.setDriver('ST',value, report = True, force = True) 
-            LOGGER.debug('Update ISY drivers :' + str('ST')+ '  value:' + str(value) )
+            #LOGGER.debug('Update ISY drivers :' + str('ST')+ '  value:' + str(value) )
             if value == 0:
                 self.longPollCountMissed = self.longPollCountMissed + 1
             else:
                 self.longPollCountMissed = 0
             self.setDriver('GV2', int(self.longPollCountMissed), report = True, force = True)     
-            LOGGER.debug('Update ISY drivers :' + str('GV2')+ '  value:' + str(self.longPollCountMissed) )
+            #LOGGER.debug('Update ISY drivers :' + str('GV2')+ '  value:' + str(self.longPollCountMissed) )
         elif level == 'critical':
             value = self.TPW.getISYvalue('ST', self.address)
             self.setDriver('ST', value, report = True, force = True)  
-            LOGGER.debug('Update ISY drivers :' + str('ST')+ '  value:' + str(value) )   
+            #LOGGER.debug('Update ISY drivers :' + str('ST')+ '  value:' + str(value) )   
             if value == 0:
                 self.longPollCountMissed = self.longPollCountMissed + 1
             else:
                 self.longPollCountMissed = 0
             self.setDriver('GV2', int(self.longPollCountMissed), report = True, force = True)   
-            LOGGER.debug('Update ISY drivers :' + str('GV2')+ '  value:' + str(self.longPollCountMissed) )
+            #LOGGER.debug('Update ISY drivers :' + str('GV2')+ '  value:' + str(self.longPollCountMissed) )
         else:
             LOGGER.error('Wrong parameter passed: ' + str(level))
  

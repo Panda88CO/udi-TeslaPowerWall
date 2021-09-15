@@ -65,7 +65,7 @@ class TPWauth:
 
 
     def authUrl(self):
-        LOGGER.debug ("getting url")
+        LOGGER.debug ("getting authUrl")
         getVars = {'client_id': 'ownerapi', 
                 'code_challenge': self.challengeSum,
                 'code_challenge_method' : "S256",
@@ -77,7 +77,7 @@ class TPWauth:
         url = 'https://auth.tesla.com/oauth2/v3/authorize'
 
         result = url + "?" + urllib.parse.urlencode(getVars)
-        LOGGER.debug(result)
+        #LOGGER.debug(result)
         return result
 
     def rand_str(self, chars=43):
@@ -108,7 +108,7 @@ class TPWauth:
                     r = s.post(self.TESLA_URL + '/oauth/token',data)
                     S = json.loads(r.text)
                 except  Exception as e:
-                    LOGGER.debug('Exception __tesla_refersh_token: ' + str(e))
+                    LOGGER.error('Exception __tesla_refersh_token: ' + str(e))
                     pass
             
             time.sleep(1)
@@ -220,7 +220,7 @@ class TPWauth:
             data['redirect_uri'] = 'https://auth.tesla.com/void/callback'        
             resp = session.post('https://auth.tesla.com/oauth2/v3/token', headers=headers, json=data)
             S = json.loads(resp.text)
-            LOGGER.debug('Tesla Access Auth: S= ' + str(S))
+            #LOGGER.debug('Tesla Access Auth: S= ' + str(S))
             if 'refresh_token' in S:
                 self.Rtoken = S['refresh_token']
             else:

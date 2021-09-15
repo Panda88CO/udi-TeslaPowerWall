@@ -69,7 +69,7 @@ def solveRecaptcha(sitekey, pageurl, captchaApiKey):
             return(None)
 
         #captcha_answer = captcha_answer.split('|')[1]
-        LOGGER.info('captcha = '+ captcha_answer)
+        #LOGGER.info('captcha = '+ captcha_answer)
         return captcha_answer
     # if captcha not enabled just return empty string
     else:

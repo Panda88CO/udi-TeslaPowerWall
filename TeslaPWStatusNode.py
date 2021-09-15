@@ -47,7 +47,7 @@ class teslaPWStatusNode(polyinterface.Node):
                     value = self.TPW.getISYvalue(key, self.id)
                     LOGGER.debug('StatusNode: driver' + str(key)+ ' value:' + str(value) + ' uom:' + str(info['uom']) )
                     self.drivers.append({'driver':key, 'value':value, 'uom':info['uom'] })
-        LOGGER.debug( 'Status node init - DONE')
+            LOGGER.debug( 'Status node init - DONE')
 
 
     def start(self):                
@@ -87,20 +87,20 @@ class teslaPWStatusNode(polyinterface.Node):
                     info = params[key]
                     if info != {}:
                         value = self.TPW.getISYvalue(key, self.id)
-                        LOGGER.debug('Update all ISY drivers :' + str(key)+ ' ' + info['systemVar']+ ' value:' + str(value) )
+                        #LOGGER.debug('Update all ISY drivers :' + str(key)+ ' ' + info['systemVar']+ ' value:' + str(value) )
                         self.setDriver(key, value, report = True, force = True)      
         elif level == 'critical':
             params = self.ISYcriticalParams
             if params:
                 for key in params:
                     value = self.TPW.getISYvalue(key, self.id)
-                    LOGGER.debug('Update critical ISY drivers :' + str(key)+ ' value: ' + str(value) )
+                    #LOGGER.debug('Update critical ISY drivers :' + str(key)+ ' value: ' + str(value) )
                     self.setDriver(key, value, report = True, force = True)        
 
         else:
-           LOGGER.debug('Wrong parameter passed: ' + str(level))
+           LOGGER.error('Wrong parameter passed: ' + str(level))
   
-        LOGGER.debug('updateISYdrivers - Status node DONE')
+        #LOGGER.debug('updateISYdrivers - Status node DONE')
 
 
     def ISYupdate (self, command):

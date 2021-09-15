@@ -71,7 +71,7 @@ class isyHandling:
             self.sData[ctrlId]['ISYnode'].update(tempDict)
 
         else:
-            LOGGER.debug('node '+ str(ctrlId) + ' already exists')
+            LOGGER.error('node '+ str(ctrlId) + ' already exists')
         return(self.nbrNodes)
 
 
@@ -87,7 +87,7 @@ class isyHandling:
             self.nodeCount= self.nodeCount+1
 
         else:
-            LOGGER.debug('node '+ str(nodeId) + ' already exists')
+            LOGGER.error('node '+ str(nodeId) + ' already exists')
         return(self.nbrNodes)
 
     def getISYnodeList(self):
@@ -145,7 +145,7 @@ class isyHandling:
         elif not(name in self.sData[nodeId]['KeyInfo']):
             self.sData[nodeId]['KeyInfo'][name] = tempDict
         else:
-            LOGGER.debug('Error: valiable '+ str(name) + ' already exists:' )
+            LOGGER.error('Error: valiable '+ str(name) + ' already exists:' )
             
     def removeISYvariable(self, nodeId, cmdName):
         if cmdName in self.sData[nodeId]['KeyInfo']:

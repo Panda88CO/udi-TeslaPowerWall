@@ -38,6 +38,7 @@ class TeslaCloudAPI():
         self.password = password
 
         self.daysConsumption = {}
+        self.site_info = {}
         self.tokeninfo = {}
         self.touScheduleList = []
         self.connectionEstablished = False

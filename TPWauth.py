@@ -119,7 +119,7 @@ class TPWauth:
 
 
 
-
+    '''
     def __tesla_initConnect(self, email, pwd):
         self.data = {}
         self.data['audience'] = ''
@@ -137,13 +137,11 @@ class TPWauth:
         self.data['identity'] = self.email
         self.data['credential'] = self.password 
 
-
-        '''
         self.captchaFile = captcha.getCaptcha(self.headers, self.cookies)
         if self.captchaMethod == 'EMAIL':
             captcha.sendEmailCaptcha(self.captchaFile, self.email)
-        '''
-
+        
+    '''
     def tesla_connect(self, captchaAPIKey ):
         '''
         headers = {
@@ -173,6 +171,7 @@ class TPWauth:
             auth_url = self.authUrl()
     
             resp = session.get(auth_url, headers=headers)
+            LOGGER.debug('1. Auth resp :' + resp.text)
             recaptcha_site_key = re.search(r".*sitekey.* : '(.*)'", resp.text).group(1)
             #LOGGER.debug ('captcha sitekey: ' + recaptcha_site_key)
             #LOGGER.debug ('auth url: ' + auth_url)
@@ -190,11 +189,13 @@ class TPWauth:
             while not(captchaOK):
                 #r = session.post(auth_url, data=data, cookies=self.cookies, headers=headers, allow_redirects=False)
                 resp = session.post(auth_url, data=data, headers=headers, allow_redirects=False)
+                LOGGER.debug('2a Auth resp: ' + resp.text)
                 if "Captcha does not match" in resp.text:
                     captchaOK = False
                 else:
                     captchaOK = True
                     count = 0
+                    LOGGER,debug('2b Auth resp code: ' + str(resp.status_code))
                     while resp.status_code != 302 and count < 5:
                         time.sleep(1)
                         count = count + 1
@@ -214,7 +215,7 @@ class TPWauth:
             data['redirect_uri'] = 'https://auth.tesla.com/void/callback'        
             resp = session.post('https://auth.tesla.com/oauth2/v3/token', headers=headers, json=data)
             S = json.loads(resp.text)
-            #LOGGER.debug('Tesla Access Auth: S= ' + str(S))
+            LOGGER.debug('3. Auth resp: S= ' + str(S))
             if 'refresh_token' in S:
                 self.Rtoken = S['refresh_token']
             else:
@@ -232,6 +233,7 @@ class TPWauth:
                 s.auth = OAuth2BearerToken(S['access_token'])
                 r = s.post(self.TESLA_URL + '/oauth/token',headers=headers, json=data)
                 S = json.loads(r.text)
+                LOGGER.debug('4th Auth Token: ' + str(S))
             except Exception as e:
                 LOGGER.error('exception ' + str(e))
                 pass

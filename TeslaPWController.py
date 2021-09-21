@@ -42,7 +42,7 @@ class TeslaPWController(polyinterface.Controller):
                             }   
 
     def start(self):
-
+        self.stopped = False
         
         self.cloudAccess = False
         self.localAccess = False
@@ -180,6 +180,7 @@ class TeslaPWController(polyinterface.Controller):
         except Exception as e:
             LOGGER.error('Exception Controller start: '+ str(e))
             LOGGER.info('Did not connect to power wall')
+            self.stopped = True 
             self.stop()
         LOGGER.debug ('Controler - start done')
 
@@ -188,7 +189,7 @@ class TeslaPWController(polyinterface.Controller):
             self.removeNoticesAll()
         if self.TPW:
             self.TPW.disconnectTPW()
-        
+        self.stopped = True
         LOGGER.debug('stop - Cleaning up')
 
     def heartbeat(self):
@@ -204,7 +205,7 @@ class TeslaPWController(polyinterface.Controller):
 
     def shortPoll(self):
         LOGGER.info('Tesla Power Wall Controller shortPoll')
-        if self.nodeDefineDone:
+        if self.nodeDefineDone and not self.stopped:
             self.heartbeat()    
             if self.TPW.pollSystemData('critical'):
                 self.updateISYdrivers('critical')
@@ -215,13 +216,15 @@ class TeslaPWController(polyinterface.Controller):
                         self.nodes[node].shortPoll()
             else:
                 LOGGER.info('Problem polling data from Tesla system') 
-        else:
+        elif not self.stopped:
             LOGGER.info('Waiting for system/nodes to get created')
+        else:
+            LOGGER.error('System Stopped.')
         
 
     def longPoll(self):
         LOGGER.info('Tesla Power Wall  Controller longPoll')
-        if self.nodeDefineDone:
+        if self.nodeDefineDone and not self.stopped:
             #self.heartbeat()
 
             if self.TPW.pollSystemData('all'):
@@ -233,8 +236,11 @@ class TeslaPWController(polyinterface.Controller):
                         self.nodes[node].longPoll()
             else:
                 LOGGER.error ('Problem polling data from Tesla system')
-        else:
+        elif not self.stopped:
             LOGGER.info('Waiting for system/nodes to get created')
+        else:
+            LOGGER.error('System Stopped.')
+        
         
 
     def updateISYdrivers(self, level):

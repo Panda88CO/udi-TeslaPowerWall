@@ -39,6 +39,7 @@ class tesla_info:
         self.ISYCritical = {}
         self.localAccessUp = False
         self.cloudAccessUp = False
+        self.ISYmap = {}
         self.isyINFO = isyHandling()
         self.lastDay = date.today()  
 

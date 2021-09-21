@@ -195,7 +195,7 @@ class TPWauth:
                 else:
                     captchaOK = True
                     count = 0
-                    LOGGER,debug('2b Auth resp code: ' + str(resp.status_code))
+                    LOGGER.debug('2b Auth resp code: ' + str(resp.status_code))
                     while resp.status_code != 302 and count < 5:
                         time.sleep(1)
                         count = count + 1

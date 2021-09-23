@@ -426,6 +426,22 @@ class tesla_info:
 
                 if self.TPWlocalAccess:
                     LOGGER.debug('pollSystemData - local  CRITICAL - local connection = ' + str(self.localAccessUp))
+                    if self.TPWlocal:
+                        if not(self.TPWlocal.is_authenticated()):
+                            self.TPWlocal.logout()
+                            time.sleep(1)
+                            if self.loginLocal(self.localEmail, self.localPassword, self.IPAddress):
+                                self.localAccessUp = True
+                            else:
+                                LOGGER.info ('Not able to connecto to local power wall - trying gain later')
+                                return(False)
+                    else:
+                        if self.loginLocal(self.localEmail, self.localPassword, self.IPAddress):
+                                self.localAccessUp = True
+                        else:
+                            LOGGER.info ('Not able to connecto to local power wall - tryng again later')
+                            self.localAccessUp = False
+                            return(False)
                     if self.TPWlocal.is_authenticated():
                             self.localAccessUp = True
                             self.status = self.TPWlocal.get_sitemaster() 
@@ -433,29 +449,27 @@ class tesla_info:
                             #if self.getTPW_ConnectedTesla() and self.TPWcloudAccess:
                             #    self.TPWcloud.teslaUpdateCloudData('critical')
                             return(True)
-                    else:
-                        LOGGER.error('No connection to Local Tesla Power Wall')
-                        self.TPWlocal.logout()
-                        time.sleep(1)
-                        if self.loginLocal(self.localEmail, self.localPassword, self.IPAddress):
-                            if self.TPWlocal.is_authenticated():
-                                self.localAccessUp = True
-                                self.status = self.TPWlocal.get_sitemaster() 
-                                self.meters = self.TPWlocal.get_meters()                            
-                                return(True)
-                            else:
-                                self.localAccessUp = False
-                                return(False)
-                            #LOGGER.debug('Exit poll SystemData Local')
+
 
             if level == 'all':
                 if self.TPWlocalAccess:
                     LOGGER.debug('pollSystemData - local ALL - local connection = ' + str(self.localAccessUp))
-                    if not(self.TPWlocal.is_authenticated()):
-                        self.TPWlocal.logout()
-                        time.sleep(1)
+                    if self.TPWlocal:
+                        if not(self.TPWlocal.is_authenticated()):
+                            self.TPWlocal.logout()
+                            time.sleep(1)
+                            if self.loginLocal(self.localEmail, self.localPassword, self.IPAddress):
+                                self.localAccessUp = True
+                            else:
+                                LOGGER.info ('Not able to connecto to local power wall - trying gain later')
+                                return(False)
+                    else:
                         if self.loginLocal(self.localEmail, self.localPassword, self.IPAddress):
-                            self.localAccessUp = True
+                                self.localAccessUp = True
+                        else:
+                            LOGGER.info ('Not able to connecto to local power wall - tryng again later')
+                            self.localAccessUp = False
+                            return(False)
                     if self.TPWlocal.is_authenticated():
                         self.localAccessUp = True
                         self.status = self.TPWlocal.get_sitemaster() 
@@ -474,7 +488,7 @@ class tesla_info:
                             self.daysTotalGenerator = 0.0 #needs to be updated - may not exist
                         return(True)
                     else:
-                        LOGGER.error('No connection to Local Tesla Power Wall')
+                        LOGGER.error('No connection to Local Tesla Power Wall - trying again later')
                         self.localAccessUp = False
                         return(False)
 

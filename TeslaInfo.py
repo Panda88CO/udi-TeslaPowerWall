@@ -904,6 +904,6 @@ class tesla_info:
 
 
     def disconnectTPW(self):
-        if self.TPWlocalAccess:
+        if self.TPWlocal != None:
             self.TPWlocal.close()
 

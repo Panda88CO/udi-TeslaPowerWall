@@ -69,7 +69,7 @@ class TeslaPWController(polyinterface.Controller):
         else:
 
             self.removeNoticesAll()
-            self.addNotice('Check CONFIG to make sure all relevant paraeters are set')
+            self.addNotice('Check CONFIG to make sure all relevant paraeters are set - Restart after setting all parameters')
 
             self.access = self.getCustomParam('ACCESS') 
             if self.access == None:
@@ -110,39 +110,40 @@ class TeslaPWController(polyinterface.Controller):
                 self.addCustomParam({'LOGFILE':'DISABLED'})
 
             # Wait for self.access to be updated
-            while self.getCustomParam('ACCESS') == 'LOCAL/CLOUD/BOTH':
-                time.sleep(2)
-            self.access = self.getCustomParam('ACCESS')
+            if self.getCustomParam('ACCESS') == 'LOCAL/CLOUD/BOTH':
+                self.addNotice(' ACCESS must be set start' )
+                self.stop()
+            
 
         if self.access == 'BOTH' or self.access == 'CLOUD':
-            # wait for user to set parameters
-            allKeysSet = False
-            while not(allKeysSet):
-                allKeysSet = True
-                for keys in self.defaultParams['CLOUD']:
-                    if self.getCustomParam(keys) ==  self.defaultParams['CLOUD'][keys]:
-                        # ok to not set captcha API KEY if method is email 
-                        if not (keys == 'CAPTCHA_APIKEY' and self.getCustomParam('CAPTCHA_METHOD') == 'EMAIL') :
-                            allKeysSet = False
-                time.sleep(2)
-                LOGGER.debug('Waiting for CLOUD parameters to get set' )
-            self.cloudAccess = True
+            # check for user to set parameters
+            allKeysSet = True
+            for keys in self.defaultParams['CLOUD']:
+                if self.getCustomParam(keys) ==  self.defaultParams['CLOUD'][keys]:
+                    # ok to not set captcha API KEY if method is email 
+                    allKeysSet = False
+                    self.addNotice(str(keys) + ' not set')
+            if not allKeysSet:
+                LOGGER.debug('Not all CLOUD parameters are sprcified' )
+                self.stop()
+            else:
+                self.cloudAccess = True
             # All cloud keys defined
 
         if  self.access == 'BOTH' or self.access == 'LOCAL':
-            allKeysSet = False
-            while not(allKeysSet):
-                allKeysSet = True
-                for keys in self.defaultParams['LOCAL']:
-                    if self.getCustomParam(keys) ==  self.defaultParams['LOCAL'][keys]:
-                        allKeysSet = False
-                time.sleep(2)
-                LOGGER.debug('Waiting for LOCAL parameters to get set' )
-            self.localAccess = True
+            allKeysSet = True       
+            for keys in self.defaultParams['LOCAL']:
+                if self.getCustomParam(keys) ==  self.defaultParams['LOCAL'][keys]:
+                    allKeysSet = False
+                    self.addNotice(str(keys) + ' not set')
+            if not allKeysSet:
+                LOGGER.debug('Not all LOCAL parameters are sprcified' )
+                self.stop()
+            else:
+                self.cloudAccess = True
+
             #all local keys defined
         
-
-
         try:
             self.TPW = tesla_info(self.name, self.address, self.access)
             self.removeNoticesAll()

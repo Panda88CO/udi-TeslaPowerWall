@@ -171,7 +171,7 @@ class TPWauth:
             auth_url = self.authUrl()
     
             resp = session.get(auth_url, headers=headers)
-            LOGGER.debug('1. Auth resp :' + resp.text)
+            LOGGER.debug('1. Auth resp :')
             recaptcha_site_key = re.search(r".*sitekey.* : '(.*)'", resp.text).group(1)
             #LOGGER.debug ('captcha sitekey: ' + recaptcha_site_key)
             #LOGGER.debug ('auth url: ' + auth_url)
@@ -189,7 +189,7 @@ class TPWauth:
             while not(captchaOK):
                 #r = session.post(auth_url, data=data, cookies=self.cookies, headers=headers, allow_redirects=False)
                 resp = session.post(auth_url, data=data, headers=headers, allow_redirects=False)
-                LOGGER.debug('2a Auth resp: ' + resp.text)
+                LOGGER.debug('2a Auth resp: ' )
                 if "Captcha does not match" in resp.text:
                     captchaOK = False
                 else:

@@ -175,7 +175,7 @@ class tesla_info:
             ModeList=None
         
         self.createISYsetup()
-        self.pollSystemData('all')
+        #self.pollSystemData('all')
 
 
     

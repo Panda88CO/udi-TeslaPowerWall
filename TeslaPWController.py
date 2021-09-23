@@ -186,12 +186,17 @@ class TeslaPWController(polyinterface.Controller):
         LOGGER.debug ('Controler - start done')
 
     def stop(self):
-        if not(PG_CLOUD_ONLY):
-            self.removeNoticesAll()
-        if self.TPW:
-            self.TPW.disconnectTPW()
-        self.stopped = True
-        LOGGER.debug('stop - Cleaning up')
+        try:
+            if not(PG_CLOUD_ONLY):
+                self.removeNoticesAll()
+            if self.TPW != None:
+                self.TPW.disconnectTPW()
+            self.stopped = True
+            LOGGER.debug('stop - Cleaning up')
+        except Exception as e:
+            LOGGER.error('Stop Exception: '+str(e))
+            LOGGER.debug('stopping')
+
 
     def heartbeat(self):
         LOGGER.debug('heartbeat: ' + str(self.hb))

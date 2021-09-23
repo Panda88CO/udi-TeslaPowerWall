@@ -110,7 +110,7 @@ class TPWauth:
                 except  Exception as e:
                     LOGGER.error('Exception __tesla_refersh_token: ' + str(e))
                     pass
-            
+            s.close()
             time.sleep(1)
             #self.S = S
             #self.S['created_at'] = datetime.now()
@@ -202,7 +202,7 @@ class TPWauth:
                         resp = session.post(auth_url, data=data, headers=headers, allow_redirects=False)   
                         #r = session.post(auth_url, data=data, cookies=self.cookies, headers=headers, allow_redirects=False)   
 
-                #LOGGER.debug('Tesla Post r=:' + str(resp.text))
+                LOGGER.debug('Tesla Post r=:' + str(resp.text))
 
 
             code = self.myparse2(resp.text,'code=')
@@ -225,9 +225,11 @@ class TPWauth:
             data['grant_type'] = 'urn:ietf:params:oauth:grant-type:jwt-bearer'
             data['client_id']=self.CLIENT_ID
             data['client_secret']=self.CLIENT_SECRET
+            session.close()
         except Exception as e:
             LOGGER.error('Exception Auth: ' + e)
-
+            session.close()
+            
         with requests.Session() as s:
             try:
                 s.auth = OAuth2BearerToken(S['access_token'])
@@ -237,6 +239,7 @@ class TPWauth:
             except Exception as e:
                 LOGGER.error('exception ' + str(e))
                 pass
+            s.close()
         owner_access_token = S["access_token"]
         self.token = owner_access_token
         self.auth_header =  {'Authorization': 'Bearer ' + self.token} 

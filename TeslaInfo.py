@@ -491,7 +491,7 @@ class tesla_info:
                         LOGGER.error('No connection to Local Tesla Power Wall - trying again later')
                         self.localAccessUp = False
                         return(False)
- c
+ 
                 if self.TPWcloudAccess:
                     LOGGER.debug('pollSystemData - CLOUD all')
                     self.cloudAccessUp = self.TPWcloud.teslaUpdateCloudData('all')

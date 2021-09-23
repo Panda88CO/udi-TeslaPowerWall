@@ -16,12 +16,12 @@ LOGGER = polyinterface.LOGGER
                
 class teslaPWSetupNode(polyinterface.Node):
 
-    def __init__(self, controller, primary, address, name):
+    def __init__(self, controller, primary, address, name, TPW):
         super().__init__(controller, primary, address, name)
 
         LOGGER.info('_init_ Tesla Power Wall setup Node')
         self.ISYforced = False
-        self.TPW = self.parent.TPW
+        self.TPW = TPW
         self.address = address 
         self.id = address
         self.name = name

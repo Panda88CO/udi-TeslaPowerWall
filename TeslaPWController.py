@@ -140,13 +140,14 @@ class TeslaPWController(polyinterface.Controller):
                 LOGGER.debug('Not all LOCAL parameters are sprcified' )
                 self.stop()
             else:
-                self.cloudAccess = True
+                self.localAccess = True
 
             #all local keys defined
         
         try:
             self.TPW = tesla_info(self.name, self.address, self.access)
             self.removeNoticesAll()
+           
             if self.localAccess:
                 self.TPW.loginLocal(self.localUserEmail, self.localUserPassword, self.IPAddress)
             if self.cloudAccess:
@@ -169,9 +170,9 @@ class TeslaPWController(polyinterface.Controller):
                 name = self.TPW.getNodeName(node)
                 LOGGER.debug('Setup Node(node, name, address) ' + str(node) + ' , '+ str(name) + ' , '+str(self.address))
                 if node == self.TPW.getSetupNodeID():  
-                    self.addNode(teslaPWSetupNode(self,self.address, node, name))
+                    self.addNode(teslaPWSetupNode(self,self.address, node, name, self.TPW))
                 if node == self.TPW.getStatusNodeID():    
-                    self.addNode(teslaPWStatusNode(self,self.address, node, name))
+                    self.addNode(teslaPWStatusNode(self,self.address, node, name, self.TPW))
             LOGGER.debug('Node installation complete')
             self.nodeDefineDone = True
             LOGGER.debug('updateISYdrivers')
